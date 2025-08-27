@@ -21,7 +21,7 @@ It helps pet owners manage feeding schedules, track activities, and integrate wi
 - **Frontend**: [React](https://react.dev/) + [Vite](https://vitejs.dev/) + [Ionic](https://ionicframework.com/)  
 - **Native Bridge**: [Capacitor](https://capacitorjs.com/)  
 - **Backend**: [Node.js](https://nodejs.org/) + [Express](https://expressjs.com/)  
-- **Database**: (e.g., MongoDB / PostgreSQL — specify once finalized)  
+- **Database**: PostgreSQL 
 
 ---
 
