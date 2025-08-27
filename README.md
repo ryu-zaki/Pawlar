@@ -11,7 +11,7 @@ It helps pet owners manage feeding schedules, track activities, and integrate wi
 - **Pet profiles**: Manage multiple pets in one place  
 - **Smart feeding**: Schedule and monitor feeding times  
 - **Smart door tracking**: Monitor when pets go in/out  
-- **Reports**: Feeding history, activity logs, and insights  
+- **Reports**: Feeding history and activity logs
 - **Push notifications**: Reminders and alerts  
 
 ---
@@ -28,28 +28,31 @@ It helps pet owners manage feeding schedules, track activities, and integrate wi
 ## 📂 Project Structure
 
 ├── **backend**/ # Node.js + Express backend API 
-
+|
 ├── **frontend**/ # React + Vite + Capacitor frontend app  
-
+|
 ├── **README.md** # Project documentation
 
 
 ## Frontend (React + Vite + Capacitor)
 ```bash
 cd frontend
-npm install
-npm run dev
+npm install # install project dependencies
+npm run dev # start Vite dev server
+```
 
 ## To build for mobile:
 
 ```bash
 npm run build
-npx cap sync
-npx cap open android   # or ios
+npx cap sync # sync web build with native platforms (ios / android)
+npx cap open android # open Android project in Android Studio
+npx cap open iso # open iOS project in Xcode
+```
 
 ## Backend (Node + Express)
 
 ```bash
 cd backend
-npm install
-npm run dev
+npm install # install backend dependencies
+npm run dev # start Express server in dev mode
