@@ -27,7 +27,7 @@ It helps pet owners manage feeding schedules, track activities, and integrate wi
 
 ## 📂 Project Structure
 ├── **backend**/ # Node.js + Express backend API
-├── **frontend**/ # React + Vite + Capacitor frontend app
+├── **frontend**/ # React + Vite + Capacitor frontend app  
 ├── **README.md** # Project documentation
 
 
