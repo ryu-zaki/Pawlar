@@ -26,25 +26,30 @@ It helps pet owners manage feeding schedules, track activities, and integrate wi
 ---
 
 ## 📂 Project Structure
+
 ├── **backend**/ # Node.js + Express backend API 
+
 ├── **frontend**/ # React + Vite + Capacitor frontend app  
+
 ├── **README.md** # Project documentation
 
 
 ## Frontend (React + Vite + Capacitor)
-
+```bash
 cd frontend
 npm install
 npm run dev
 
 ## To build for mobile:
 
+```bash
 npm run build
 npx cap sync
 npx cap open android   # or ios
 
 ## Backend (Node + Express)
 
+```bash
 cd backend
 npm install
 npm run dev
