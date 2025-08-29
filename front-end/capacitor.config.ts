@@ -2,10 +2,11 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.example.app',
-  appName: 'capacitor_prac',
+  appName: 'pawlar',
   webDir: 'dist',
+
   server: {
-    url: "http://192.168.0.101:5173",
+    url: "http://192.168.0.102:5173",
     cleartext: true
   }
 };

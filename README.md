@@ -25,7 +25,7 @@ It helps pet owners manage feeding schedules, track activities, and integrate wi
 
 ---
 
-## 📂 Project Structure
+## 📂 Project Structure 
 
 ├── **backend**/ # Node.js + Express backend API 
 

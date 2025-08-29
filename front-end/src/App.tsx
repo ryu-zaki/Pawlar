@@ -1,15 +1,12 @@
 
 import './App.css'
-import LoginPage from './components/LoginSignupPage'
+import LoginForm from './components/LoginSignup/Login'
 
 function App() {
 
   return (
-    <div className=''>
-      
-     <LoginPage/>
-  
-    </div>
+    <LoginForm/>
+    
   )
 }
 
