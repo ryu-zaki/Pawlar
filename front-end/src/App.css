@@ -4,7 +4,8 @@ body {
 
 
 .label-animation > input:focus ~ label,
-.label-animation > input:not(:placeholder-shown) ~ label {
+.label-animation > input:not(:placeholder-shown) ~ label,
+.label-animation > input:valid ~ label {
   translate: 0 -2.8em;
   font-size: 0.8rem;
   left: 0;

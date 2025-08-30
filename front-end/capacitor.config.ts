@@ -5,10 +5,10 @@ const config: CapacitorConfig = {
   appName: 'pawlar',
   webDir: 'dist',
 
-  server: {
-    url: "http://192.168.0.102:5173",
+  /* server: {
+    url: "http://192.168.0.104:5173/",
     cleartext: true
-  }
+  } */
 };
 
 export default config;

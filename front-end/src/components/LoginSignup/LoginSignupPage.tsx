@@ -9,7 +9,7 @@ const LoginPage = () => {
       setTimeout(() => {
          setIsLoad(false);
       }, 2000);
-   })
+   }, [])
 
     return isLoad ? (<div className="w-full h-screen flex justify-center items-center">
 <div className="loader"></div>
@@ -25,12 +25,12 @@ const LoginPage = () => {
          
          <div>
            <div className="mt-10 mb-8 w-fit mx-auto border-primary-dark border flex relative  font-semibold text-lg bg-primary text-white rounded-full">
-             <button className="px-10 py-3" >Sign in</button><button className="px-8 py-3">Sign up</button>
+             <button className="px-10 py-3">Sign in</button><button className="px-8 py-3">Sign up</button>
              
              <div className="absolute w-1/2 h-full left-0 bg-white rounded-full text-primary flex justify-center items-center"><span>Sign in</span></div>
            </div>
            
-            <Outlet />
+            <Outlet/>
          </div>
          
       </div>)
