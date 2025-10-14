@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+
 
 const LoginPage = () => {
 
@@ -17,7 +17,6 @@ const LoginPage = () => {
              <button>Sign in</button><button>Sign up</button>
            </div>
            
-            <Outlet></Outlet>
          </div>
          
       </div>
