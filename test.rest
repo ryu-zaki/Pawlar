@@ -12,8 +12,8 @@ Content-Type: application/json
 
 
 ### PROTECTED ROUTE
-GET http://localhost:3000/profile
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6IjA5NTE0NDA2MDYyIiwicGFzc3dvcmQiOiJyeXV6YWtpIiwiaWF0IjoxNzYwODQzOTIxLCJleHAiOjE3NjA4NDQ4MjF9.GvP3eP9CycU7ueZs0mzyFN823hRK123wdKH7Nj-PN8c
+POST http://localhost:3000/profile
+Authorization: Bearer eyJhbGciOiJIUizI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6IjA5NTE0NDA2MDYyIiwicGFzc3dvcmQiOiJyeXV6YWtpIiwiaWF0IjoxNzYwODgyNzkwLCJleHAiOjE3NjA4ODM2OTB9.kuE_6l4hXuxsNR8LJzyuJbMCOYY8LVk-VL1RDwDMuvQ
 
 ### REFRESH ACCESS TOKEN 
 

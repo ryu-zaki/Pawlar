@@ -20,7 +20,7 @@ const loginController = (req:Request, res:Response) => {
 }
 
 const registerController = () => {
-    
+   
 }
 
 
