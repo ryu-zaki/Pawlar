@@ -6,7 +6,6 @@ const REFRESH_SECRET = process.env.REFRESH_SECRET as string;
 
 const loginController = (req:Request, res:Response) => {
      const {body} = req;
-      console.log(body);
      // postgreSQL functions
      // setting the database
 
@@ -21,7 +20,7 @@ const loginController = (req:Request, res:Response) => {
 }
 
 const registerController = () => {
-   
+    
 }
 
 
@@ -34,8 +33,6 @@ const refreshAccessToken = (req:Request, res:Response) => {
       const decoded = jwt.verify(refreshToken, REFRESH_SECRET) as TokenPayload;
 
       const newAccessToken = generateAccessToken({phoneNumber: decoded.phoneNumber, password: decoded.password});
-
-      console.log(decoded.password);
 
       res.json({ newAccessToken }); 
     }
