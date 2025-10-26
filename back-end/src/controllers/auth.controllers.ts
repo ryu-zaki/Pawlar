@@ -8,7 +8,8 @@ const loginController = (req:Request, res:Response) => {
      const {body} = req;
      // postgreSQL functions
      // setting the database
-
+     
+     
      const refreshToken = generateRefreshToken(body.phoneNumber);
      const accessToken = generateAccessToken(body);
      
@@ -19,8 +20,10 @@ const loginController = (req:Request, res:Response) => {
      res.json({ accessToken }); 
 }
 
-const registerController = () => {
-    
+const registerController = (req:Request, res:Response) => {
+  
+
+
 }
 
 

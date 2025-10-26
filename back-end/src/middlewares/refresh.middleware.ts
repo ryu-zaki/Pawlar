@@ -1,8 +1,8 @@
-import { Response, Request } from 'express';
+import { Response, Request, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 const ACCESS_SECRET = process.env.ACCESS_SECRET as string;
 
-export const checkIfAccessToken = (req: Request, res: Response) => {
+export const checkIfAccessToken = (req: Request, res: Response, next: NextFunction) => {
   
   try {
      const authHeaders = req.headers["authorization"];
@@ -10,8 +10,9 @@ export const checkIfAccessToken = (req: Request, res: Response) => {
      if (!token) return res.sendStatus(401);
     
      const decoded = jwt.verify(token, ACCESS_SECRET);
-     res.json({ decoded });      
-
+     
+     
+     next();       
   }
 
   catch(err) {
