@@ -16,7 +16,7 @@ const LoginPage = () => {
 
 
       {/* Login Page */}
-      <div className="bg-[#FFFEFE] flex flex-col justify-start my-5 xl:my-12">
+      <div className="bg-[#FFFEFE] flex flex-col justify-start xl:my-12">
         <div className="mx-7 mt-8">
           <h1 className="text-2xl text-brown">Sign up</h1>
           <p className="text-gray-400">
