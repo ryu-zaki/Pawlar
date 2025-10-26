@@ -2,12 +2,14 @@ import { Response, Request } from "express";
 import { generateAccessToken, generateRefreshToken } from "../utils/generateTokens";
 import {TokenPayload} from '../interfaces';
 import jwt from 'jsonwebtoken';
+import { createUser } from "../services/auth.service";
 const REFRESH_SECRET = process.env.REFRESH_SECRET as string;
 
 const loginController = (req:Request, res:Response) => {
      const {body} = req;
      // postgreSQL functions
      // setting the database
+     
 
      const refreshToken = generateRefreshToken(body.phoneNumber);
      const accessToken = generateAccessToken(body);
@@ -19,8 +21,19 @@ const loginController = (req:Request, res:Response) => {
      res.json({ accessToken }); 
 }
 
-const registerController = () => {
+
+const registerController = async (req: Request, res: Response) => {
+  
+  try {   
+   await createUser(req.body);
    
+   res.sendStatus(200);
+   
+  }
+
+  catch(err) {
+    console.log(err);
+  }
 }
 
 

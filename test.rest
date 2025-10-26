@@ -1,20 +1,31 @@
 ### LOGIN
 
-POST http://localhost:3000/auth/login
+POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-    "phoneNumber": "09514406062",
-    "password": "ryuzaki"
+    "firstName": "Jhonwell",
+    "lastName": "Espanola",
+    "email": "ash@gmail.com",
+    "password": "123"
 }
 
 
 
-
-### PROTECTED ROUTE
-POST http://localhost:3000/profile
-Authorization: Bearer eyJhbGciOiJIUizI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6IjA5NTE0NDA2MDYyIiwicGFzc3dvcmQiOiJyeXV6YWtpIiwiaWF0IjoxNzYwODgyNzkwLCJleHAiOjE3NjA4ODM2OTB9.kuE_6l4hXuxsNR8LJzyuJbMCOYY8LVk-VL1RDwDMuvQ
-
 ### REFRESH ACCESS TOKEN 
 
-POST http://localhost:3000/auth/refresh-access-token
+GET http://localhost:3000/check
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6IjA5NTE0NDA2MDYyIiwicGFzc3dvcmQiOiJyeXV6YWtpIiwiaWF0IjoxNzYxNDU4MjM5LCJleHAiOjE3NjE0NTkxMzl9.sz3KfCMDyG_gyg2BuAJkoe7MhPVMNWR0FQTHtMe2E38
+
+
+### 
+
+POST http://localhost:3000/auth/register
+
+Content-Type: application/json
+{
+    "firstName": "Jhonwell",
+    "lastName": "Espanola",
+    "email": "jhon@gmail.com",
+    "password": "123"
+}
