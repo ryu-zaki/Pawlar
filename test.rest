@@ -1,11 +1,13 @@
 ### LOGIN
 
-POST http://localhost:3000/auth/login
+POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-    "phoneNumber": "09514406062",
-    "password": "ryuzaki"
+    "firstName": "Jhonwell",
+    "lastName": "Espanola",
+    "email": "ash@gmail.com",
+    "password": "123"
 }
 
 
@@ -19,3 +21,16 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6I
 
 GET http://localhost:3000/check
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6IjA5NTE0NDA2MDYyIiwicGFzc3dvcmQiOiJyeXV6YWtpIiwiaWF0IjoxNzYxNDU4MjM5LCJleHAiOjE3NjE0NTkxMzl9.sz3KfCMDyG_gyg2BuAJkoe7MhPVMNWR0FQTHtMe2E38
+
+
+### 
+
+POST http://localhost:3000/auth/register
+
+Content-Type: application/json
+{
+    "firstName": "Jhonwell",
+    "lastName": "Espanola",
+    "email": "jhon@gmail.com",
+    "password": "123"
+}
