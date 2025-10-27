@@ -1,31 +1,23 @@
 ### LOGIN
 
-POST http://localhost:3000/auth/register
+POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-    "firstName": "Jhonwell",
-    "lastName": "Espanola",
-    "email": "ash@gmail.com",
+    "email": "jellaanne@gmail.com",
     "password": "123"
 }
 
 
 
-### REFRESH ACCESS TOKEN 
 
-GET http://localhost:3000/check
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6IjA5NTE0NDA2MDYyIiwicGFzc3dvcmQiOiJyeXV6YWtpIiwiaWF0IjoxNzYxNDU4MjM5LCJleHAiOjE3NjE0NTkxMzl9.sz3KfCMDyG_gyg2BuAJkoe7MhPVMNWR0FQTHtMe2E38
-
-
-### 
-
-POST http://localhost:3000/auth/register
-
+### REGISTER
+POST  http://localhost:3000/auth/register
 Content-Type: application/json
+
 {
-    "firstName": "Jhonwell",
-    "lastName": "Espanola",
-    "email": "jhon@gmail.com",
-    "password": "123"
+    "email": "ryu@gmail.com",
+    "password": "123",
+    "firstName": "L",
+    "lastName": "lawliet"
 }
