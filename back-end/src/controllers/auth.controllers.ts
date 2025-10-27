@@ -2,23 +2,36 @@ import { Response, Request } from "express";
 import { generateAccessToken, generateRefreshToken } from "../utils/generateTokens";
 import {TokenPayload} from '../interfaces';
 import jwt from 'jsonwebtoken';
-import { createUser } from "../services/auth.service";
+import bcrypt from 'bcrypt';
+import { createUser, checkUser, extractUserInfo } from "../services/auth.service";
 const REFRESH_SECRET = process.env.REFRESH_SECRET as string;
 
-const loginController = (req:Request, res:Response) => {
+const loginController = async (req:Request, res:Response) => {
      const {body} = req;
-     // postgreSQL functions
-     // setting the database
      
+     try {
+         const exists = await checkUser(body.email); 
+         const user = await extractUserInfo(body.email);
+         const isPasswordValid = await bcrypt.compare(body.password, user?.password);
+         console.log(user?.password);
 
-     const refreshToken = generateRefreshToken(body.phoneNumber);
-     const accessToken = generateAccessToken(body);
+         if (!exists || !isPasswordValid) return res.sendStatus(403);
+
+         const refreshToken = generateRefreshToken(body.email);
+         const accessToken = generateAccessToken(body);
      
-     res.cookie('refreshToken', refreshToken, {
-          httpOnly: true
-     })
+         res.cookie('refreshToken', refreshToken, {
+            httpOnly: true
+         })
 
-     res.json({ accessToken }); 
+         res.json({ accessToken, user }); 
+     }
+
+     catch(err) {
+       console.log(err);
+       res.sendStatus(401);
+     }
+     
 }
 
 
