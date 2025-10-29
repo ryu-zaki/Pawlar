@@ -46,6 +46,7 @@ const registerController = async (req: Request, res: Response) => {
 
   catch(err) {
     console.log(err);
+    res.sendStatus(403); 
   }
 }
 
