@@ -1,9 +1,26 @@
+
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Wendy+One&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --color-primary-light: #FFEBD8;
-  --color-brown: #CA731C;
+  --color-flesh: #FFEBD8;
+  --color-brown-orange: #CA731C;
   --color-p-gray: #7F7F7F;
-  --color-primary-dark: #BF6A02;
-  --color-primary: #D9763B;
+  --color-choco: #985D22;
+  --color-light-brown: #C3A98F;
+  --color-white-button: #F6F6F6;
+  
+}
+
+
+.font-wendy {
+  font-family: 'Wendy One', sans-serif;
+}  
+
+.font-league {
+  font-family: 'League Spartan' , sans-serif;
+}
+
+.bg-paws-gradient {
+  background: linear-gradient(180deg, #CA731C 15%, #E67809 60%, #64390E 90%);
 }

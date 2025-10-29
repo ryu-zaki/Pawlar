@@ -1,0 +1,20 @@
+### LOGIN
+
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "phoneNumber": "09514406062",
+    "password": "ryuzaki"
+}
+
+
+
+
+### PROTECTED ROUTE
+POST http://localhost:3000/profile
+Authorization: Bearer eyJhbGciOiJIUizI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6IjA5NTE0NDA2MDYyIiwicGFzc3dvcmQiOiJyeXV6YWtpIiwiaWF0IjoxNzYwODgyNzkwLCJleHAiOjE3NjA4ODM2OTB9.kuE_6l4hXuxsNR8LJzyuJbMCOYY8LVk-VL1RDwDMuvQ
+
+### REFRESH ACCESS TOKEN 
+
+POST http://localhost:3000/auth/refresh-access-token
