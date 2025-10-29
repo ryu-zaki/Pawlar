@@ -16,7 +16,6 @@ const loginController = async (req: Request, res: Response) => {
     const exists = await checkUser(body.email);
     const user = await extractUserInfo(body.email);
     const isPasswordValid = await bcrypt.compare(body.password, user?.password);
-    console.log(user?.password);
 
     if (!exists || !isPasswordValid) return res.sendStatus(403);
 
@@ -24,7 +23,7 @@ const loginController = async (req: Request, res: Response) => {
     const accessToken = generateAccessToken(body);
 
     res.cookie('refreshToken', refreshToken, {
-      httpOnly: true
+      httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7
     })
 
     res.json({ accessToken, user });
