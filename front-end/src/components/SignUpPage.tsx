@@ -25,7 +25,7 @@ const SignUpPage = () => {
           return;
       }
         try{
-            const response = await api.post("http://192.168.123.110:3000/auth/register", userInfo)
+            const response = await api.post("http://localhost:3001/auth/register", userInfo)
             const data = await response.data;
 
             if (!response) {
@@ -49,8 +49,6 @@ const SignUpPage = () => {
             setModalOpen(true);
         }
       }
-
-      console.log(userInfo);
 
       const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
         setUserInfo(prev => {

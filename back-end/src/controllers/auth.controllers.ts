@@ -11,7 +11,7 @@ const RESET_SECRET = process.env.RESET_SECRET as string;
 
 const loginController = async (req: Request, res: Response) => {
   const { body } = req;
-
+ 
   try {
     const exists = await checkUser(body.email);
     const user = await extractUserInfo(body.email);
@@ -54,7 +54,7 @@ const registerController = async (req: Request, res: Response) => {
 
 
 const refreshAccessToken = (req: Request, res: Response) => {
-
+  console.log("hello")
   const refreshToken = req.cookies.refreshToken;
   if (!refreshToken) return res.sendStatus(401);
 
@@ -65,7 +65,7 @@ const refreshAccessToken = (req: Request, res: Response) => {
 
     res.json({ newAccessToken });
   }
-
+  
   catch (err) {
     res.sendStatus(403)
   }

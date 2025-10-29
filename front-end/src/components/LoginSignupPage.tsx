@@ -22,7 +22,7 @@ const LoginPage = () => {
     e.preventDefault();
 
       try {
-        const response = await fetch("http://192.168.123.110:3000/auth/login", {
+        const response = await fetch("http://localhost:3001/auth/login", {
           method: "POST",
           credentials: "include",
           headers: {
@@ -35,9 +35,7 @@ const LoginPage = () => {
         
         const data = await response.json();
         console.log(data);
-        setAccessToken(data.accessToken)
-        
-         
+        setAccessToken(data.accessToken);
             
         setModalHeader("Account logged in successfully!");
         setModalMessage("Login succesful!");
@@ -47,8 +45,8 @@ const LoginPage = () => {
           setModalOpen(false);
           navigate('/sample');
         }, 2000);
- 
       }
+
       catch(err) {
         console.log(err)
         setModalHeader("Oh no! Log in failed.");
@@ -57,8 +55,6 @@ const LoginPage = () => {
       }
   }
 
-
-  console.log(userInfo);
 
   const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     setUserInfo(prev => {   

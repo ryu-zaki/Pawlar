@@ -20,4 +20,4 @@ app.get("/profile", (req, res) => {
    res.json({ message: "Hello World" });
 })
  
-app.listen(3000, () => console.log("Server is runninng on PORT 3000"));
+app.listen(3001, () => console.log("Server is runninng on PORT 3000"));
