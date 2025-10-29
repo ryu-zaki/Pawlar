@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict 5icmGdqY5ELCH9q1Kno0Q5QSLpMth0ytcj7z6yj6cN9esYyGDy1HawfBnh3yEEw
+\restrict 92rjb9rGJygsR3AVn5sbDJwBtqEwfkEidL2pWeu9sccIdoLHfyFa1ebgYLsWhHb
 
 -- Dumped from database version 18.0
 -- Dumped by pg_dump version 18.0
@@ -62,6 +62,24 @@ $$;
 
 ALTER PROCEDURE public.createuser(IN fname character varying, IN lname character varying, IN _email character varying, IN _password text) OWNER TO postgres;
 
+--
+-- Name: getuserinfobyemail(text); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.getuserinfobyemail(p_email text) RETURNS TABLE(first_name character varying, last_name character varying, email character varying, password text)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    RETURN QUERY
+    SELECT u.first_name, u.last_name, u.email, u.password
+    FROM users u
+    WHERE u.email = p_email;
+END;
+$$;
+
+
+ALTER FUNCTION public.getuserinfobyemail(p_email text) OWNER TO postgres;
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -117,11 +135,9 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 COPY public.users (id, first_name, last_name, email, phone_number, password) FROM stdin;
 1	jhonwell	Espanola	jhon@gmail.com	\N	123
-3	Jhonwell	Espanola	ash@gmail.com	\N	123
-7	Jhon	Espanola	ryuzaki@gmail.com	\N	123
-11	Jhon	Espanola	ryuzakiiii@gmail.com	\N	123
-12	Jhonnnnnn	Espanollaaaa	ryuzakiiii@gmail.commmmmmmmm	\N	1233456790
 13	jella	gonzales	jellaanne@gmail.com	\N	123
+16	light	yagami	light@gmail.com	\N	$2b$10$tZLGVBf2Fh05heEdRxJuru6tllWXznzj2STvxyUsX5D51U/fM7DGm
+17	L	lawliet	ryu@gmail.com	\N	$2b$10$XleIKfn9hrYIi5wGAkDHs.CC8S5ZNUPqz6feNAKwv/6AIR7.JdUR6
 \.
 
 
@@ -129,7 +145,7 @@ COPY public.users (id, first_name, last_name, email, phone_number, password) FRO
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 14, true);
+SELECT pg_catalog.setval('public.users_id_seq', 17, true);
 
 
 --
@@ -152,5 +168,5 @@ ALTER TABLE ONLY public.users
 -- PostgreSQL database dump complete
 --
 
-\unrestrict 5icmGdqY5ELCH9q1Kno0Q5QSLpMth0ytcj7z6yj6cN9esYyGDy1HawfBnh3yEEw
+\unrestrict 92rjb9rGJygsR3AVn5sbDJwBtqEwfkEidL2pWeu9sccIdoLHfyFa1ebgYLsWhHb
 
