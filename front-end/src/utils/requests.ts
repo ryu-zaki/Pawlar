@@ -17,16 +17,22 @@ interface ApiResponse {
   message: string;
 }
 
-const requestPasswordReset = async (email: string) => {
-    const response = await api.post<ApiResponse>('/auth/forgot-password', { email });
-    return response.data; 
+interface ForgotPasswordResponse {
+  message: string;
+  resetToken: string; 
+}
+
+const requestPasswordReset = async (email: string): Promise<ForgotPasswordResponse> => {
+    const response = await api.post<ForgotPasswordResponse>('/auth/forgot-password', { email });
+    return response.data;
 };
 
-const resetPassword = async (email: string, otp: string, newPassword: string) => {
+const resetPassword = async (email: string, otp: string, newPassword: string, resetToken: string) => {
     const response = await api.post<ApiResponse>('/auth/reset-password', {
         email,
         otp,
         newPassword,
+        resetToken
     });
     return response.data; 
 };
