@@ -1,11 +1,17 @@
 import {Pool} from 'pg';
+import dotenv from 'dotenv';
+
+/* DATABASE CREDENTIALS */
+dotenv.config();
+const { DB_USER, DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT } = process.env; 
+
 
 const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: "pawlar_db",
-    port: 5432,
-    password: "0330@Kenzo"
+    user: DB_USER,
+    host: DB_HOST,
+    database: DB_NAME,
+    port: Number(DB_PORT),
+    password: DB_PASSWORD
 });
 
 pool.connect()
