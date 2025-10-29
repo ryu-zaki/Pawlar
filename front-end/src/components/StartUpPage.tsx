@@ -3,15 +3,16 @@ import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useNavigate } from "react-router-dom";
 import { GreaterThanIcon } from "@phosphor-icons/react";
-
-// Helper function to create custom Tailwind utility classes using VW/VH
-// NOTE: Since you can't define custom config here, I will use custom
-// JIT syntax with relative units for the positions and sizes.
+import StartUpAnimation from "./StartUpAnimation";
 
 export default function StartupPage() {
+  const [showIntro, setShowIntro] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isInitialized, setIsInitialized] = useState(false);
   const slidesRef = useRef<HTMLDivElement[]>([]);
   const navigate = useNavigate();
+
+
 
   const addToRefs = (el: HTMLDivElement | null) => {
     if (el && !slidesRef.current.includes(el)) {
@@ -20,11 +21,16 @@ export default function StartupPage() {
   };
 
   useGSAP(() => {
-    if (slidesRef.current.length === 0) return;
-
+    if (isInitialized || showIntro) return;
+   
+    gsap.delayedCall(0.1, () => {    
+    if (!slidesRef.current || slidesRef.current.length === 0) { return; }
     gsap.set(slidesRef.current, { xPercent: 100, yPercent: 0, opacity: 1 });
     gsap.set(slidesRef.current[0], { xPercent: 0 });
-  }, []);
+    
+    setIsInitialized(true)
+    });
+  }, [showIntro, isInitialized]);
 
   useGSAP(() => {
     if (currentSlide === 3) {
@@ -36,7 +42,7 @@ export default function StartupPage() {
     if (currentSlide < slidesRef.current.length - 1) {
       const nextIndex = currentSlide + 1;
 
-      // Handle the transition from slide 3 to 4 (vertical transition)
+      // Handle the transition from slide 3 to 4 
       if (currentSlide === 3) {
         gsap.set(slidesRef.current[nextIndex], { yPercent: 100, xPercent: 0, opacity: 1 });
 
@@ -72,7 +78,7 @@ export default function StartupPage() {
 
     const tl = gsap.timeline({
       defaults: { ease: "power2.inOut", duration: 1 },
-      onComplete: () => navigate("/forgot-password"),
+      onComplete: () => navigate("/signup"),
     });
 
     // Slide 5 moves up to reveal login page
@@ -81,20 +87,18 @@ export default function StartupPage() {
 
   return (
     <>
-      <div className="relative w-full h-screen overflow-hidden">
-        {/*
-          --- KEY CHANGE STRATEGY ---
-          We use responsive text sizes (rem based) and use custom JIT values
-          with viewport width/height (vw/vh) for placements and image sizes
-          to maintain the visual look on any screen.
-        */}
-
+      {showIntro ? (
+    <StartUpAnimation onComplete={() => setShowIntro(false)} />
+  ) : (
+    <div className="relative w-full h-screen overflow-hidden">
+      
+    <div className="relative w-full h-screen overflow-hidden">
+ 
         {/* slide 1 */}
         <div
           ref={addToRefs}
           className="absolute inset-0 flex flex-col items-center bg-flesh"
         >
-          {/* texts: Use responsive text sizes (rem) and place using margin/flex */}
           <div className="relative z-20 flex flex-col items-start text-justify pt-[8vh] -left-5 ">
             <h1 className="text-[10vw] mb-2 font-wendy text-choco leading-tight">
               Track Your
@@ -106,16 +110,13 @@ export default function StartupPage() {
             </p>
           </div>
 
-          {/* button: Positioned absolutely using VW/VH for consistent spot */}
           <button
             onClick={nextSlide}
-            // Button size is fixed for touch target, position is relative to viewport
             className="absolute right-[5vw] bottom-[5vh] w-[12vw] h-[12vw] max-w-[50px] max-h-[50px] flex items-center justify-center bg-light-brown rounded-full z-20 shadow-md"
           >
             <GreaterThanIcon size={20} color="#FFF" weight="bold" />
           </button>
 
-          {/* assets: Sizing and placement using VW/VH */}
           <div className="relative w-full h-full">
             <img
               src="/assets/blob1.svg"
@@ -285,6 +286,11 @@ export default function StartupPage() {
           </button>
         </div>
       </div>
+
+    </div>
+  )}
     </>
   );
 }
+
+
