@@ -5,6 +5,7 @@ import LoginPage from './components/LoginSignupPage';
 import './index.css';
 import SignUpPage from './components/SignUpPage';
 import ForgotPasswordPage from './components/ForgotPasswordPage';
+import SampleLandingPage from './components/SampleLandingPage';
 
 
 function App() {
@@ -16,6 +17,7 @@ return (
         <Route path='/signup' element={<SignUpPage/>} />
         {/* <Route path='/login' element={<LoginPage/>} /> */}
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/sample" element={<SampleLandingPage/>} />
       </Routes>
 
   );

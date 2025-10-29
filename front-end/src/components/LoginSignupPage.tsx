@@ -22,11 +22,18 @@ const LoginPage = () => {
     e.preventDefault();
 
       try {
-        const response = await api.post("http://192.168.123.110:3000/auth/login", userInfo) 
+        const response = await fetch("http://192.168.123.110:3000/auth/login", {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            'Content-Type' : 'application/json'
+          },
+          body: JSON.stringify(userInfo)
+        }) 
 
-        if (!response)  throw new Error();
+        if (response.status === 401)  throw new Error();
         
-        const data = await response.data;
+        const data = await response.json();
         console.log(data);
         setAccessToken(data.accessToken)
         
@@ -36,11 +43,11 @@ const LoginPage = () => {
         setModalMessage("Login succesful!");
         setModalOpen(true);
 
-        /* setTimeout(() => {
+         setTimeout(() => {
           setModalOpen(false);
-          navigate("landing page toh");
+          navigate('/sample');
         }, 2000);
- */
+ 
       }
       catch(err) {
         console.log(err)

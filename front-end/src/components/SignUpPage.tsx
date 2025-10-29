@@ -39,7 +39,7 @@ const SignUpPage = () => {
 
             setTimeout(() => {
                 setModalOpen(false);
-                navigate("next page to yah");
+                navigate('/sample');
             }, 2000);
 
         } catch(err) {
