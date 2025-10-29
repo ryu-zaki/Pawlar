@@ -12,6 +12,7 @@ const ForgotPasswordPage = () => {
     const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [message, setMessage] = useState<string>('');
     const [error, setError] = useState<string>('');
+    const [resetToken, setResetToken] = useState<string>('');
     const navigate = useNavigate();
 
     const handleRequestOTP = async (e: FormEvent) => {
@@ -22,6 +23,7 @@ const ForgotPasswordPage = () => {
         try {
             const response = await requestPasswordReset(email);
             setMessage(response.message);
+            setResetToken(response.resetToken);
             setStage('enter-otp');
         } catch (err: any) {
             const errorMessage = err.response?.data?.message || err.message || 'An unexpected error occurred.';
@@ -45,7 +47,7 @@ const ForgotPasswordPage = () => {
         }
 
         try {
-            const response = await resetPassword(email, otp, newPassword);
+            const response = await resetPassword(email, otp, newPassword, resetToken);
             setMessage(response.message);
             setStage('success');
 
