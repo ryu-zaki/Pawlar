@@ -2,7 +2,7 @@ import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { GreaterThanIcon } from "@phosphor-icons/react";
-import { resetPassword } from "../utils/requests"; // <-- IMPORT NATIN
+import { resetPassword } from "../utils/requests";
 
 const RenewPassword = () => {
   const navigate = useNavigate();
@@ -13,7 +13,6 @@ const RenewPassword = () => {
   const [showConfirmBack, setShowConfirmBack] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  // --- STATE NA KAILANGAN ---
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -22,7 +21,6 @@ const RenewPassword = () => {
     setError("");
     setLoading(true);
 
-    // Validation
     if (!password || !confirmPassword) {
       setError("Please fill in both password fields.");
       setLoading(false);
@@ -39,25 +37,19 @@ const RenewPassword = () => {
       return;
     }
 
-    // KINUKUHA ANG LAHAT NG DATA MULA SA SESSION
     const email = sessionStorage.getItem("pw_reset_email");
     const otp = sessionStorage.getItem("pw_reset_otp");
     const resetToken = sessionStorage.getItem("pw_reset_token");
 
-    // Check kung may nawawalang data (e.g., nag-timeout, etc.)
     if (!email || !otp || !resetToken) {
       setError("Your session has expired. Please try again.");
       setLoading(false);
-      // Pwede mo silang ibalik sa simula
-      // navigate("/EmailSendOTP"); 
       return;
     }
 
     try {
-      // Tinatawag ang final API
       await resetPassword(email, otp, password, resetToken);
       
-      // Ipinapakita ang success modal
       setShowSuccessModal(true);
 
     } catch (err: any) {
@@ -69,13 +61,12 @@ const RenewPassword = () => {
   };
 
   const handleSuccess = () => {
-    // NILILINIS ANG SESSION STORAGE PAGKATAPOS
     sessionStorage.removeItem("pw_reset_email");
     sessionStorage.removeItem("pw_reset_otp");
     sessionStorage.removeItem("pw_reset_token");
     
     setShowSuccessModal(false);
-    navigate("../login"); // <-- Pinapalagay ko na /LoginSignupPage ang login mo
+    navigate("../login");
   };
 
   return (
