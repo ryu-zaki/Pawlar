@@ -99,7 +99,7 @@ const EmailOTP = () => {
                 onClick={() => setShowConfirmBack(false)}
                 className="bg-gray-200 text-gray-700 px-10 py-2 rounded-[10px] font-medium hover:bg-gray-300 transition"> Cancel </button>
             <button
-                onClick={() => navigate("/")} // <-- Dapat siguro sa /EmailSendOTP ito?
+                onClick={() => navigate("/")} 
                 className="bg-[#A63A2B] text-white px-9 py-2 rounded-[10px] font-medium hover:opacity-90 transition"> Yes, I’m sure </button>
           </div>
         </div>

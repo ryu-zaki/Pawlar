@@ -34,7 +34,7 @@ const EmailSendOTP = () => {
       {/* Back Button*/}
       <div className="absolute top-6 left-6">
         <button
-          onClick={() => navigate("/LoginSignupPage")}
+          onClick={() => navigate("../login")}
           className="bg-[#C4703D] text-white rounded-full p-3">
           <GreaterThanIcon size={20} className="rotate-180" />
         </button>
