@@ -3,7 +3,9 @@ const SampleLandingPage = () => {
 
     return (
         <>
-            <h1>HAKSJDAHKJDHA</h1>
+            <div className="flex items-center justify-center w-full">
+                <h1>Welcome to Pawlar App!</h1>
+            </div>
         </>
     );
 

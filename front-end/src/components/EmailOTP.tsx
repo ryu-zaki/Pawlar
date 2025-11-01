@@ -6,7 +6,7 @@ const EmailOTP = () => {
   const navigate = useNavigate();
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [showConfirmBack, setShowConfirmBack] = useState(false);
-  const [error, setError] = useState<string>(""); // <-- Idinagdag
+  const [error, setError] = useState<string>("");
 
   const handleChange = (index: number, value: string) => {
     if (/^[0-9]?$/.test(value)) {
@@ -14,7 +14,6 @@ const EmailOTP = () => {
       newOtp[index] = value;
       setOtp(newOtp);
 
-      // Auto-focus sa susunod na input
       if (value && index < 5) {
         const nextInput = document.getElementById(`otp-input-${index + 1}`);
         nextInput?.focus();
@@ -32,7 +31,6 @@ const EmailOTP = () => {
       return;
     }
 
-    // SINE-SAVE ANG OTP PARA SA FINAL STEP
     sessionStorage.setItem("pw_reset_otp", otpString);
     navigate("renew");
   };
@@ -58,9 +56,9 @@ const EmailOTP = () => {
         {/* OTP Input Boxes */}
         <div className="flex justify-center space-x-2 mt-4">
           {otp.map((digit, index) => (<input
-              id={`otp-input-${index}`} // <-- Idinagdag para sa auto-focus
+              id={`otp-input-${index}`}
               key={index}
-              type="tel" // <-- Mas maganda para sa mobile
+              type="tel" 
               maxLength={1}
               value={digit}
               onChange={(e) => handleChange(index, e.target.value)}
