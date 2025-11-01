@@ -9,10 +9,10 @@ import { useLogin } from '../contexts/LoginContext';
 
 const LoginPage = () => {
   const [userInfo, setUserInfo] = React.useState({
-    email: "", 
-    password: "", 
+    email: "",
+    password: "",
   });
-  const {setIsLogin} = useLogin();
+  const { setIsLogin } = useLogin();
 
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
@@ -23,36 +23,36 @@ const LoginPage = () => {
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
-      try {
-        const response = await api.post("/auth/login", userInfo) 
+    try {
+      const response = await api.post("/auth/login", userInfo)
 
-        if (response.status === 401)  throw new Error();
-        
-        const data = response.data;
-        console.log(data);
-        setAccessToken(data.accessToken);
-            
-        setModalHeader("Account logged in successfully!");
-        setModalMessage("Login succesful!");
-        setModalOpen(true);
-        
-        setTimeout(() => {
-          setIsLogin(true);
-        }, 2000);
-        
-      }
+      if (response.status === 401) throw new Error();
 
-      catch(err) {
-        console.log(err)
-        setModalHeader("Oh no! Log in failed.");
-        setModalMessage("Please try again");
-        setModalOpen(true);
-      }
+      const data = response.data;
+      console.log(data);
+      setAccessToken(data.accessToken);
+
+      setModalHeader("Account logged in successfully!");
+      setModalMessage("Login succesful!");
+      setModalOpen(true);
+
+      setTimeout(() => {
+        setIsLogin(true);
+      }, 2000);
+
+    }
+
+    catch (err) {
+      console.log(err)
+      setModalHeader("Oh no! Log in failed.");
+      setModalMessage("Please try again");
+      setModalOpen(true);
+    }
   }
 
 
   const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    setUserInfo(prev => {   
+    setUserInfo(prev => {
       return ({
         ...prev,
         [target.id]: target.value
@@ -82,9 +82,9 @@ const LoginPage = () => {
             Log In
           </h1>
           <p className="text-gray-400">
-              Don't have an account? {" "}
-              <a
-              onClick={ () => navigate('/auth/signup')}
+            Don't have an account? {" "}
+            <a
+              onClick={() => navigate('/auth/signup')}
               className="text-brown underline cursor-pointer">Sign up</a>
           </p>
         </div>
@@ -117,18 +117,26 @@ const LoginPage = () => {
               required
             />
 
-            <div className="mt-2 flex items-center">
-              <input type="checkbox" className="h-3 w-3" />
-              <label className="ml-2 text-[4vw] text-p-gray">
-                Save account
-              </label>
+            <div className="mt-2 flex items-center justify-between">
+              <div>
+                <input type="checkbox" className="h-3 w-3" />
+                <label className="ml-2 text-[4vw] text-p-gray">
+                  Save account
+                </label>
+              </div>
+              <p
+              className="text-[#A95A29] font-semibold"
+              onClick={() => navigate('../otp')}>
+                Forgot Password?
+              </p>
+
             </div>
-            
+
             {/* Save button */}
             <button
               type="submit"
               className="w-full h-[40px] mt-4 bg-brown-orange text-white text-[4.5vw] rounded-[15px] border-2 border-white shadow-sm">
-               Log in
+              Log in
             </button>
           </div>
 
@@ -140,43 +148,43 @@ const LoginPage = () => {
 
           <div className="relative flex items-center justify-center mt-[15vw] bottom-4">
             <button
-            type="button"
-            className="absolute w-full h-[40px] z-0 bg-white text-p-gray text-[4.5vw] rounded-[15px] border shadow-sm">
-            <GoogleLogoIcon 
-            size={20}
-            className="absolute z-10 flex items-center justify-center translate-x-15 translate-y-1"           
-            />
-            Continue with Google
+              type="button"
+              className="absolute w-full h-[40px] z-0 bg-white text-p-gray text-[4.5vw] rounded-[15px] border shadow-sm">
+              <GoogleLogoIcon
+                size={20}
+                className="absolute z-10 flex items-center justify-center translate-x-15 translate-y-1"
+              />
+              Continue with Google
             </button>
           </div>
         </form>
       </div>
 
-          <Modal 
-          isOpen={modalOpen} 
-          onOpenChange={setModalOpen} 
-          isDismissable={false} 
-          backdrop="opaque"
-          placement="center"
-          className="w-[85vw] h-[20vh] flex flex-center items-center z-30 rounded-2xl shadow-lg">
-              <ModalContent className="bg-white-button text-center p-6">
-                <ModalHeader
-                className="text-brown-orange text-semibold text-[5vw] translate-y-[3vw]">
-                 {modalHeader} </ModalHeader>
-              <ModalBody>
-                <p className="-translate-y-[2vw] text-[4vw]">{modalMessage}</p>
-              </ModalBody>
-              <ModalFooter>
-                <Button 
-                onPress={() => setModalOpen(false)}
-                className={`bg-transparent text-[4vw] -translate-y-[6vw] 
-                ${ modalMessage.toLowerCase().includes("successfully") ? "text-[#17592B]" : "text-[#B31919]"}
+      <Modal
+        isOpen={modalOpen}
+        onOpenChange={setModalOpen}
+        isDismissable={false}
+        backdrop="opaque"
+        placement="center"
+        className="w-[85vw] h-[20vh] flex flex-center items-center z-30 rounded-2xl shadow-lg">
+        <ModalContent className="bg-white-button text-center p-6">
+          <ModalHeader
+            className="text-brown-orange text-semibold text-[5vw] translate-y-[3vw]">
+            {modalHeader} </ModalHeader>
+          <ModalBody>
+            <p className="-translate-y-[2vw] text-[4vw]">{modalMessage}</p>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              onPress={() => setModalOpen(false)}
+              className={`bg-transparent text-[4vw] -translate-y-[6vw] 
+                ${modalMessage.toLowerCase().includes("successfully") ? "text-[#17592B]" : "text-[#B31919]"}
                 `}>
-                  Tap to continue
-                </Button>
-              </ModalFooter>
-              </ModalContent>
-          </Modal>
+              Tap to continue
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
 
     </div>
   );

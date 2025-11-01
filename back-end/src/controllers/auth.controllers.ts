@@ -77,7 +77,7 @@ const forgotPasswordController = async (req: Request, res: Response) => {
   try {
     const userExists = await checkUser(email);
     if (!userExists) {
-      return res.status(200).json({ message: 'If an account with that email exists, an OTP has been sent.' });
+      return res.status(404).json({ message: 'Email is not registered. Please check for typos or sign up.' });
     }
 
     const otp = generateOTP();
