@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { GreaterThanIcon } from "@phosphor-icons/react";
+import { resetPassword } from "../utils/requests"; // <-- IMPORT NATIN
 
 const RenewPassword = () => {
   const navigate = useNavigate();
@@ -12,22 +13,69 @@ const RenewPassword = () => {
   const [showConfirmBack, setShowConfirmBack] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const handleConfirm = (e: React.FormEvent) => {
+  // --- STATE NA KAILANGAN ---
+  const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleConfirm = async (e: FormEvent) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    // Validation
     if (!password || !confirmPassword) {
-      alert("Please fill in both password fields.");
+      setError("Please fill in both password fields.");
+      setLoading(false);
       return;
     }
     if (password !== confirmPassword) {
-      alert("Passwords do not match.");
+      setError("Passwords do not match.");
+      setLoading(false);
       return;
     }
-    setShowSuccessModal(true);
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long.");
+      setLoading(false);
+      return;
+    }
+
+    // KINUKUHA ANG LAHAT NG DATA MULA SA SESSION
+    const email = sessionStorage.getItem("pw_reset_email");
+    const otp = sessionStorage.getItem("pw_reset_otp");
+    const resetToken = sessionStorage.getItem("pw_reset_token");
+
+    // Check kung may nawawalang data (e.g., nag-timeout, etc.)
+    if (!email || !otp || !resetToken) {
+      setError("Your session has expired. Please try again.");
+      setLoading(false);
+      // Pwede mo silang ibalik sa simula
+      // navigate("/EmailSendOTP"); 
+      return;
+    }
+
+    try {
+      // Tinatawag ang final API
+      await resetPassword(email, otp, password, resetToken);
+      
+      // Ipinapakita ang success modal
+      setShowSuccessModal(true);
+
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || err.message || "An unexpected error occurred.";
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSuccess = () => {
+    // NILILINIS ANG SESSION STORAGE PAGKATAPOS
+    sessionStorage.removeItem("pw_reset_email");
+    sessionStorage.removeItem("pw_reset_otp");
+    sessionStorage.removeItem("pw_reset_token");
+    
     setShowSuccessModal(false);
-    navigate("/LoginSignupPage");
+    navigate("../login"); // <-- Pinapalagay ko na /LoginSignupPage ang login mo
   };
 
   return (
@@ -84,12 +132,18 @@ const RenewPassword = () => {
           </button>
         </div>
 
+        {/* Error Message Display */}
+        {error && (
+          <p className="text-red-600 text-sm text-center w-full">{error}</p>
+        )}
+
         {/* Confirm Button */}
         <button
           onClick={handleConfirm}
-          className="w-[280px] h-[40px] bg-[#C4702E] text-white text-[16px] font-['Wendy_One'] rounded-[15px] mt-1 hover:opacity-90 transition"
+          disabled={loading} // <-- Idinagdag
+          className="w-[280px] h-[40px] bg-[#C4702E] text-white text-[16px] font-['Wendy_One'] rounded-[15px] mt-1 hover:opacity-90 transition disabled:opacity-50"
         >
-          Confirm
+          {loading ? "Confirming..." : "Confirm"}
         </button>
       </div>
 

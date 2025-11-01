@@ -2,23 +2,39 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GreaterThanIcon } from "@phosphor-icons/react";
 
-
 const EmailOTP = () => {
   const navigate = useNavigate();
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [showConfirmBack, setShowConfirmBack] = useState(false);
+  const [error, setError] = useState<string>(""); // <-- Idinagdag
 
   const handleChange = (index: number, value: string) => {
     if (/^[0-9]?$/.test(value)) {
       const newOtp = [...otp];
       newOtp[index] = value;
       setOtp(newOtp);
+
+      // Auto-focus sa susunod na input
+      if (value && index < 5) {
+        const nextInput = document.getElementById(`otp-input-${index + 1}`);
+        nextInput?.focus();
+      }
     }
   };
 
   const handleConfirm = (e: React.FormEvent) => {
     e.preventDefault();
-    navigate("/RenewPassword");
+    setError("");
+
+    const otpString = otp.join("");
+    if (otpString.length !== 6) {
+      setError("Please enter the complete 6-digit OTP.");
+      return;
+    }
+
+    // SINE-SAVE ANG OTP PARA SA FINAL STEP
+    sessionStorage.setItem("pw_reset_otp", otpString);
+    navigate("renew");
   };
 
   return (
@@ -42,8 +58,9 @@ const EmailOTP = () => {
         {/* OTP Input Boxes */}
         <div className="flex justify-center space-x-2 mt-4">
           {otp.map((digit, index) => (<input
+              id={`otp-input-${index}`} // <-- Idinagdag para sa auto-focus
               key={index}
-              type="text"
+              type="tel" // <-- Mas maganda para sa mobile
               maxLength={1}
               value={digit}
               onChange={(e) => handleChange(index, e.target.value)}
@@ -51,6 +68,11 @@ const EmailOTP = () => {
             />
           ))}
         </div>
+
+        {/* Error Message Display */}
+        {error && (
+          <p className="text-red-600 text-sm text-center w-full pt-2">{error}</p>
+        )}
 
         {/* Confirm Button */}
         <button
@@ -61,7 +83,7 @@ const EmailOTP = () => {
         </button>
       </div>
 
-      {/* Resend */}
+      {/* Resend (Note: Kailangan ng bagong function para dito) */}
       <p className="text-sm text-gray-600 mt-4">
         If you didn’t receive the code:{" "}
         <button className="text-[#C4703D] font-semibold hover:underline">
@@ -79,14 +101,12 @@ const EmailOTP = () => {
                 onClick={() => setShowConfirmBack(false)}
                 className="bg-gray-200 text-gray-700 px-10 py-2 rounded-[10px] font-medium hover:bg-gray-300 transition"> Cancel </button>
             <button
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/")} // <-- Dapat siguro sa /EmailSendOTP ito?
                 className="bg-[#A63A2B] text-white px-9 py-2 rounded-[10px] font-medium hover:opacity-90 transition"> Yes, I’m sure </button>
           </div>
         </div>
         </div>
       )}
-
-
     </div>
   );
 };
