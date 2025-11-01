@@ -25,7 +25,7 @@ const SignUpPage = () => {
           return;
       }
         try{
-            const response = await api.post("http://localhost:3001/auth/register", userInfo)
+            const response = await api.post("/auth/register", userInfo)
             const data = await response.data;
 
             if (!response) {
@@ -82,7 +82,7 @@ const SignUpPage = () => {
                 <p className="text-gray-400">
                     Already have an account? {" "}
                     <a
-                    onClick={() => navigate('/login')}
+                    onClick={() => navigate('/auth/login')}
                     className="text-brown underline cursor-pointer">Log in</a>
                 </p>
                 </div>

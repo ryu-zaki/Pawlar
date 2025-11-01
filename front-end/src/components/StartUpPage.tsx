@@ -78,7 +78,7 @@ export default function StartupPage() {
 
     const tl = gsap.timeline({
       defaults: { ease: "power2.inOut", duration: 1 },
-      onComplete: () => navigate("/signup"),
+      onComplete: () => navigate("/auth/login"),
     });
 
     // Slide 5 moves up to reveal login page

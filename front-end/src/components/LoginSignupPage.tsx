@@ -84,7 +84,7 @@ const LoginPage = () => {
           <p className="text-gray-400">
               Don't have an account? {" "}
               <a
-              onClick={ () => navigate('/signup')}
+              onClick={ () => navigate('/auth/signup')}
               className="text-brown underline cursor-pointer">Sign up</a>
           </p>
         </div>
