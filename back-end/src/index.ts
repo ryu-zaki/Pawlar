@@ -5,7 +5,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import routes from './routes';
 import { checkIfAccessToken } from "./middlewares/token.middleware";
-
+const PORT = process.env.PORT;
 const app = express();
 
 app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
@@ -20,4 +20,4 @@ app.get("/profile", (req, res) => {
    res.json({ message: "Hello World" });
 })
  
-app.listen(3001, () => console.log("Server is runninng on PORT 3000"));
+app.listen(PORT, () => console.log(`Server is runninng on PORT ${PORT}`));

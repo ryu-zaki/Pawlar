@@ -4,6 +4,7 @@ import { GoogleLogoIcon } from "@phosphor-icons/react";
 import { Modal, ModalContent, ModalBody, ModalHeader, ModalFooter, Button } from "@heroui/react";
 import { useNavigate } from "react-router-dom";
 import api, { setAccessToken } from "../utils/api";
+import { useLogin } from '../contexts/LoginContext';
 
 
 const LoginPage = () => {
@@ -11,6 +12,8 @@ const LoginPage = () => {
     email: "", 
     password: "", 
   });
+  const {setIsLogin} = useLogin();
+
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [modalHeader, setModalHeader] = useState("");
@@ -20,31 +23,23 @@ const LoginPage = () => {
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
-
       try {
-        const response = await fetch("http://localhost:3001/auth/login", {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            'Content-Type' : 'application/json'
-          },
-          body: JSON.stringify(userInfo)
-        }) 
+        const response = await api.post("/auth/login", userInfo) 
 
         if (response.status === 401)  throw new Error();
         
-        const data = await response.json();
+        const data = response.data;
         console.log(data);
         setAccessToken(data.accessToken);
             
         setModalHeader("Account logged in successfully!");
         setModalMessage("Login succesful!");
         setModalOpen(true);
-
-         setTimeout(() => {
-          setModalOpen(false);
-          navigate('/sample');
+        
+        setTimeout(() => {
+          setIsLogin(true);
         }, 2000);
+        
       }
 
       catch(err) {

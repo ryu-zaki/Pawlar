@@ -1,7 +1,7 @@
 import axios, { AxiosError, type AxiosInstance, type InternalAxiosRequestConfig, type AxiosResponse } from 'axios';
 
 const api: AxiosInstance = axios.create({
-    baseURL: 'http://localhost:3000',
+    baseURL: `http://localhost:3000`,
     withCredentials: true,
 });
 
@@ -12,7 +12,7 @@ export const setAccessToken = (token: string) => {
 }
 
 // Automatic attachment of access token on every request
-api.interceptors.request.use(
+/* api.interceptors.request.use(
     (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
         if (accessToken && config.headers) {
            config.headers.Authorization = `Bearer ${accessToken}`
@@ -21,10 +21,10 @@ api.interceptors.request.use(
         return config;
     },
     (err: AxiosError) => Promise.reject(err)
-);
+); */
 
 // Handling expired or invalid accessToken
-api.interceptors.response.use(
+/* api.interceptors.response.use(
     (response: AxiosResponse): AxiosResponse => response,
     async (error: AxiosError) => {
        const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
@@ -52,7 +52,7 @@ api.interceptors.response.use(
        return Promise.reject(error);
     }
 
-)
+) */
 
 export default api;
 

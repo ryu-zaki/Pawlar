@@ -54,7 +54,6 @@ const registerController = async (req: Request, res: Response) => {
 
 
 const refreshAccessToken = (req: Request, res: Response) => {
-  console.log("hello")
   const refreshToken = req.cookies.refreshToken;
   if (!refreshToken) return res.sendStatus(401);
 
