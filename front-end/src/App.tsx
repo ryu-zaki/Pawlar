@@ -1,5 +1,5 @@
 import './App.css'
-import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import StartupPage from './components/StartUpPage';
 import LoginPage from './components/LoginSignupPage';
 import './index.css';
