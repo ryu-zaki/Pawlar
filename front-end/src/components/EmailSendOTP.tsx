@@ -1,11 +1,10 @@
 import { useState, type FormEvent } from "react";
 import { GreaterThanIcon, EnvelopeSimple } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
-import { requestPasswordReset } from "../utils/requests"; // <-- IMPORT NATIN
+import { requestPasswordReset } from "../utils/requests";
 
 const EmailSendOTP = () => {
   const navigate = useNavigate();
-  // --- STATE NA KAILANGAN ---
   const [email, setEmail] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -16,18 +15,14 @@ const EmailSendOTP = () => {
     setError("");
 
     try {
-      // Tinatawag ang API na galing sa dating component
       const response = await requestPasswordReset(email);
 
-      // SINE-SAVE NATIN ANG DATA PARA SA SUSUNOD NA PAGE
       sessionStorage.setItem("pw_reset_email", email);
       sessionStorage.setItem("pw_reset_token", response.resetToken);
 
-      // Nag-navigate lang kapag successful
       navigate("verify");
 
     } catch (err: any) {
-      // Pinapakita ang error (e.g., "Email not registered")
       const errorMessage = err.response?.data?.message || err.message || "An unexpected error occurred.";
       setError(errorMessage);
       setLoading(false);
@@ -39,7 +34,7 @@ const EmailSendOTP = () => {
       {/* Back Button*/}
       <div className="absolute top-6 left-6">
         <button
-          onClick={() => navigate("/LoginSignupPage")} // <-- Pinapalagay ko na /LoginSignupPage ang login mo
+          onClick={() => navigate("../login")}
           className="bg-[#C4703D] text-white rounded-full p-3">
           <GreaterThanIcon size={20} className="rotate-180" />
         </button>

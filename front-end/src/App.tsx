@@ -30,12 +30,7 @@ function App() {
         <Route path="otp/verify" element={<EmailOTP />} />
         <Route path="otp/verify/renew" element={<RenewPassword />} />
       </Route>
-
-      {/* Step 2: Dito ilalagay ang OTP */}
-
-      {/* Step 3: Dito gagawin ang bagong password */}
-
-      {/* <Route path='/login' element={<LoginPage/>} /> */}
+      
       <Route path="/sample" element={isLogin ? <SampleLandingPage /> : <Navigate to={"/auth/login"} />} />
     </Routes>
 
