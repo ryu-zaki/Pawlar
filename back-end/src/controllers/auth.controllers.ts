@@ -17,7 +17,7 @@ const loginController = async (req: Request, res: Response) => {
     const user = await extractUserInfo(body.email);
     const isPasswordValid = await bcrypt.compare(body.password, user?.password);
 
-    if (!isPasswordValid) return res.sendStatus(403);
+    if (!isPasswordValid) return res.sendStatus(401); // unauthorized: wrong password / credentials
 
     const refreshToken = generateRefreshToken(body.email);
     const accessToken = generateAccessToken(body);
@@ -31,7 +31,7 @@ const loginController = async (req: Request, res: Response) => {
 
   catch (err) {
     console.log(err);
-    res.sendStatus(401);
+    res.sendStatus(500);
   }
 
 }
