@@ -123,4 +123,24 @@ const resetPasswordController = async (req: Request, res: Response) => {
   }
 };
 
-export { loginController, registerController, refreshAccessToken, forgotPasswordController, resetPasswordController };
+const handleGoogleLogin = (req: Request, res: Response) => {
+  
+  try {
+    const { body } = req;
+    const refreshToken = generateRefreshToken(body.email);
+    const accessToken = generateAccessToken(body);
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7
+    })
+
+    res.json({ accessToken });
+  }
+
+  catch(err) {
+    console.log(err);
+  }
+
+}
+
+export { loginController, registerController, refreshAccessToken, forgotPasswordController, resetPasswordController, handleGoogleLogin };

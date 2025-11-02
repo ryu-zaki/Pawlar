@@ -2,9 +2,18 @@
 import React, { useState, type FormEvent } from "react";
 import { GoogleLogoIcon, EyeIcon, EyeSlashIcon } from "@phosphor-icons/react";
 import { Modal, ModalContent, ModalBody, ModalHeader, ModalFooter, Button } from "@heroui/react";
+import {jwtDecode} from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import api, { setAccessToken } from "../utils/api";
 import { useLogin } from '../contexts/LoginContext';
+import { GoogleLogin } from "@react-oauth/google";
+
+interface GooglePayload {
+  email: string;
+  name: string;
+  picture: string;
+  sub: string; // Google user ID
+}
 
 
 const LoginPage = () => {
@@ -60,6 +69,29 @@ const LoginPage = () => {
       });
     })
   }
+
+
+  const handleLoginSuccess = async (credentialResponse: any) => {
+    if (!credentialResponse.credential) return;
+
+    // Decode JWT (optional, just to view data on frontend)
+    const decoded: GooglePayload = jwtDecode(credentialResponse.credential);
+    console.log("Google user:", decoded);
+    
+    try {
+    // Send token to backend
+    await api.post("/auth/google", {
+      credential: credentialResponse.email,
+    });
+    
+    setIsLogin(true);
+    }
+
+    catch(err) {
+      console.log(err);
+    }
+    
+  };
 
 
   return (
@@ -160,7 +192,7 @@ const LoginPage = () => {
           </div>
 
           <div className="relative flex items-center justify-center mt-[15vw] bottom-4">
-            <button
+            {/* <button
               type="button"
               className="absolute w-full h-10 z-0 bg-white text-p-gray text-[4.5vw] rounded-[15px] border shadow-sm">
               <GoogleLogoIcon
@@ -168,7 +200,11 @@ const LoginPage = () => {
                 className="absolute z-10 flex items-center justify-center translate-x-15 translate-y-1"
               />
               Continue with Google
-            </button>
+            </button> */}
+            <GoogleLogin 
+              onSuccess={handleLoginSuccess}
+              onError={() => {}}
+            />
           </div>
         </form>
       </div>
