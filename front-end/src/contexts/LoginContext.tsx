@@ -11,7 +11,7 @@ const LoginContext = ({ children }: { children: ReactElement }) => {
         (async () => {
          
             try {
-              const response = await fetch("http://localhost:3001/auth/refresh-access-token", {
+              const response = await fetch("http://localhost:3000/auth/refresh-access-token", {
                 method: 'POST',
                 credentials: 'include'
               });
