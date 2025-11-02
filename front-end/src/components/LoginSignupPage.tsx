@@ -1,6 +1,6 @@
 
 import React, { useState, type FormEvent } from "react";
-import { GoogleLogoIcon } from "@phosphor-icons/react";
+import { GoogleLogoIcon, EyeIcon, EyeSlashIcon } from "@phosphor-icons/react";
 import { Modal, ModalContent, ModalBody, ModalHeader, ModalFooter, Button } from "@heroui/react";
 import { useNavigate } from "react-router-dom";
 import api, { setAccessToken } from "../utils/api";
@@ -17,6 +17,7 @@ const LoginPage = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [modalHeader, setModalHeader] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
 
@@ -62,10 +63,10 @@ const LoginPage = () => {
 
 
   return (
-    <div className="w-screen bg-[#FFEBD8] h-auto">
+    <div className="w-screen bg-flesh h-auto">
 
       {/* Background */}
-      <div className="bg-[#FFEBD8] flex flex-col items-center justify-center h-auto">
+      <div className="bg-flesh flex-col items-center justify-center h-auto">
       </div>
 
       {/* Dog images */}
@@ -99,7 +100,7 @@ const LoginPage = () => {
               id="email"
               value={userInfo.email}
               type="text"
-              className="bg-white shadow text-[4vw] p-2 w-full h-[40px] rounded-[15px] mb-2 outline-[#7F7F7F]"
+              className="bg-white shadow text-[4vw] p-2 w-full h-10 rounded-[15px] mb-2 outline-p-gray"
               placeholder="user@gmail.com"
               required
             />
@@ -107,15 +108,27 @@ const LoginPage = () => {
             <label className="block text-[4vw] mb-1 text-p-gray">
               Password
             </label>
-            <input
+            <div className="relative">
+              <input
               id="password"
               onChange={handleChange}
               value={userInfo.password}
-              type="password"
-              className="bg-white shadow text-[4vw] p-2 w-full h-[40px] rounded-[15px] mb-2 outline-[#7F7F7F]"
+              type={showPassword ? "text" : "password"}
+              className="bg-white shadow text-[4vw] p-2 w-full h-10 rounded-[15px] mb-2  outline-p-gray"
               placeholder="Enter password"
               required
-            />
+              />
+              <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-2 text-gray-500">
+              {showPassword ? (
+                  <EyeSlashIcon size={22} weight="regular" />
+                  ) : (
+                  <EyeIcon size={22} weight="regular" />
+                  )}
+              </button>
+          </div>
 
             <div className="mt-2 flex items-center justify-between">
               <div>
@@ -135,21 +148,21 @@ const LoginPage = () => {
             {/* Save button */}
             <button
               type="submit"
-              className="w-full h-[40px] mt-4 bg-brown-orange text-white text-[4.5vw] rounded-[15px] border-2 border-white shadow-sm">
+              className="w-full h-10mt-4 bg-brown-orange text-white text-[4.5vw] rounded-[15px] border-2 border-white shadow-sm">
               Log in
             </button>
           </div>
 
           <div className="flex items-center my-4">
-            <div className="flex-grow h-px bg-gray-300"></div>
+            <div className="grow h-px bg-gray-300"></div>
             <span className="mx-2 text-p-gray text-[4vw]">or</span>
-            <div className="flex-grow h-px bg-gray-300"></div>
+            <div className="grow h-px bg-gray-300"></div>
           </div>
 
           <div className="relative flex items-center justify-center mt-[15vw] bottom-4">
             <button
               type="button"
-              className="absolute w-full h-[40px] z-0 bg-white text-p-gray text-[4.5vw] rounded-[15px] border shadow-sm">
+              className="absolute w-full h-10 z-0 bg-white text-p-gray text-[4.5vw] rounded-[15px] border shadow-sm">
               <GoogleLogoIcon
                 size={20}
                 className="absolute z-10 flex items-center justify-center translate-x-15 translate-y-1"

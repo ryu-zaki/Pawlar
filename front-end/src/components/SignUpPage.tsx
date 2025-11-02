@@ -1,5 +1,5 @@
 import React, { useState, type FormEvent } from "react";
-import { GoogleLogoIcon } from "@phosphor-icons/react";
+import { GoogleLogoIcon, EyeIcon, EyeSlashIcon } from "@phosphor-icons/react";
 import { Modal, ModalContent, ModalBody, ModalHeader, ModalFooter, Button } from "@heroui/react";
 import { useNavigate } from "react-router-dom";
 import api from "../utils/api";
@@ -15,6 +15,8 @@ const SignUpPage = () => {
       const [modalOpen, setModalOpen] = useState(false);
       const [modalMessage, setModalMessage] = useState("");
       const [modalHeader, setModalHeader] = useState("");
+      const [showPassword, setShowPassword] = useState(false);
+      const [showConfirmPassword, setShowConfirmPassword] = useState(false);
       const navigate = useNavigate();
 
       const handleSignUp = async (e: FormEvent) => {
@@ -61,10 +63,10 @@ const SignUpPage = () => {
 
     return ( 
         <>
-        <div className="w-screen bg-[#FFEBD8] h-auto">
+        <div className="w-screen bg-flesh h-auto">
 
             {/* Background */}
-            <div className="bg-[#FFEBD8] flex flex-col items-center justify-center h-auto"></div>
+            <div className="bg-flesh flex flex-col items-center justify-center h-auto"></div>
 
             {/* Dog Images */}
             <div className="flex items-center justify-center relative">
@@ -104,7 +106,7 @@ const SignUpPage = () => {
                         id="firstName"
                         onChange={handleChange}
                         value={userInfo.firstName}
-                        className="bg-white shadow text-[4vw] p-2 w-full h-[40px] rounded-[15px] mb-2 outline-[#7F7F7F]"
+                        className="bg-white shadow text-[4vw] p-2 w-full h-10 rounded-[15px] mb-2 outline-p-gray"
                         placeholder="First name"
                         required
                     />
@@ -112,7 +114,7 @@ const SignUpPage = () => {
                         id="lastName"
                         onChange={handleChange}
                         value={userInfo.lastName}
-                        className="bg-white shadow text-[4vw] p-2 w-full h-[40px] rounded-[15px] mb-2 outline-[#7F7F7F]"
+                        className="bg-white shadow text-[4vw] p-2 w-full h-10 rounded-[15px] mb-2 outline-p-gray"
                         placeholder="Last name"
                         required
                     />
@@ -126,7 +128,7 @@ const SignUpPage = () => {
                         id="email"
                         value={userInfo.email}
                         type="text"
-                        className="bg-white shadow text-[4vw] p-2 w-full h-[40px] rounded-[15px] mb-2 outline-[#7F7F7F]"
+                        className="bg-white shadow text-[4vw] p-2 w-full h-10rounded-[15px] mb-2 outline-p-gray"
                         placeholder="user@gmail.com"
                         required
                         />
@@ -134,28 +136,52 @@ const SignUpPage = () => {
                         <label className="block text-[4vw] mb-1 text-p-gray">
                         Password
                         </label>
-                        <input
-                        id="password"
-                        onChange={handleChange}
-                        value={userInfo.password}
-                        type="password"
-                        className="bg-white shadow text-[4vw] p-2 w-full h-[40px] rounded-[15px] mb-2 outline-[#7F7F7F]"
-                        placeholder="Enter password"
-                        required
-                        />
+                        <div className="relative">
+                            <input
+                            id="password"
+                            onChange={handleChange}
+                            value={userInfo.password}
+                            type={showPassword ? "text" : "password"}
+                            className="bg-white shadow text-[4vw] p-2 w-full h-10 rounded-[15px] mb-2  outline-p-gray"
+                            placeholder="Enter password"
+                            required
+                            />
+                            <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-3 top-2 text-gray-500">
+                            {showPassword ? (
+                                <EyeSlashIcon size={22} weight="regular" />
+                                ) : (
+                                <EyeIcon size={22} weight="regular" />
+                                )}
+                            </button>
+                        </div>
 
                         <label className="block text-[4vw] mb-1 text-p-gray">
                         Confirm Password
                         </label>
-                        <input
+                        <div className="relative">
+                            <input
                             id="confirmPassword"
                             onChange={handleChange}
                             value={userInfo.confirmPassword}
-                            type="password"
-                            className="bg-white shadow text-[4vw] p-2 w-full h-[40px] rounded-[15px] mb-2 outline-[#7F7F7F]"
-                            placeholder="Confirm Password"
+                            type={showConfirmPassword ? "text" : "password"}
+                            className="bg-white shadow text-[4vw] p-2 w-full h-10 rounded-[15px] mb-2  outline-p-gray"
+                            placeholder="Enter password"
                             required
-                        />
+                            />
+                            <button
+                            type="button"
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            className="absolute right-3 top-2 text-gray-500">
+                            {showConfirmPassword ? (
+                                <EyeSlashIcon size={22} weight="regular" />
+                                ) : (
+                                <EyeIcon size={22} weight="regular" />
+                                )}
+                            </button>
+                        </div>
 
                         <div className="mt-2 flex items-center">
                         <input type="checkbox" className="h-3 w-3" />
@@ -167,21 +193,21 @@ const SignUpPage = () => {
                         {/* Save button */}
                         <button
                         type="submit"
-                        className="w-full h-[40px] mt-4 bg-brown-orange text-white text-[4.5vw] rounded-[15px] border-2 border-white shadow-sm">
+                        className="w-full h-10 mt-4 bg-brown-orange text-white text-[4.5vw] rounded-[15px] border-2 border-white shadow-sm">
                         Sign up
                         </button>
                     </div>
                     {/* Divider */}
                     <div className="flex items-center my-4">
-                        <div className="flex-grow h-px bg-gray-300"></div>
+                        <div className="grow h-px bg-gray-300"></div>
                         <span className="mx-2 text-p-gray text-[4vw]">or</span>
-                        <div className="flex-grow h-px bg-gray-300"></div>
+                        <div className="grow h-px bg-gray-300"></div>
                     </div>
                     {/* Google */}
                     <div className="relative flex items-center justify-center mt-[15vw] bottom-4">
                         <button
                             type="button"
-                            className="absolute w-full h-[40px] z-0 bg-white text-p-gray text-[4.5vw] rounded-[15px] border shadow-sm">
+                            className="absolute w-full h-10 z-0 bg-white text-p-gray text-[4.5vw] rounded-[15px] border shadow-sm">
                             <GoogleLogoIcon 
                             size={20}
                             className="absolute z-10 flex items-center justify-center translate-x-15 translate-y-1"           
