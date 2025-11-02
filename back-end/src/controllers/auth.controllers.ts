@@ -38,7 +38,10 @@ const loginController = async (req: Request, res: Response) => {
 
 
 const registerController = async (req: Request, res: Response) => {
+  
+  res.sendStatus(404);
 
+  return;
   try {
     await createUser(req.body);
 
