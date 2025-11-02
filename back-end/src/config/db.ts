@@ -14,8 +14,18 @@ const pool = new Pool({
     password: DB_PASSWORD
 });
 
-pool.connect()
-.then(() => console.log("Database Connected"))
-.catch(err => console.log(err));
+(async () => {
+    try {
+       await pool.connect();
+       console.log("Database Connected")
+    }
+
+    catch(err) { 
+       console.log(err)
+    }
+  
+
+
+})();
 
 export default pool;

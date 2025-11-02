@@ -21,3 +21,5 @@ app.get("/profile", (req, res) => {
 })
  
 app.listen(PORT, () => console.log(`Server is runninng on PORT ${PORT}`));
+
+export default app;
