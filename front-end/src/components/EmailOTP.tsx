@@ -27,7 +27,7 @@ const EmailOTP = () => {
 
     const otpString = otp.join("");
     if (otpString.length !== 6) {
-      setError("Please enter the complete 6-digit OTP.");
+      setError("Please enter the complete 6-digit verification code.");
       return;
     }
 
@@ -36,7 +36,7 @@ const EmailOTP = () => {
   };
 
   return (
-    <div className="bg-[#FFEBD8] h-screen flex flex-col justify-center items-center font-['League_Spartan'] relative">
+    <div className="bg-fleshcreen flex flex-col justify-center items-center font-['League_Spartan'] relative">
       {/* Back Button */}
       <button
         onClick={() => setShowConfirmBack(true)}
@@ -47,8 +47,8 @@ const EmailOTP = () => {
       {/* Content */}
       <div className="flex flex-col items-start text-left space-y-4 w-[280px]">
         <div>
-          <h1 className="text-[#A0561D] text-[35px] font-bold">Enter the OTP</h1>
-          <p className="text-[#7F7F7F] text-[18px]">
+          <h1 className="text-[#A0561D] text-[35px] font-bold">Enter verification code</h1>
+          <p className="text-p-gray text-[18px]">
             Please enter the one-time pin sent to your email address.
           </p>
         </div>
@@ -75,7 +75,7 @@ const EmailOTP = () => {
         {/* Confirm Button */}
         <button
           onClick={handleConfirm}
-          className="w-[280px] h-[40px] bg-[#C4702E] text-white text-[16px] font-['Wendy_One'] rounded-[15px] mt-2 hover:opacity-90 transition"
+          className="w-[280px] h-10 bg-[#C4702E] text-white text-[16px] font-['Wendy_One'] rounded-[15px] mt-2 hover:opacity-90 transition"
         >
           Confirm
         </button>

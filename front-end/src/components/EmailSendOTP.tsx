@@ -77,7 +77,7 @@ const EmailSendOTP = () => {
             disabled={loading} // <-- Idinagdag
             className="w-full h-10 bg-[#C4702E] text-white text-[16px] font-['Wendy_One'] rounded-[15px] hover:opacity-90 transition disabled:opacity-50"
           >
-            {loading ? "Sending..." : "Send OTP"}
+            {loading ? "Sending..." : "Send verification code"}
           </button>
         </form>
       </div>

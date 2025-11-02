@@ -1,7 +1,7 @@
 
 import React, { useState, type FormEvent } from "react";
-import { GoogleLogoIcon, EyeIcon, EyeSlashIcon } from "@phosphor-icons/react";
-import { Modal, ModalContent, ModalBody, ModalHeader, ModalFooter, Button } from "@heroui/react";
+import { EyeIcon, EyeSlashIcon } from "@phosphor-icons/react";
+import { Button } from "@heroui/react";
 import {jwtDecode} from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import api, { setAccessToken } from "../utils/api";
@@ -23,16 +23,29 @@ const LoginPage = () => {
   });
   const { setIsLogin } = useLogin();
 
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
-  const [modalHeader, setModalHeader] = useState("");
+  // const [modalOpen, setModalOpen] = useState(false);
+  // const [modalMessage, setModalMessage] = useState("");
+  // const [modalHeader, setModalHeader] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const navigate = useNavigate();
 
-
+  const validateEmail = (email: string) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  }
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
+    setEmailError("");
+    setPasswordError("");
+
+    if (!validateEmail(userInfo.email)) {
+      setEmailError("Invalid email format.");
+      return;
+    }
+    
     try {
       const response = await api.post("/auth/login", userInfo)
 
@@ -41,34 +54,29 @@ const LoginPage = () => {
       const data = response.data;
       console.log(data);
       setAccessToken(data.accessToken);
+      setIsLogin(true);
 
-      setModalHeader("Account logged in successfully!");
-      setModalMessage("Login succesful!");
-      setModalOpen(true);
-
-      setTimeout(() => {
-        setIsLogin(true);
-      }, 2000);
 
     }
 
-    catch (err) {
-      console.log(err)
-      setModalHeader("Oh no! Log in failed.");
-      setModalMessage("Please try again");
-      setModalOpen(true);
+    catch (err: any) {
+      console.log(err);
+      // backend stuff
+      if(err.message?.toLowerCase().includes("password")) {
+        setPasswordError("Invalid credentials.");
+      }      
     }
   }
 
 
   const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     setUserInfo(prev => {
-      return ({
-        ...prev,
-        [target.id]: target.value
-      });
-    })
-  }
+      return ({ ...prev, [target.id]: target.value }); }) 
+
+      if (target.id === "email") setEmailError("");
+      if (target.id === "password") setPasswordError("");
+    
+    };
 
 
   const handleLoginSuccess = async (credentialResponse: any) => {
@@ -89,6 +97,7 @@ const LoginPage = () => {
 
     catch(err) {
       console.log(err);
+      setPasswordError("Google login failed. Please try again.")
     }
     
   };
@@ -109,8 +118,8 @@ const LoginPage = () => {
 
 
       {/* Login Page */}
-      <div className="bg-[#FFFEFE] flex flex-col justify-start h-auto">
-        <div className="mx-7 mt-10">
+      <div className="w-full bg-[#FFFEFE] flex flex-col justify-start h-auto">
+        <div className="mx-7 mt-15">
           <h1 className="text-[7vw] text-brown-orange font-wendy">
             Log In
           </h1>
@@ -122,7 +131,7 @@ const LoginPage = () => {
           </p>
         </div>
 
-        <form onSubmit={handleLogin} className="space-y-4 mx-7 mt-8">
+        <form onSubmit={handleLogin} className="space-y-4 mx-7 mt-5">
           <div>
             <label className="block text-[4vw] mb-1 text-p-gray">
               Email
@@ -132,12 +141,17 @@ const LoginPage = () => {
               id="email"
               value={userInfo.email}
               type="text"
-              className="bg-white shadow text-[4vw] p-2 w-full h-10 rounded-[15px] mb-2 outline-p-gray"
-              placeholder="user@gmail.com"
-              required
+              className={`bg-white shadow text-[4vw] p-2 w-full h-10 rounded-[15px] mb-2 outline-p-gray 
+                ${ emailError ? "border border-error-red" : "" }`}
+              placeholder="Enter your email"              
             />
+            {emailError && (
+              <p className="text-error-red text-[3.5vw] mb-1">{emailError}</p>
+            )
+              
+            }
 
-            <label className="block text-[4vw] mb-1 text-p-gray">
+            <label className="block text-[4vw] mb-1 mt-2 text-p-gray">
               Password
             </label>
             <div className="relative">
@@ -146,31 +160,36 @@ const LoginPage = () => {
               onChange={handleChange}
               value={userInfo.password}
               type={showPassword ? "text" : "password"}
-              className="bg-white shadow text-[4vw] p-2 w-full h-10 rounded-[15px] mb-2  outline-p-gray"
-              placeholder="Enter password"
-              required
+              className={`bg-white shadow text-[4vw] p-2 w-full h-10 rounded-[15px] mb-2 outline-p-gray 
+                ${ passwordError ? "border border-error-red" : "" }`}
+              placeholder="Enter your password"            
               />
+              {passwordError && (
+              <p className="text-error-red text-[3.5vw] mb-1">{passwordError}</p>
+            )
+              
+            }
               <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               className="absolute right-3 top-2 text-gray-500">
               {showPassword ? (
-                  <EyeSlashIcon size={22} weight="regular" />
-                  ) : (
                   <EyeIcon size={22} weight="regular" />
+                  ) : (
+                  <EyeSlashIcon size={22} weight="regular" />
                   )}
               </button>
           </div>
 
             <div className="mt-2 flex items-center justify-between">
-              <div>
+              {/* <div>
                 <input type="checkbox" className="h-3 w-3" />
                 <label className="ml-2 text-[4vw] text-p-gray">
-                  Save account
+                  Remember me
                 </label>
-              </div>
+              </div> */}
               <p
-              className="text-[#A95A29] font-semibold"
+              className="text-[#A95A29] font-semibold justify-end"
               onClick={() => navigate('../otp')}>
                 Forgot Password?
               </p>
@@ -178,11 +197,11 @@ const LoginPage = () => {
             </div>
 
             {/* Save button */}
-            <button
+            <Button
               type="submit"
-              className="w-full h-10mt-4 bg-brown-orange text-white text-[4.5vw] rounded-[15px] border-2 border-white shadow-sm">
+              className="w-full h-10 mt-4 bg-brown-orange text-white text-[4.5vw] rounded-[15px] border-2 border-white shadow-sm">
               Log in
-            </button>
+            </Button>
           </div>
 
           <div className="flex items-center my-4">
@@ -204,12 +223,13 @@ const LoginPage = () => {
             <GoogleLogin 
               onSuccess={handleLoginSuccess}
               onError={() => {}}
+              
             />
           </div>
         </form>
       </div>
 
-      <Modal
+      {/* <Modal
         isOpen={modalOpen}
         onOpenChange={setModalOpen}
         isDismissable={false}
@@ -233,7 +253,7 @@ const LoginPage = () => {
             </Button>
           </ModalFooter>
         </ModalContent>
-      </Modal>
+      </Modal> */}
 
     </div>
   );
