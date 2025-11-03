@@ -95,7 +95,9 @@ const RenewPassword = () => {
     }
 
     setErrors(newErrors);
-
+    if (hasError) {
+      return;
+    }
 
     if (!email || !otp) {
       setErrors((prev) => ({ ...prev, general: "Your session has expired. Please try again." }));
