@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict qWoXxJkq4dIY8AbzxilOtcwaQO395oFJx5XQIBEf8BuSKicKqe0I6VzG75A3FBb
+\restrict ZdHiSeVubbppmr0dXByIUf6fkT7RwrRgdQuFCkmiSU6HQJaIT1vokhwZP6GrFMn
 
 -- Dumped from database version 18.0
 -- Dumped by pg_dump version 18.0
@@ -67,6 +67,27 @@ $$;
 ALTER PROCEDURE public.create_user(IN fname character varying, IN lname character varying, IN _email character varying, IN _password text) OWNER TO postgres;
 
 --
+-- Name: createotpcredentials(character varying, integer, timestamp without time zone, timestamp without time zone); Type: PROCEDURE; Schema: public; Owner: postgres
+--
+
+CREATE PROCEDURE public.createotpcredentials(IN _email character varying, IN verificationcode integer, IN lastotpsentat timestamp without time zone, IN verificationexpiresat timestamp without time zone)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN 
+
+UPDATE users SET 
+verification_code = verificationCode, last_otp_sent_at = lastOtpSentAT, 
+verification_expires_at = verificationExpiresAt
+WHERE email = _email;
+
+END;
+
+$$;
+
+
+ALTER PROCEDURE public.createotpcredentials(IN _email character varying, IN verificationcode integer, IN lastotpsentat timestamp without time zone, IN verificationexpiresat timestamp without time zone) OWNER TO postgres;
+
+--
 -- Name: getuserinfobyemail(text); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -84,9 +105,63 @@ $$;
 
 ALTER FUNCTION public.getuserinfobyemail(p_email text) OWNER TO postgres;
 
+--
+-- Name: updateuserpasswordbyemail(character varying, text); Type: PROCEDURE; Schema: public; Owner: postgres
+--
+
+CREATE PROCEDURE public.updateuserpasswordbyemail(IN _email character varying, IN _new_password text)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    UPDATE users
+    SET password = _new_password
+    WHERE email = _email;
+END;
+$$;
+
+
+ALTER PROCEDURE public.updateuserpasswordbyemail(IN _email character varying, IN _new_password text) OWNER TO postgres;
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
+
+--
+-- Name: password_reset_token; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.password_reset_token (
+    id integer NOT NULL,
+    email character varying(150),
+    last_otp_sent_at timestamp without time zone,
+    verification_expires_at timestamp without time zone,
+    verification_code text
+);
+
+
+ALTER TABLE public.password_reset_token OWNER TO postgres;
+
+--
+-- Name: password_reset_token_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.password_reset_token_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.password_reset_token_id_seq OWNER TO postgres;
+
+--
+-- Name: password_reset_token_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.password_reset_token_id_seq OWNED BY public.password_reset_token.id;
+
 
 --
 -- Name: users; Type: TABLE; Schema: public; Owner: postgres
@@ -98,7 +173,11 @@ CREATE TABLE public.users (
     last_name character varying(100) NOT NULL,
     email character varying(150) NOT NULL,
     phone_number character varying(100),
-    password text
+    password text,
+    verified integer,
+    last_otp_sent_at timestamp without time zone,
+    verification_expires_at timestamp without time zone,
+    verification_code text
 );
 
 
@@ -127,6 +206,13 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
+-- Name: password_reset_token id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.password_reset_token ALTER COLUMN id SET DEFAULT nextval('public.password_reset_token_id_seq'::regclass);
+
+
+--
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -134,18 +220,42 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
+-- Data for Name: password_reset_token; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.password_reset_token (id, email, last_otp_sent_at, verification_expires_at, verification_code) FROM stdin;
+\.
+
+
+--
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.users (id, first_name, last_name, email, phone_number, password) FROM stdin;
+COPY public.users (id, first_name, last_name, email, phone_number, password, verified, last_otp_sent_at, verification_expires_at, verification_code) FROM stdin;
+22	 Jhonwell	ESPAÑOLA	jhonwellespanola4@gmail.com	\N	\N	\N	\N	\N	\N
 \.
+
+
+--
+-- Name: password_reset_token_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.password_reset_token_id_seq', 1, false);
 
 
 --
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 19, true);
+SELECT pg_catalog.setval('public.users_id_seq', 22, true);
+
+
+--
+-- Name: password_reset_token password_reset_token_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.password_reset_token
+    ADD CONSTRAINT password_reset_token_pkey PRIMARY KEY (id);
 
 
 --
@@ -168,5 +278,5 @@ ALTER TABLE ONLY public.users
 -- PostgreSQL database dump complete
 --
 
-\unrestrict qWoXxJkq4dIY8AbzxilOtcwaQO395oFJx5XQIBEf8BuSKicKqe0I6VzG75A3FBb
+\unrestrict ZdHiSeVubbppmr0dXByIUf6fkT7RwrRgdQuFCkmiSU6HQJaIT1vokhwZP6GrFMn
 
