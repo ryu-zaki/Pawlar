@@ -3,8 +3,10 @@ import { GoogleLogoIcon, EyeIcon, EyeSlashIcon } from "@phosphor-icons/react";
 import { Button, Checkbox } from "@heroui/react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../utils/api";
+import {useLogin} from '../contexts/LoginContext';
 
 const SignUpPage = () => {
+    const {setCredentials} = useLogin();
     const [userInfo, setUserInfo] = React.useState({
         firstName: "", 
         lastName: "", 
@@ -92,7 +94,7 @@ const SignUpPage = () => {
              if (!response) {
                  throw new Error();
              }
-             
+             setCredentials(response.data)
              navigate("/auth/verify-signup");
 
             }

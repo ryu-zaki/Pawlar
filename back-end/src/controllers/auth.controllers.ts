@@ -5,13 +5,12 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { sendOTPEmail } from '../utils/email.helper';
 import { generateOTP } from '../utils/otp.helper'
-import { createUser, checkUser, extractUserInfo, updateUserPassword } from "../services/auth.service";
+import { createUser, checkUser, extractUserInfo, updateUserPassword, updateValidateField } from "../services/auth.service";
 const REFRESH_SECRET = process.env.REFRESH_SECRET as string;
 const RESET_SECRET = process.env.RESET_SECRET as string;
 
 const loginController = async (req: Request, res: Response) => {
   const { body } = req;
- 
   try {
     /* const exists = await checkUser(body.email); */
     const user = await extractUserInfo(body.email);
@@ -41,8 +40,9 @@ const registerController = async (req: Request, res: Response) => {
   
   try {
     await createUser(req.body);
-
-    res.sendStatus(200);
+    
+    const user = await extractUserInfo(req.body.email); 
+    res.json(user);
 
   }
 
@@ -53,16 +53,17 @@ const registerController = async (req: Request, res: Response) => {
 }
 
 
-const refreshAccessToken = (req: Request, res: Response) => {
+const refreshAccessToken = async (req: Request, res: Response) => {
   const refreshToken = req.cookies.refreshToken;
   if (!refreshToken) return res.sendStatus(401);
 
   try {
     const decoded = jwt.verify(refreshToken, REFRESH_SECRET) as TokenPayload;
 
-    const newAccessToken = generateAccessToken({ phoneNumber: decoded.phoneNumber, password: decoded.password });
+    const newAccessToken = generateAccessToken({ email: decoded.email, password: decoded.password });
+    const user = await extractUserInfo(decoded.email);
 
-    res.json({ newAccessToken });
+    res.json({ newAccessToken, user });
   }
   
   catch (err) {
@@ -143,4 +144,26 @@ const handleGoogleLogin = (req: Request, res: Response) => {
 
 }
 
-export { loginController, registerController, refreshAccessToken, forgotPasswordController, resetPasswordController, handleGoogleLogin };
+const validateCode = async (req: Request, res: Response) => {
+   try {
+     const { code, email } = req.body;
+     const user = await extractUserInfo(email);
+    
+     const isValid = await bcrypt.compare(code, user?.verification_code);
+     
+     if (isValid) {
+       await updateValidateField(user?.email, '1');
+       res.sendStatus(200);
+     } else {
+      res.sendStatus(401);
+     }
+     return ;
+   }
+
+   catch(err) {
+    console.log(err)
+  
+   }
+}
+
+export { loginController, registerController, refreshAccessToken, forgotPasswordController, resetPasswordController, handleGoogleLogin, validateCode };

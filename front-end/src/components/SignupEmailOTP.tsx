@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"
 import { GreaterThanIcon } from "@phosphor-icons/react";
-
+import api from '../utils/api';
+import { useLogin } from '../contexts/LoginContext';
 
 const SignupEmailOTP = () => {
 const navigate = useNavigate();
+const {credentials} = useLogin();
 
 const [otp, setOtp] = useState(["", "", "", "", "", ""]);
 const [showConfirmBack, setShowConfirmBack] = useState(false);
@@ -23,7 +25,8 @@ const [error, setError] = useState<string>("");
     }
   };
 
-    const handleVerify = (e: React.FormEvent) => {
+    const handleVerify = async (e: React.FormEvent) => {
+    
     e.preventDefault();
     setError("");
 
@@ -33,8 +36,23 @@ const [error, setError] = useState<string>("");
       return;
     }
 
-    sessionStorage.setItem("email_verification_otp", otpString);
-    navigate("/auth/register");
+
+    try {
+      const response = await api.post("/auth/validate-code", {
+         email: credentials.email, 
+         code: otpString});
+
+      if (response.status ==  200) {
+        alert("Correct CODE")
+      } else {
+        alert("Error")
+      }
+    }
+
+    catch(err) {
+      console.log(err);
+    }
+    
   };
 
 
