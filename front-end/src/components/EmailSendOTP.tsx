@@ -2,23 +2,38 @@ import { useState, type FormEvent } from "react";
 import { GreaterThanIcon, EnvelopeSimple } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
 import { requestPasswordReset } from "../utils/requests";
+import { useContext } from 'react';
+import { ForgotPasswordContext } from "./ForgotPasswordParent";
 
 const EmailSendOTP = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState<string>("");
+  const [email, setUserEmail] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+
+  const { setEmail, setResetToken } = useContext(ForgotPasswordContext)!;
+
+  const validateEmail = (email: string) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  }
 
   const handleSendOTP = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
+    if (!validateEmail(email)) {
+      setError("Invalid email format.");
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await requestPasswordReset(email);
 
-      sessionStorage.setItem("pw_reset_email", email);
-      sessionStorage.setItem("pw_reset_token", response.resetToken);
+      setEmail(email);
+      setResetToken(response.resetToken);
 
       navigate("verify");
 
@@ -43,38 +58,38 @@ const EmailSendOTP = () => {
       {/* Content */}
       <div className="flex flex-col items-start text-left space-y-8 w-[300px]">
         <div>
-          <h1 className="text-[#A0561D] text-[35px] font-bold"> Mail Address Here </h1>
+          <h1 className="text-[#A0561D] text-[35px] font-bold"> Email Address Here </h1>
           <p className="text-p-gray text-[18px]"> Enter email address associated with your account. </p>
         </div>
 
         <form
           onSubmit={handleSendOTP}
-          className="flex flex-col items-start text-left space-y-3 w-full"
+          className="flex flex-col items-start text-left gap-5 w-full"
         >
           {/* Email Input */}
           <div className="relative w-full">
             <EnvelopeSimple
               size={20}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"/>
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
-              type="email"
               required
+              id="password"
               placeholder="example@gmail.com"
-              value={email} // <-- Idinagdag
-              onChange={(e) => setEmail(e.target.value)} // <-- Idinagdag
-              className="bg-white shadow-[0_2px_8px_rgba(0,0,0,0.1)] text-s pl-10 p-2 w-full h-10 rounded-[10px] outline-p-gray placeholder:text-[#B3B3B3]"
+              value={email}
+              onChange={(e) => setUserEmail(e.target.value)}
+              className={`bg-white shadow-[0_2px_8px_rgba(0,0,0,0.1)] text-s pl-10 p-2 w-full h-10 rounded-[15px] outline-0 placeholder:text-[#B3B3B3]
+              ${ error ? "border border-error-red" : "" }`}
             />
           </div>
 
-          {/* Error Message Display */}
           {error && (
-            <p className="text-red-600 text-sm text-center w-full">{error}</p>
+            <p className="text-error-red text-sm text-center w-full">{error}</p>
           )}
 
           {/* Send OTP Button */}
           <button
             type="submit"
-            disabled={loading} // <-- Idinagdag
+            disabled={loading}
             className="w-full h-10 bg-[#C4702E] text-white text-[16px] font-['Wendy_One'] rounded-[15px] hover:opacity-90 transition disabled:opacity-50"
           >
             {loading ? "Sending..." : "Send verification code"}
