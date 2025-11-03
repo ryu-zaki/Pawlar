@@ -1,4 +1,4 @@
-import React, { useState, createContext } from "react";
+import { useState, createContext } from "react";
 import { Outlet } from "react-router-dom";
 
 interface IForgotPasswordContext {
@@ -12,15 +12,37 @@ export const ForgotPasswordContext = createContext<IForgotPasswordContext | null
 
 const ForgotPasswordParent = () => {
   
-  const [email, setEmail] = useState("");
+  const [email, setEmailState] = useState<string>(() => {
+    return localStorage.getItem('forgotPasswordEmail') || "";
+  });
   
-  const [otp, setOtp] = useState("");
+  const [otp, setOtpState] = useState<string>(() => {
+    return localStorage.getItem('forgotPasswordOtp') || "";
+  });
+
+  const setEmail = (newEmail: string) => {
+    if (newEmail === "") {
+      localStorage.removeItem('forgotPasswordEmail'); 
+    } else {
+      localStorage.setItem('forgotPasswordEmail', newEmail); 
+    }
+    setEmailState(newEmail);
+  };
+
+  const setOtp = (newOtp: string) => {
+    if (newOtp === "") {
+      localStorage.removeItem('forgotPasswordOtp');
+    } else {
+      localStorage.setItem('forgotPasswordOtp', newOtp);
+    }
+    setOtpState(newOtp);
+  };
 
   const contextValue = {
-    email,
-    setEmail,
-    otp,
-    setOtp
+    email,   
+    setEmail, 
+    otp,     
+    setOtp     
   };
 
   return (

@@ -92,9 +92,13 @@ const forgotPasswordController = async (req: Request, res: Response) => {
     await createResetPasswordTokenField(email, otp);
     await sendOTPEmail(email, otp);
 
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+
     res.status(200).json({
       message: 'An OTP has been sent to your email.',
+      expiresAt: expiresAt
     });
+    
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error while sending OTP.' });

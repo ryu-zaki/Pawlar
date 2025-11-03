@@ -19,6 +19,7 @@ interface ApiResponse {
 
 interface ForgotPasswordResponse {
   message: string;
+  expiresAt: string;
 }
 
 const requestPasswordReset = async (email: string): Promise<ForgotPasswordResponse> => {
