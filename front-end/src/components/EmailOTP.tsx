@@ -1,18 +1,23 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { CaretLeft } from "@phosphor-icons/react";
+import { ForgotPasswordContext } from "./ForgotPasswordParent";
+import { requestPasswordReset } from "../utils/requests";
+
 
 const EmailOTP = () => {
   const navigate = useNavigate();
-  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const [localOtp, setLocalOtp] = useState(["", "", "", "", "", ""]);
   const [showConfirmBack, setShowConfirmBack] = useState(false);
   const [error, setError] = useState<string>("");
 
+  const { email, setOtp: setGlobalOtp } = useContext(ForgotPasswordContext)!;
+
   const handleChange = (index: number, value: string) => {
     if (/^[0-9]?$/.test(value)) {
-      const newOtp = [...otp];
+      const newOtp = [...localOtp];
       newOtp[index] = value;
-      setOtp(newOtp);
+      setLocalOtp(newOtp);
 
       if (value && index < 5) {
         const nextInput = document.getElementById(`otp-input-${index + 1}`);
@@ -25,14 +30,30 @@ const EmailOTP = () => {
     e.preventDefault();
     setError("");
 
-    const otpString = otp.join("");
+    const otpString = localOtp.join("");
     if (otpString.length !== 6) {
       setError("Please enter the complete 6-digit verification code.");
       return;
     }
 
-    sessionStorage.setItem("pw_reset_otp", otpString);
-    navigate("renew");
+    setGlobalOtp(otpString);
+    navigate("../renew");
+  };
+
+    const handleResend = async () => {
+    if (!email) { // 'email' galing sa parent context
+      setError("Email not found. Please go back.");
+      return;
+    }
+    try {
+      setError(""); // Clear previous errors
+      console.log(`Resending OTP to ${email}`);
+      await requestPasswordReset(email);      
+      
+      alert(`Verification code resent to ${email}`); 
+    } catch (err) {
+      setError("Failed to resend code. Please try again.");
+    }
   };
 
   return (
@@ -56,7 +77,7 @@ const EmailOTP = () => {
 
         {/* OTP Input Boxes */}
         <div className="flex justify-center space-x-2 mt-4">
-          {otp.map((digit, index) => (<input
+          {localOtp.map((digit, index) => (<input
               id={`otp-input-${index}`}
               key={index}
               type="tel" 
@@ -82,10 +103,12 @@ const EmailOTP = () => {
         </button>
       </div>
 
-      {/* Resend (Note: Kailangan ng bagong function para dito) */}
       <p className="text-sm text-gray-600 mt-4">
-        If you didn’t receive the code:{" "}
-        <button className="text-[#C4703D] font-semibold hover:underline">
+        If you didn’t receive the code:&nbsp;
+        <button
+        onClick={handleResend} 
+        className="text-[#C4703D] font-semibold hover:underline"
+        >
           Resend
         </button>
       </p>
@@ -93,15 +116,15 @@ const EmailOTP = () => {
       {/* Confirmation Modal */}
       {showConfirmBack && (
         <div className="absolute inset-0 flex justify-center items-center bg-black/60">
-        <div className="bg-white p-4 rounded-[10px] shadow-x4 text-center w-[310px]">
-        <p className="text-[#A0561D] font-medium mb-8"> Go back to the email verification page? Your entered code won’t be saved.</p>
-          <div className="flex justify-around mt-6">
+        <div className="bg-white p-5 rounded-[15px] shadow-x4 text-center w-[310px]">
+        <p className="text-[#A0561D] font-medium mb-4"> Go back to the email verification page? Your entered code won’t be saved.</p>
+          <div className="flex justify-around mt-6 gap-2">
             <button
                 onClick={() => setShowConfirmBack(false)}
                 className="bg-gray-200 text-gray-700 px-9 py-2 rounded-[10px] font-medium hover:bg-gray-300 transition"> Cancel </button>
             <button
                 onClick={() => navigate("/")} 
-                className="bg-[#A63A2B] text-white px-9 py-2 rounded-[10px] font-medium hover:opacity-90 transition"> Yes, I’m sure </button>
+                className="bg-[#A63A2B] text-white px-9 py-2 rounded-[10px] font-medium hover:opacity-90 transition"> Yes </button>
           </div>
         </div>
         </div>

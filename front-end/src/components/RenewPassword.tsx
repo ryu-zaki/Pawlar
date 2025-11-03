@@ -1,8 +1,9 @@
-import { useState, type FormEvent } from "react";
+import { useState, type FormEvent, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { CaretRightIcon } from "@phosphor-icons/react";
 import { resetPassword } from "../utils/requests";
+import { ForgotPasswordContext } from "./ForgotPasswordParent";
 
 const RenewPassword = () => {
   const navigate = useNavigate();
@@ -15,6 +16,8 @@ const RenewPassword = () => {
 
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+
+  const { email, otp, resetToken, setEmail, setOtp, setResetToken } = useContext(ForgotPasswordContext)!;
 
   const handleConfirm = async (e: FormEvent) => {
     e.preventDefault();
@@ -37,10 +40,6 @@ const RenewPassword = () => {
       return;
     }
 
-    const email = sessionStorage.getItem("pw_reset_email");
-    const otp = sessionStorage.getItem("pw_reset_otp");
-    const resetToken = sessionStorage.getItem("pw_reset_token");
-
     if (!email || !otp || !resetToken) {
       setError("Your session has expired. Please try again.");
       setLoading(false);
@@ -49,7 +48,7 @@ const RenewPassword = () => {
 
     try {
       await resetPassword(email, otp, password, resetToken);
-      
+
       setShowSuccessModal(true);
 
     } catch (err: any) {
@@ -61,16 +60,16 @@ const RenewPassword = () => {
   };
 
   const handleSuccess = () => {
-    sessionStorage.removeItem("pw_reset_email");
-    sessionStorage.removeItem("pw_reset_otp");
-    sessionStorage.removeItem("pw_reset_token");
-    
+    setEmail("");
+    setOtp("");
+    setResetToken("");
+
     setShowSuccessModal(false);
-    navigate("../login");
+    navigate("../../login");
   };
 
   return (
-    <div className="bg-[#FFEBD8] h-screen flex flex-col justify-center items-center font-['League_Spartan'] relative">
+    <div className="bg-flesh h-screen flex flex-col justify-center items-center font-['League_Spartan'] relative">
 
       {/* Back Button */}
 <button
@@ -86,7 +85,7 @@ const RenewPassword = () => {
       <div className="flex flex-col items-start text-left space-y-7 w-[280px]">
         <div>
           <h1 className="text-[#A0561D] text-[35px] font-bold">Renew Password</h1>
-          <p className="text-[#7F7F7F] text-[18px]">Enter and confirm your new password.</p>
+          <p className="text-p-gray text-[18px]">Enter and confirm your new password.</p>
         </div>
 
         {/* New Password Field */}
@@ -96,7 +95,7 @@ const RenewPassword = () => {
             placeholder="New password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full h-[40px] bg-[#FFFEFD] border border-gray-300 rounded-[10px] px-3 text-[16px] focus:outline-[#7F7F7F] shadow-sm"
+            className="w-full h-10 bg-[#FFFEFD] border border-gray-300 rounded-[10px] px-3 text-[16px] focus:outline-p-gray shadow-sm"
           />
           <button
             type="button"
@@ -114,7 +113,7 @@ const RenewPassword = () => {
             placeholder="Confirm password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full h-[40px] bg-[#FFFEFD] border border-gray-300 rounded-[10px]   px-3 text-[16px] focus:outline-[#7F7F7F] shadow-sm"
+            className="w-full h-10 bg-[#FFFEFD] border border-gray-300 rounded-[10px]   px-3 text-[16px] focus:outline-p-gray shadow-sm"
           />
           <button
             type="button"
@@ -133,8 +132,8 @@ const RenewPassword = () => {
         {/* Confirm Button */}
         <button
           onClick={handleConfirm}
-          disabled={loading}
-          className="w-[280px] h-[40px] bg-[#C4702E] text-white text-[16px] font-['Wendy_One'] rounded-[10px] mt-1 hover:opacity-90 transition disabled:opacity-50"
+          disabled={loading} // <-- Idinagdag
+          className="w-[280px] h-10 bg-[#C4702E] text-white text-[16px] font-['Wendy_One'] rounded-[15px] mt-1 hover:opacity-90 transition disabled:opacity-50"
         >
           {loading ? "Confirming..." : "Confirm"}
         </button>
@@ -142,30 +141,30 @@ const RenewPassword = () => {
 
       {/* Back Confirmation Modal */}
       {showConfirmBack && (
-        <div className="absolute inset-0 flex justify-center items-center bg-black/60">
-        <div className="bg-white p-4 rounded-[10px] shadow-x4 text-center w-[310px]">
-        <p className="text-[#A0561D] font-medium mb-4"> Go back to the email verification page? Your entered code won’t be saved.</p>
-          <div className="flex justify-around mt-6">
+        <div className="absolute inset-0 flex justify-center items-center">
+          <div className="bg-white p-5 rounded-[15px] shadow-x4 text-center w-[310px]">
+            <p className="text-[#A0561D] font-medium mb-4"> Go back to the email verification page? Your entered code won’t be saved.</p>
+            <div className="flex justify-around mt-6">
               <button
                 onClick={() => setShowConfirmBack(false)}
                 className="bg-gray-200 text-gray-700 px-9 py-2 rounded-[10px] font-medium hover:bg-gray-300 transition"> Cancel </button>
               <button
                 onClick={() => navigate("/EmailOTP")}
                 className="bg-[#A63A2B] text-white px-9 py-2 rounded-[10px] font-medium hover:opacity-90 transition"> Yes, I’m sure </button>
-        </div>
-        </div>
+            </div>
+          </div>
         </div>
       )}
 
       {/* Success Modal */}
       {showSuccessModal && (
-        <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-40">
-          <div className="bg-white p-6 white-lg shadow-md text-center w-[270px]">
-            <p className="text-[#A0561D] font-medium mb-4"> Password successfully renewed! </p>
+        <div className="absolute inset-0 flex justify-center items-center bg-black/40">
+          <div className="bg-white p-6 rounded-lg shadow-md text-center w-[270px]">
+            <p className="text-[#A0561D] font-medium mb-4"> Password successfully changed! </p>
             <button
               onClick={handleSuccess}
               className="bg-[#C4703D] text-white px-6 py-2 rounded-md font-semibold hover:opacity-90 transition"> OK </button>
-        </div>
+          </div>
         </div>
       )}
     </div>

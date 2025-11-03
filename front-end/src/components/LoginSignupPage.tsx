@@ -3,7 +3,7 @@ import React, { useState, type FormEvent } from "react";
 import { EyeIcon, EyeSlashIcon } from "@phosphor-icons/react";
 import { Button } from "@heroui/react";
 import {jwtDecode} from "jwt-decode";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import api, { setAccessToken } from "../utils/api";
 import { useLogin } from '../contexts/LoginContext';
 import { GoogleLogin } from "@react-oauth/google";
@@ -35,6 +35,10 @@ const LoginPage = () => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
   }
+  const validatePass = (password: string) => {
+    const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
+    return passRegex.test(password);
+  }
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
@@ -43,6 +47,11 @@ const LoginPage = () => {
 
     if (!validateEmail(userInfo.email)) {
       setEmailError("Invalid email format.");
+      return;
+    }
+
+    if (!validatePass(userInfo.password)) {
+      setPasswordError("Invalid credentials")
       return;
     }
     
@@ -125,9 +134,7 @@ const LoginPage = () => {
           </h1>
           <p className="text-gray-400">
             Don't have an account? {" "}
-            <a
-              onClick={() => navigate('/auth/signup')}
-              className="text-brown underline cursor-pointer">Sign up</a>
+            <Link to={'/auth/signup'} className="text-brown underline cursor-pointer">Sign up</Link>           
           </p>
         </div>
 
@@ -147,8 +154,7 @@ const LoginPage = () => {
             />
             {emailError && (
               <p className="text-error-red text-[3.5vw] mb-1">{emailError}</p>
-            )
-              
+            )              
             }
 
             <label className="block text-[4vw] mb-1 mt-2 text-p-gray">
