@@ -8,6 +8,7 @@ import SampleLandingPage from './components/SampleLandingPage';
 import EmailSendOTP from './components/EmailSendOTP';
 import EmailOTP from './components/EmailOTP';
 import RenewPassword from './components/RenewPassword';
+import SignupEmailOTP from './components/SignUpEmailOTP';
 
 import { useLogin } from "./contexts/LoginContext";
 import AuthLayout from './components/AuthLayout';
@@ -26,11 +27,11 @@ function App() {
       <Route path="/auth" element={isLogin ? <Navigate to={"/sample"} /> : <AuthLayout />}>
         <Route path='login' element={<LoginPage />} />
         <Route path='signup' element={<SignUpPage />} />
-
+        <Route path="verify-signup" element={<SignupEmailOTP />} />
         <Route path="otp" element={<ForgotPasswordParent />}>
-          <Route index element={<EmailSendOTP />} />
-          <Route path="verify" element={<EmailOTP />} />
-          <Route path="renew" element={<RenewPassword />} />
+        <Route index element={<EmailSendOTP />} />
+        <Route path="verify" element={<EmailOTP />} />
+        <Route path="renew" element={<RenewPassword />} />
         </Route>
       </Route>
 

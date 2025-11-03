@@ -1,22 +1,20 @@
-import { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom"
 import { GreaterThanIcon } from "@phosphor-icons/react";
-import { ForgotPasswordContext } from "./ForgotPasswordParent";
-import { requestPasswordReset } from "../utils/requests";
 
-const EmailOTP = () => {
-  const navigate = useNavigate();
-  const [localOtp, setLocalOtp] = useState(["", "", "", "", "", ""]);
-  const [showConfirmBack, setShowConfirmBack] = useState(false);
-  const [error, setError] = useState<string>("");
 
-  const { email, setOtp: setGlobalOtp } = useContext(ForgotPasswordContext)!;
+const SignupEmailOTP = () => {
+const navigate = useNavigate();
+
+const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+const [showConfirmBack, setShowConfirmBack] = useState(false);
+const [error, setError] = useState<string>("");
 
   const handleChange = (index: number, value: string) => {
     if (/^[0-9]?$/.test(value)) {
-      const newOtp = [...localOtp];
+      const newOtp = [...otp];
       newOtp[index] = value;
-      setLocalOtp(newOtp);
+      setOtp(newOtp);
 
       if (value && index < 5) {
         const nextInput = document.getElementById(`otp-input-${index + 1}`);
@@ -25,57 +23,44 @@ const EmailOTP = () => {
     }
   };
 
-  const handleConfirm = (e: React.FormEvent) => {
+    const handleVerify = (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
-    const otpString = localOtp.join("");
+    const otpString = otp.join("");
     if (otpString.length !== 6) {
       setError("Please enter the complete 6-digit verification code.");
       return;
     }
 
-    setGlobalOtp(otpString);
-    navigate("../renew");
+    sessionStorage.setItem("email_verification_otp", otpString);
+    navigate("/auth/register");
   };
 
-    const handleResend = async () => {
-    if (!email) { // 'email' galing sa parent context
-      setError("Email not found. Please go back.");
-      return;
-    }
-    try {
-      setError(""); // Clear previous errors
-      console.log(`Resending OTP to ${email}`);
-      await requestPasswordReset(email);      
-      
-      alert(`Verification code resent to ${email}`); 
-    } catch (err) {
-      setError("Failed to resend code. Please try again.");
-    }
-  };
 
-  return (
-    <div className="bg-flesh h-screen flex flex-col justify-center items-center font-['League_Spartan'] relative">
+
+    return(
+        <>
+          <div className="bg-flesh h-screen flex flex-col justify-center items-center font-['League_Spartan'] relative">
       {/* Back Button */}
       <button
         onClick={() => setShowConfirmBack(true)}
         className="absolute top-6 left-6 bg-[#C4703D] text-white rounded-full p-2">
-        <GreaterThanIcon size={20} className="rotate-180" />
+        <GreaterThanIcon size={20} weight="bold" className="rotate-180" />
       </button>
 
       {/* Content */}
       <div className="flex flex-col items-start text-left space-y-4 w-[280px]">
         <div>
-          <h1 className="text-[#A0561D] text-[35px] font-bold">Enter verification code</h1>
+          <h1 className="text-[#A0561D] text-[35px] font-bold">Email verification</h1>
           <p className="text-p-gray text-[18px]">
-            Please enter the one-time pin sent to your email address.
+            Please enter the one-time verification code sent to your email address.
           </p>
         </div>
 
         {/* OTP Input Boxes */}
         <div className="flex justify-center space-x-2 mt-4">
-          {localOtp.map((digit, index) => (<input
+          {otp.map((digit, index) => (<input
               id={`otp-input-${index}`}
               key={index}
               type="tel" 
@@ -94,41 +79,38 @@ const EmailOTP = () => {
 
         {/* Confirm Button */}
         <button
-          onClick={handleConfirm}
+          onClick={handleVerify}
           className="w-[280px] h-10 bg-[#C4702E] text-white text-[16px] font-['Wendy_One'] rounded-[15px] mt-2 hover:opacity-90 transition"
         >
-          Confirm
+          Verify Email
         </button>
       </div>
 
       <p className="text-sm text-gray-600 mt-4">
-        If you didn’t receive the code:&nbsp;
-        <button
-        onClick={handleResend} 
-        className="text-[#C4703D] font-semibold hover:underline"
-        >
+        Didn’t receive the code?{" "}
+        <button className="text-[#C4703D] font-semibold hover:underline">
           Resend
         </button>
       </p>
 
-      {/* Confirmation Modal */}
       {showConfirmBack && (
         <div className="absolute inset-0 flex justify-center items-center bg-black/60">
         <div className="bg-white p-5 rounded-[15px] shadow-x4 text-center w-[310px]">
-        <p className="text-[#A0561D] font-medium mb-4"> Go back to the email verification page? Your entered code won’t be saved.</p>
+        <p className="text-[#A0561D] font-medium mb-4"> Go back to the Sign up?</p>
           <div className="flex justify-around mt-6 gap-2">
             <button
                 onClick={() => setShowConfirmBack(false)}
                 className="bg-gray-200 text-gray-700 px-10 py-2 rounded-[10px] font-medium hover:bg-gray-300 transition"> Cancel </button>
             <button
-                onClick={() => navigate("/")} 
+                onClick={() => navigate("/auth/signup")} 
                 className="bg-[#A63A2B] text-white px-9 py-2 rounded-[10px] font-medium hover:opacity-90 transition"> Yes </button>
           </div>
         </div>
         </div>
       )}
     </div>
-  );
-};
+        </>
+    );
 
-export default EmailOTP;
+};
+export default SignupEmailOTP;
