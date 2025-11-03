@@ -70,7 +70,7 @@ const RenewPassword = () => {
   };
 
   return (
-    <div className="bg-[#FFEBD8] h-screen flex flex-col justify-center items-center font-['League_Spartan'] relative">
+    <div className="bg-flesh h-screen flex flex-col justify-center items-center font-['League_Spartan'] relative">
 
       {/* Back Button */}
       <button
@@ -84,7 +84,7 @@ const RenewPassword = () => {
       <div className="flex flex-col items-start text-left space-y-7 w-[280px]">
         <div>
           <h1 className="text-[#A0561D] text-[35px] font-bold">Renew Password</h1>
-          <p className="text-[#7F7F7F] text-[18px]">Enter and confirm your new password.</p>
+          <p className="text-p-gray text-[18px]">Enter and confirm your new password.</p>
         </div>
 
         {/* New Password Field */}
@@ -94,7 +94,7 @@ const RenewPassword = () => {
             placeholder="New password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full h-[40px] bg-[#FFFEFD] border border-gray-300 rounded-[10px] px-3 text-[16px] focus:outline-[#7F7F7F] shadow-sm"
+            className="w-full h-10 bg-[#FFFEFD] border border-gray-300 rounded-[10px] px-3 text-[16px] focus:outline-p-gray shadow-sm"
           />
           <button
             type="button"
@@ -112,7 +112,7 @@ const RenewPassword = () => {
             placeholder="Confirm password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full h-[40px] bg-[#FFFEFD] border border-gray-300 rounded-[10px]   px-3 text-[16px] focus:outline-[#7F7F7F] shadow-sm"
+            className="w-full h-10 bg-[#FFFEFD] border border-gray-300 rounded-[10px]   px-3 text-[16px] focus:outline-p-gray shadow-sm"
           />
           <button
             type="button"
@@ -132,7 +132,7 @@ const RenewPassword = () => {
         <button
           onClick={handleConfirm}
           disabled={loading} // <-- Idinagdag
-          className="w-[280px] h-[40px] bg-[#C4702E] text-white text-[16px] font-['Wendy_One'] rounded-[15px] mt-1 hover:opacity-90 transition disabled:opacity-50"
+          className="w-[280px] h-10 bg-[#C4702E] text-white text-[16px] font-['Wendy_One'] rounded-[15px] mt-1 hover:opacity-90 transition disabled:opacity-50"
         >
           {loading ? "Confirming..." : "Confirm"}
         </button>
