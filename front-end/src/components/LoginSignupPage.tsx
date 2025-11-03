@@ -89,7 +89,7 @@ const LoginPage = () => {
     try {
     // Send token to backend
     await api.post("/auth/google", {
-      credential: credentialResponse.email,
+      credential: decoded,
     });
     
     setIsLogin(true);

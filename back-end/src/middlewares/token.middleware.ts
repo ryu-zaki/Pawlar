@@ -31,7 +31,7 @@ export const checkUser = async (req: Request, res: Response, next: NextFunction)
     const validate = result.rows[0].checkuserexist;
 
     if (!validate) {
-      res.sendStatus(403) // forbidden: emaiil doesnt exists
+      res.sendStatus(403) // forbidden: emaiil doesn't exists
     } else {
       next();
     }
@@ -48,13 +48,22 @@ export const checkUser = async (req: Request, res: Response, next: NextFunction)
 export const checkLoginWithGoogle = async (req: Request, res: Response, next: NextFunction) => {
    
    try {
-      const {email} = req.body;
 
-      const result = await pool.query('SELECT checkUserExist($1)', [email]);
+      const {credential} = req.body;
+      const nameArr = credential.name.split(",");
+      const userInfo = {
+        firstName: nameArr[1],
+        lastName: nameArr[0],
+        email: credential.email,
+        password: null
+      }
+  
+      const result = await pool.query('SELECT checkUserExist($1)', [userInfo.email]);
       const isExist = result.rows[0].checkuserexist;
       
       if (!isExist) {
-        await createUser(req.body);
+        
+        await createUser(userInfo);
       } 
 
       next();
