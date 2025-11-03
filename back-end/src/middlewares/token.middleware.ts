@@ -1,4 +1,5 @@
 import { Response, Request, NextFunction } from 'express';
+import { createUser } from '../services/auth.service';
 import jwt from 'jsonwebtoken';
 const ACCESS_SECRET = process.env.ACCESS_SECRET as string;
 import pool from '../config/db';
@@ -42,4 +43,24 @@ export const checkUser = async (req: Request, res: Response, next: NextFunction)
     res.sendStatus(500);
     
   }
-} 
+}
+
+export const checkLoginWithGoogle = async (req: Request, res: Response, next: NextFunction) => {
+   
+   try {
+      const {email} = req.body;
+
+      const result = await pool.query('SELECT checkUserExist($1)', [email]);
+      const isExist = result.rows[0].checkuserexist;
+      
+      if (!isExist) {
+        await createUser(req.body);
+      } 
+
+      next();
+   }
+
+   catch(err) {
+    console.log(err);
+   }
+}
