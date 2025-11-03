@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { sendOTPEmail } from '../utils/email.helper';
 import { generateOTP } from '../utils/otp.helper'
-import { createUser, checkUser, extractUserInfo, updateUserPassword, updateValidateField } from "../services/auth.service";
+import { createUser, checkUser, extractUserInfo, updateUserPassword, updateValidateField, createOtpFields } from "../services/auth.service";
 const REFRESH_SECRET = process.env.REFRESH_SECRET as string;
 const RESET_SECRET = process.env.RESET_SECRET as string;
 
@@ -166,4 +166,16 @@ const validateCode = async (req: Request, res: Response) => {
    }
 }
 
-export { loginController, registerController, refreshAccessToken, forgotPasswordController, resetPasswordController, handleGoogleLogin, validateCode };
+const resendOTP = async (req: Request, res: Response) => {
+    try {
+        await createOtpFields(req.body.email);
+        res.sendStatus(200)
+    }
+
+    catch(err) {
+      console.log(err);
+      res.sendStatus(500);
+    }
+}
+
+export { loginController, registerController, refreshAccessToken, forgotPasswordController, resetPasswordController, handleGoogleLogin, validateCode, resendOTP };
