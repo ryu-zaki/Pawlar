@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict 92rjb9rGJygsR3AVn5sbDJwBtqEwfkEidL2pWeu9sccIdoLHfyFa1ebgYLsWhHb
+\restrict qWoXxJkq4dIY8AbzxilOtcwaQO395oFJx5XQIBEf8BuSKicKqe0I6VzG75A3FBb
 
 -- Dumped from database version 18.0
 -- Dumped by pg_dump version 18.0
@@ -46,21 +46,25 @@ $$;
 ALTER FUNCTION public.checkuserexist(_email character varying) OWNER TO postgres;
 
 --
--- Name: createuser(character varying, character varying, character varying, text); Type: PROCEDURE; Schema: public; Owner: postgres
+-- Name: create_user(character varying, character varying, character varying, text); Type: PROCEDURE; Schema: public; Owner: postgres
 --
 
-CREATE PROCEDURE public.createuser(IN fname character varying, IN lname character varying, IN _email character varying, IN _password text)
+CREATE PROCEDURE public.create_user(IN fname character varying, IN lname character varying, IN _email character varying, IN _password text DEFAULT NULL::text)
     LANGUAGE plpgsql
-    AS $$ 
-
+    AS $$
 BEGIN
-  INSERT INTO users (first_name, last_name, email, password)
-  VALUES (fName, lName, _email, _password);
+    IF _password IS NULL THEN
+        INSERT INTO users (first_name, last_name, email)
+        VALUES (fName, lName, _email);
+    ELSE
+       INSERT INTO users (first_name, last_name, email, password)
+       VALUES (fName, lName, _email, _password);
+    END IF;
 END;
 $$;
 
 
-ALTER PROCEDURE public.createuser(IN fname character varying, IN lname character varying, IN _email character varying, IN _password text) OWNER TO postgres;
+ALTER PROCEDURE public.create_user(IN fname character varying, IN lname character varying, IN _email character varying, IN _password text) OWNER TO postgres;
 
 --
 -- Name: getuserinfobyemail(text); Type: FUNCTION; Schema: public; Owner: postgres
@@ -94,7 +98,7 @@ CREATE TABLE public.users (
     last_name character varying(100) NOT NULL,
     email character varying(150) NOT NULL,
     phone_number character varying(100),
-    password text NOT NULL
+    password text
 );
 
 
@@ -134,10 +138,6 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 --
 
 COPY public.users (id, first_name, last_name, email, phone_number, password) FROM stdin;
-1	jhonwell	Espanola	jhon@gmail.com	\N	123
-13	jella	gonzales	jellaanne@gmail.com	\N	123
-16	light	yagami	light@gmail.com	\N	$2b$10$tZLGVBf2Fh05heEdRxJuru6tllWXznzj2STvxyUsX5D51U/fM7DGm
-17	L	lawliet	ryu@gmail.com	\N	$2b$10$XleIKfn9hrYIi5wGAkDHs.CC8S5ZNUPqz6feNAKwv/6AIR7.JdUR6
 \.
 
 
@@ -145,7 +145,7 @@ COPY public.users (id, first_name, last_name, email, phone_number, password) FRO
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 17, true);
+SELECT pg_catalog.setval('public.users_id_seq', 19, true);
 
 
 --
@@ -168,5 +168,5 @@ ALTER TABLE ONLY public.users
 -- PostgreSQL database dump complete
 --
 
-\unrestrict 92rjb9rGJygsR3AVn5sbDJwBtqEwfkEidL2pWeu9sccIdoLHfyFa1ebgYLsWhHb
+\unrestrict qWoXxJkq4dIY8AbzxilOtcwaQO395oFJx5XQIBEf8BuSKicKqe0I6VzG75A3FBb
 

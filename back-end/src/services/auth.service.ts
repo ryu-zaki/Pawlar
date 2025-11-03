@@ -11,10 +11,9 @@ interface User {
 const createUser = async (user: User) => {
   try {
     const { firstName, lastName, email, password: rawPassword } = user;
-
-    const hashPassword = await bcrypt.hash(rawPassword, 10);
-
-    await pool.query('CALL createUser($1, $2, $3, $4)', [firstName, lastName, email, hashPassword])
+    
+    const hashPassword = !!rawPassword ? await bcrypt.hash(rawPassword, 10) : null;
+    await pool.query('CALL create_user($1, $2, $3, $4)', [firstName, lastName, email, hashPassword])
   }
 
   catch (err) {

@@ -13,11 +13,11 @@ const loginController = async (req: Request, res: Response) => {
   const { body } = req;
  
   try {
-    const exists = await checkUser(body.email);
+    /* const exists = await checkUser(body.email); */
     const user = await extractUserInfo(body.email);
     const isPasswordValid = await bcrypt.compare(body.password, user?.password);
 
-    if (!exists || !isPasswordValid) return res.sendStatus(403);
+    if (!isPasswordValid) return res.sendStatus(401); // unauthorized: wrong password / credentials
 
     const refreshToken = generateRefreshToken(body.email);
     const accessToken = generateAccessToken(body);
@@ -31,14 +31,14 @@ const loginController = async (req: Request, res: Response) => {
 
   catch (err) {
     console.log(err);
-    res.sendStatus(401);
+    res.sendStatus(500);
   }
 
 }
 
 
 const registerController = async (req: Request, res: Response) => {
-
+  
   try {
     await createUser(req.body);
 
