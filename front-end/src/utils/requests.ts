@@ -19,7 +19,7 @@ interface ApiResponse {
 
 interface ForgotPasswordResponse {
   message: string;
-  resetToken: string; 
+  expiresAt: string;
 }
 
 const requestPasswordReset = async (email: string): Promise<ForgotPasswordResponse> => {
@@ -27,12 +27,11 @@ const requestPasswordReset = async (email: string): Promise<ForgotPasswordRespon
     return response.data;
 };
 
-const resetPassword = async (email: string, otp: string, newPassword: string, resetToken: string) => {
+const resetPassword = async (email: string, otp: string, newPassword: string) => {
     const response = await api.post<ApiResponse>('/auth/reset-password', {
         email,
         otp,
-        newPassword,
-        resetToken
+        newPassword
     });
     return response.data; 
 };

@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { CaretRightIcon, EnvelopeSimple, CaretRight } from "@phosphor-icons/react";
+import { EnvelopeSimple, CaretLeftIcon } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
 import { requestPasswordReset } from "../utils/requests";
 import { useContext } from 'react';
@@ -11,7 +11,7 @@ const EmailSendOTP = () => {
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { setEmail, setResetToken } = useContext(ForgotPasswordContext)!;
+  const { setEmail } = useContext(ForgotPasswordContext)!;
 
   const validateEmail = (email: string) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -20,28 +20,39 @@ const EmailSendOTP = () => {
 
   const handleSendOTP = async (e: FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setError("");
 
-    if (!validateEmail(email)) {
-      setError("Invalid email format.");
-      setLoading(false);
+    const trimmedEmail = email.trim();
+
+    if (trimmedEmail.length === 0) {
+      setError("Please input an email.");
       return;
     }
 
+    if (!validateEmail(trimmedEmail)) {
+      setError("Invalid email format.");
+      return;
+    }
+
+    setLoading(true);
+
     try {
-      const response = await requestPasswordReset(email);
+      const response = await requestPasswordReset(trimmedEmail);
+      setEmail(trimmedEmail);
 
-      setEmail(email);
-      setResetToken(response.resetToken);
+      const expiryTime = Date.now() + 600000;
+      localStorage.setItem('otpCooldownExpiry', expiryTime.toString());
 
+      localStorage.setItem('otpActualExpiry', response.expiresAt);
       navigate("verify");
 
     } catch (err: any) {
       const errorMessage = err.response?.data?.message || err.message || "An unexpected error occurred.";
       setError(errorMessage);
+    } finally {
       setLoading(false);
     }
+
   };
 
   return (
@@ -50,8 +61,8 @@ const EmailSendOTP = () => {
       <div className="absolute top-6 left-6">
         <button
           onClick={() => navigate("../login")}
-          className="bg-[#C4703D] text-white rounded-full p-3">
-          <CaretRightIcon size={20} weight="bold" className="rotate-180" />
+          className="bg-[#C4703D] text-white rounded-full p-2">
+          <CaretLeftIcon size={20} weight="bold" />
         </button>
       </div>
 
@@ -72,13 +83,12 @@ const EmailSendOTP = () => {
               size={20}
               className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
-              required
               id="password"
               placeholder="example@gmail.com"
               value={email}
               onChange={(e) => setUserEmail(e.target.value)}
-              className={`bg-white shadow-[0_2px_8px_rgba(0,0,0,0.1)] text-s pl-10 p-2 w-full h-10 rounded-[15px] outline-0 placeholder:text-[#B3B3B3]
-              ${ error ? "border border-error-red" : "" }`}
+              className={`bg-white shadow-[0_2px_8px_rgba(0,0,0,0.1)] text-s pl-10 p-2 w-full h-10 rounded-[15px] outline-p-gray placeholder:text-[#B3B3B3]
+              ${error ? "border border-error-red" : ""}`}
             />
           </div>
 
