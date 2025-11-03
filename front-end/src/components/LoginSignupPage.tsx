@@ -147,8 +147,7 @@ const LoginPage = () => {
             />
             {emailError && (
               <p className="text-error-red text-[3.5vw] mb-1">{emailError}</p>
-            )
-              
+            )              
             }
 
             <label className="block text-[4vw] mb-1 mt-2 text-p-gray">

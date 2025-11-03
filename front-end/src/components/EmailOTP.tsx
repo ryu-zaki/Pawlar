@@ -1,18 +1,22 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { GreaterThanIcon } from "@phosphor-icons/react";
+import { ForgotPasswordContext } from "./ForgotPasswordParent";
+import { requestPasswordReset } from "../utils/requests";
 
 const EmailOTP = () => {
   const navigate = useNavigate();
-  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const [localOtp, setLocalOtp] = useState(["", "", "", "", "", ""]);
   const [showConfirmBack, setShowConfirmBack] = useState(false);
   const [error, setError] = useState<string>("");
 
+  const { email, setOtp: setGlobalOtp } = useContext(ForgotPasswordContext)!;
+
   const handleChange = (index: number, value: string) => {
     if (/^[0-9]?$/.test(value)) {
-      const newOtp = [...otp];
+      const newOtp = [...localOtp];
       newOtp[index] = value;
-      setOtp(newOtp);
+      setLocalOtp(newOtp);
 
       if (value && index < 5) {
         const nextInput = document.getElementById(`otp-input-${index + 1}`);
@@ -25,18 +29,34 @@ const EmailOTP = () => {
     e.preventDefault();
     setError("");
 
-    const otpString = otp.join("");
+    const otpString = localOtp.join("");
     if (otpString.length !== 6) {
       setError("Please enter the complete 6-digit verification code.");
       return;
     }
 
-    sessionStorage.setItem("pw_reset_otp", otpString);
-    navigate("renew");
+    setGlobalOtp(otpString);
+    navigate("../renew");
+  };
+
+    const handleResend = async () => {
+    if (!email) { // 'email' galing sa parent context
+      setError("Email not found. Please go back.");
+      return;
+    }
+    try {
+      setError(""); // Clear previous errors
+      console.log(`Resending OTP to ${email}`);
+      await requestPasswordReset(email);      
+      
+      alert(`Verification code resent to ${email}`); 
+    } catch (err) {
+      setError("Failed to resend code. Please try again.");
+    }
   };
 
   return (
-    <div className="bg-fleshcreen flex flex-col justify-center items-center font-['League_Spartan'] relative">
+    <div className="bg-flesh h-screen flex flex-col justify-center items-center font-['League_Spartan'] relative">
       {/* Back Button */}
       <button
         onClick={() => setShowConfirmBack(true)}
@@ -55,7 +75,7 @@ const EmailOTP = () => {
 
         {/* OTP Input Boxes */}
         <div className="flex justify-center space-x-2 mt-4">
-          {otp.map((digit, index) => (<input
+          {localOtp.map((digit, index) => (<input
               id={`otp-input-${index}`}
               key={index}
               type="tel" 
@@ -81,10 +101,12 @@ const EmailOTP = () => {
         </button>
       </div>
 
-      {/* Resend (Note: Kailangan ng bagong function para dito) */}
       <p className="text-sm text-gray-600 mt-4">
-        If you didn’t receive the code:{" "}
-        <button className="text-[#C4703D] font-semibold hover:underline">
+        If you didn’t receive the code:&nbsp;
+        <button
+        onClick={handleResend} 
+        className="text-[#C4703D] font-semibold hover:underline"
+        >
           Resend
         </button>
       </p>
