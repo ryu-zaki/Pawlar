@@ -1,5 +1,5 @@
 import { Response, Request, NextFunction } from 'express';
-import { createUser } from '../services/auth.service';
+import { createUser, createOtpFields } from '../services/auth.service';
 import jwt from 'jsonwebtoken';
 const ACCESS_SECRET = process.env.ACCESS_SECRET as string;
 import pool from '../config/db';
@@ -72,4 +72,17 @@ export const checkLoginWithGoogle = async (req: Request, res: Response, next: Ne
    catch(err) {
     console.log(err);
    }
+}
+
+export const handleRegisterOTP = async (req: Request, res: Response, next: NextFunction) => {
+  const { email } = req.body;
+  try {
+    await createOtpFields(email);
+    
+  }
+
+  catch(err) {
+    throw err;
+  }
+
 }

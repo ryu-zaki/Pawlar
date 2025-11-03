@@ -1,5 +1,6 @@
 import pool from "../config/db";
 import bcrypt from 'bcrypt';
+import { generateOTP } from "../utils/otp.helper";
 
 interface User {
   firstName: string;
@@ -11,8 +12,8 @@ interface User {
 const createUser = async (user: User) => {
   try {
     const { firstName, lastName, email, password: rawPassword } = user;
-    
     const hashPassword = !!rawPassword ? await bcrypt.hash(rawPassword, 10) : null;
+
     await pool.query('CALL create_user($1, $2, $3, $4)', [firstName, lastName, email, hashPassword])
   }
 
@@ -57,4 +58,20 @@ const updateUserPassword = async (email: string, newPassword: string) => {
   }
 };
 
-export { createUser, checkUser, extractUserInfo, updateUserPassword }; 
+const createOtpFields = async (email: string) => {
+  const verification_code = generateOTP();
+  const last_otp_sent_at = (new Date()).toISOString();
+  const verification_expires_at = (new Date()).toISOString();
+  
+
+   try {
+     await pool.query("CALL createOTPcredentials(?, ?, ?, ?)", 
+      [email, verification_code, last_otp_sent_at, verification_expires_at])
+   }
+
+   catch(err) {
+    throw err
+   }
+}
+
+export { createUser, checkUser, extractUserInfo, updateUserPassword, createOtpFields }; 

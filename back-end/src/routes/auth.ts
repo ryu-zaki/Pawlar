@@ -1,10 +1,10 @@
 import express from 'express';
 import { loginController, registerController, refreshAccessToken, forgotPasswordController, resetPasswordController, handleGoogleLogin } from '../controllers/auth.controllers';
-import { checkUser, checkLoginWithGoogle } from '../middlewares/token.middleware';
+import { checkUser, checkLoginWithGoogle, handleRegisterOTP } from '../middlewares/token.middleware';
 const router = express.Router();
 
 router.post('/login', checkUser, loginController);
-router.post('/register', registerController);
+router.post('/register', handleRegisterOTP, registerController);
 router.post("/google", checkLoginWithGoogle, handleGoogleLogin);
 router.post('/refresh-access-token', refreshAccessToken); 
 
