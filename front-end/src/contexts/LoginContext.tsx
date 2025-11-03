@@ -1,11 +1,17 @@
 import React, { useContext, type ReactElement } from "react";
 
-const LoginComponent = React.createContext<{ isLogin: boolean, setIsLogin: React.Dispatch<React.SetStateAction<boolean>> }>({ isLogin: false, setIsLogin: () => {}});
+const LoginComponent = React.createContext<{ 
+    isLogin: boolean, setIsLogin: 
+      React.Dispatch<React.SetStateAction<boolean>>, 
+        isEmailVerified: boolean | string, setIsEmailVerified: React.Dispatch<React.SetStateAction<boolean | "pending">>  }>
+           ({ isLogin: false, setIsLogin: () => {}, isEmailVerified: false, setIsEmailVerified: () => {}});
 
 const LoginContext = ({ children }: { children: ReactElement }) => {
 
     const [isLogin, setIsLogin] = React.useState(false);
- 
+    const [isEmailVerified, setIsEmailVerified] = React.useState<boolean | "pending">(false);
+    
+
     React.useEffect(() => {
       
         (async () => {
@@ -29,7 +35,7 @@ const LoginContext = ({ children }: { children: ReactElement }) => {
     }, []);
 
     return (
-        <LoginComponent.Provider value={{ isLogin, setIsLogin }}>
+        <LoginComponent.Provider value={{ isLogin, setIsLogin, isEmailVerified, setIsEmailVerified }}>
               {children}
         </LoginComponent.Provider>
     )

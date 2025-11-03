@@ -2,7 +2,7 @@ import React, { useState, type FormEvent } from "react";
 import { GoogleLogoIcon, EyeIcon, EyeSlashIcon } from "@phosphor-icons/react";
 import { Button, Checkbox } from "@heroui/react";
 import { Link, useNavigate } from "react-router-dom";
-//import api from "../utils/api";
+import api from "../utils/api";
 
 const SignUpPage = () => {
     const [userInfo, setUserInfo] = React.useState({
@@ -85,24 +85,23 @@ const SignUpPage = () => {
     };  setErrors(newErrors);
 
         if (Object.values(newErrors).some((err) => err)) return;
-        navigate("/auth/verify-signup");
+       
+            try {
+             const response = await api.post("/auth/register", userInfo)
+                 
+             if (!response) {
+                 throw new Error();
+             }
+             
+             navigate("/auth/verify-signup");
 
-        // try{
-        //     const response = await api.post("/auth/register", userInfo)
-        //     const data = await response.data;
+            }
 
-        //     if (!response) {
-        //         console.log("Welcome,", data.user?.firstName);
-        //         navigate("verify-signup");
-        //         throw new Error();
-        //     }
-
-
-        // } catch(err) {
-        //     console.log(err)
+            catch(err) {
+               console.log(err)    
+            }
         
-        // }
-    }
+}
 
     return ( 
         <>

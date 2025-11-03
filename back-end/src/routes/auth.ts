@@ -4,7 +4,7 @@ import { checkUser, checkLoginWithGoogle, handleRegisterOTP } from '../middlewar
 const router = express.Router();
 
 router.post('/login', checkUser, loginController);
-router.post('/register', handleRegisterOTP, registerController);
+router.post('/register', registerController);
 router.post("/google", checkLoginWithGoogle, handleGoogleLogin);
 router.post('/refresh-access-token', refreshAccessToken); 
 
