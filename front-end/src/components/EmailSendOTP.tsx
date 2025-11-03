@@ -11,7 +11,7 @@ const EmailSendOTP = () => {
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { setEmail, setResetToken } = useContext(ForgotPasswordContext)!;
+  const { setEmail } = useContext(ForgotPasswordContext)!;
 
   const validateEmail = (email: string) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -30,10 +30,8 @@ const EmailSendOTP = () => {
     }
 
     try {
-      const response = await requestPasswordReset(email);
-
+      await requestPasswordReset(email);
       setEmail(email);
-      setResetToken(response.resetToken);
 
       navigate("verify");
 

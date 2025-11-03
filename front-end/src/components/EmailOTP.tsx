@@ -40,17 +40,17 @@ const EmailOTP = () => {
     navigate("../renew");
   };
 
-    const handleResend = async () => {
-    if (!email) { // 'email' galing sa parent context
+  const handleResend = async () => {
+    if (!email) {
       setError("Email not found. Please go back.");
       return;
     }
     try {
-      setError(""); // Clear previous errors
+      setError("");
       console.log(`Resending OTP to ${email}`);
-      await requestPasswordReset(email);      
-      
-      alert(`Verification code resent to ${email}`); 
+      await requestPasswordReset(email);
+
+      alert(`Verification code resent to ${email}`);
     } catch (err) {
       setError("Failed to resend code. Please try again.");
     }
@@ -59,12 +59,12 @@ const EmailOTP = () => {
   return (
     <div className="bg-flesh h-screen flex flex-col justify-center items-center font-['League_Spartan'] relative">
       {/* Back Button */}
-<button
-  onClick={() => setShowConfirmBack(true)}
-  className="absolute top-6 left-6 bg-[#C4703D] text-white rounded-full p-2 shadow-md hover:bg-[#b35f2d] transition"
->
-  <CaretLeft size={20} weight="bold" />
-</button>
+      <button
+        onClick={() => setShowConfirmBack(true)}
+        className="absolute top-6 left-6 bg-[#C4703D] text-white rounded-full p-2 shadow-md hover:bg-[#b35f2d] transition"
+      >
+        <CaretLeft size={20} weight="bold" />
+      </button>
 
       {/* Content */}
       <div className="flex flex-col items-start text-left space-y-4 w-[280px]">
@@ -78,14 +78,14 @@ const EmailOTP = () => {
         {/* OTP Input Boxes */}
         <div className="flex justify-center space-x-2 mt-4">
           {localOtp.map((digit, index) => (<input
-              id={`otp-input-${index}`}
-              key={index}
-              type="tel" 
-              maxLength={1}
-              value={digit}
-              onChange={(e) => handleChange(index, e.target.value)}
-              className="w-10 h-10 border border-gray-300 rounded-md text-center text-lg focus:outline-[#C4703D] bg-white shadow-sm"
-            />
+            id={`otp-input-${index}`}
+            key={index}
+            type="tel"
+            maxLength={1}
+            value={digit}
+            onChange={(e) => handleChange(index, e.target.value)}
+            className="w-10 h-10 border border-gray-300 rounded-md text-center text-lg focus:outline-[#C4703D] bg-white shadow-sm"
+          />
           ))}
         </div>
 
@@ -106,8 +106,8 @@ const EmailOTP = () => {
       <p className="text-sm text-gray-600 mt-4">
         If you didn’t receive the code:&nbsp;
         <button
-        onClick={handleResend} 
-        className="text-[#C4703D] font-semibold hover:underline"
+          onClick={handleResend}
+          className="text-[#C4703D] font-semibold hover:underline"
         >
           Resend
         </button>
@@ -116,17 +116,17 @@ const EmailOTP = () => {
       {/* Confirmation Modal */}
       {showConfirmBack && (
         <div className="absolute inset-0 flex justify-center items-center bg-black/60">
-        <div className="bg-white p-5 rounded-[15px] shadow-x4 text-center w-[310px]">
-        <p className="text-[#A0561D] font-medium mb-4"> Go back to the email verification page? Your entered code won’t be saved.</p>
-          <div className="flex justify-around mt-6 gap-2">
-            <button
+          <div className="bg-white p-5 rounded-[15px] shadow-x4 text-center w-[310px]">
+            <p className="text-[#A0561D] font-medium mb-4"> Go back to the email verification page? Your entered code won’t be saved.</p>
+            <div className="flex justify-around mt-6 gap-2">
+              <button
                 onClick={() => setShowConfirmBack(false)}
                 className="bg-gray-200 text-gray-700 px-9 py-2 rounded-[10px] font-medium hover:bg-gray-300 transition"> Cancel </button>
-            <button
-                onClick={() => navigate("/")} 
+              <button
+                onClick={() => navigate("/")}
                 className="bg-[#A63A2B] text-white px-9 py-2 rounded-[10px] font-medium hover:opacity-90 transition"> Yes </button>
+            </div>
           </div>
-        </div>
         </div>
       )}
     </div>

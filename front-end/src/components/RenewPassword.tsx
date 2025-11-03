@@ -17,7 +17,7 @@ const RenewPassword = () => {
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { email, otp, resetToken, setEmail, setOtp, setResetToken } = useContext(ForgotPasswordContext)!;
+  const { email, otp, setEmail, setOtp } = useContext(ForgotPasswordContext)!;
 
   const handleConfirm = async (e: FormEvent) => {
     e.preventDefault();
@@ -40,14 +40,14 @@ const RenewPassword = () => {
       return;
     }
 
-    if (!email || !otp || !resetToken) {
+    if (!email || !otp) {
       setError("Your session has expired. Please try again.");
       setLoading(false);
       return;
     }
 
     try {
-      await resetPassword(email, otp, password, resetToken);
+      await resetPassword(email, otp, password);
 
       setShowSuccessModal(true);
 
@@ -62,8 +62,6 @@ const RenewPassword = () => {
   const handleSuccess = () => {
     setEmail("");
     setOtp("");
-    setResetToken("");
-
     setShowSuccessModal(false);
     navigate("../../login");
   };

@@ -4,8 +4,6 @@ import { Outlet } from "react-router-dom";
 interface IForgotPasswordContext {
   email: string;
   setEmail: (email: string) => void;
-  resetToken: string;
-  setResetToken: (token: string) => void;
   otp: string;
   setOtp: (otp: string) => void;
 }
@@ -15,15 +13,12 @@ export const ForgotPasswordContext = createContext<IForgotPasswordContext | null
 const ForgotPasswordParent = () => {
   
   const [email, setEmail] = useState("");
-  const [resetToken, setResetToken] = useState("");
   
   const [otp, setOtp] = useState("");
 
   const contextValue = {
     email,
     setEmail,
-    resetToken,
-    setResetToken,
     otp,
     setOtp
   };
