@@ -65,7 +65,7 @@ const RenewPassword = () => {
     setResetToken("");
 
     setShowSuccessModal(false);
-    navigate("../login");
+    navigate("../../login");
   };
 
   return (
