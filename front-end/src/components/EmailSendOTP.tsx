@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { GreaterThanIcon, EnvelopeSimple } from "@phosphor-icons/react";
+import { CaretRightIcon, EnvelopeSimple, CaretRight } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
 import { requestPasswordReset } from "../utils/requests";
 import { useContext } from 'react';
@@ -51,7 +51,7 @@ const EmailSendOTP = () => {
         <button
           onClick={() => navigate("../login")}
           className="bg-[#C4703D] text-white rounded-full p-3">
-          <GreaterThanIcon size={20} className="rotate-180" />
+          <CaretRightIcon size={20} weight="bold" className="rotate-180" />
         </button>
       </div>
 

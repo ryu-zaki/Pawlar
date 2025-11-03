@@ -1,8 +1,9 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { GreaterThanIcon } from "@phosphor-icons/react";
+import { CaretLeft } from "@phosphor-icons/react";
 import { ForgotPasswordContext } from "./ForgotPasswordParent";
 import { requestPasswordReset } from "../utils/requests";
+
 
 const EmailOTP = () => {
   const navigate = useNavigate();
@@ -58,11 +59,12 @@ const EmailOTP = () => {
   return (
     <div className="bg-flesh h-screen flex flex-col justify-center items-center font-['League_Spartan'] relative">
       {/* Back Button */}
-      <button
-        onClick={() => setShowConfirmBack(true)}
-        className="absolute top-6 left-6 bg-[#C4703D] text-white rounded-full p-2">
-        <GreaterThanIcon size={20} className="rotate-180" />
-      </button>
+<button
+  onClick={() => setShowConfirmBack(true)}
+  className="absolute top-6 left-6 bg-[#C4703D] text-white rounded-full p-2 shadow-md hover:bg-[#b35f2d] transition"
+>
+  <CaretLeft size={20} weight="bold" />
+</button>
 
       {/* Content */}
       <div className="flex flex-col items-start text-left space-y-4 w-[280px]">
@@ -95,7 +97,7 @@ const EmailOTP = () => {
         {/* Confirm Button */}
         <button
           onClick={handleConfirm}
-          className="w-[280px] h-10 bg-[#C4702E] text-white text-[16px] font-['Wendy_One'] rounded-[15px] mt-2 hover:opacity-90 transition"
+          className="w-[280px] h-10 bg-[#C4702E] text-white text-[16px] font-['Wendy_One'] rounded-[10px] mt-2 hover:opacity-90 transition"
         >
           Confirm
         </button>
@@ -119,7 +121,7 @@ const EmailOTP = () => {
           <div className="flex justify-around mt-6 gap-2">
             <button
                 onClick={() => setShowConfirmBack(false)}
-                className="bg-gray-200 text-gray-700 px-10 py-2 rounded-[10px] font-medium hover:bg-gray-300 transition"> Cancel </button>
+                className="bg-gray-200 text-gray-700 px-9 py-2 rounded-[10px] font-medium hover:bg-gray-300 transition"> Cancel </button>
             <button
                 onClick={() => navigate("/")} 
                 className="bg-[#A63A2B] text-white px-9 py-2 rounded-[10px] font-medium hover:opacity-90 transition"> Yes </button>
