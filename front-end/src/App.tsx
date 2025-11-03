@@ -17,14 +17,14 @@ import ForgotPasswordParent from './components/ForgotPasswordParent';
 
 function App() {
 
-  const { isLogin } = useLogin();
+  const { isLogin, isEmailVerified } = useLogin();
 
   return (
 
     <Routes>
       <Route path='/' element={<StartupPage />} />
 
-      <Route path="/auth" element={isLogin ? <Navigate to={"/sample"} /> : <AuthLayout />}>
+      <Route path="/auth" element={(isLogin && isEmailVerified) ? <Navigate to={"/sample"} /> : <AuthLayout />}>
         <Route path='login' element={<LoginPage />} />
         <Route path='signup' element={<SignUpPage />} />
         <Route path="termsandconditions" element={< TermsAndConditions />}/>

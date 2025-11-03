@@ -7,7 +7,7 @@ import React from 'react';
 
 const SignupEmailOTP = () => {
 const navigate = useNavigate();
-const {credentials} = useLogin();
+const {credentials, setIsEmailVerified} = useLogin();
 
 const [otp, setOtp] = useState(["", "", "", "", "", ""]);
 const [showConfirmBack, setShowConfirmBack] = useState(false);
@@ -56,7 +56,8 @@ const [resendCount, setResendCount] = useState(30);
          code: otpString});
 
       if (response.status ==  200) {
-        alert("Correct CODE")
+        alert("Correct CODE");
+        setIsEmailVerified(true);
       } else {
         alert("Error")
       }
