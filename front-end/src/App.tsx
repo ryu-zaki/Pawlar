@@ -9,7 +9,7 @@ import SampleLandingPage from './components/SampleLandingPage';
 import EmailSendOTP from './components/EmailSendOTP';
 import EmailOTP from './components/EmailOTP';
 import RenewPassword from './components/RenewPassword';
-
+import TermsAndConditions from './components/TermsAndConditions';
 import { useLogin } from "./contexts/LoginContext";
 import AuthLayout from './components/AuthLayout';
 
@@ -29,6 +29,7 @@ function App() {
         <Route path="otp" element={<EmailSendOTP />} />
         <Route path="otp/verify" element={<EmailOTP />} />
         <Route path="otp/verify/renew" element={<RenewPassword />} />
+        <Route path="termsandconditions" element={< TermsAndConditions />}/>
       </Route>
       
       <Route path="/sample" element={isLogin ? <SampleLandingPage /> : <Navigate to={"/auth/login"} />} />

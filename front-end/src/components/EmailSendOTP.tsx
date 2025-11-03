@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { GreaterThanIcon, EnvelopeSimple } from "@phosphor-icons/react";
+import { CaretRightIcon, EnvelopeSimple, CaretRight } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
 import { requestPasswordReset } from "../utils/requests";
 
@@ -36,14 +36,14 @@ const EmailSendOTP = () => {
         <button
           onClick={() => navigate("../login")}
           className="bg-[#C4703D] text-white rounded-full p-3">
-          <GreaterThanIcon size={20} className="rotate-180" />
+          <CaretRightIcon size={20} weight="bold" className="rotate-180" />
         </button>
       </div>
 
       {/* Content */}
       <div className="flex flex-col items-start text-left space-y-8 w-[300px]">
         <div>
-          <h1 className="text-[#A0561D] text-[35px] font-bold"> Mail Address Here </h1>
+          <h1 className="text-[#A0561D] text-[35px] font-bold"> Email Address Here </h1>
           <p className="text-p-gray text-[18px]"> Enter email address associated with your account. </p>
         </div>
 
@@ -60,8 +60,8 @@ const EmailSendOTP = () => {
               type="email"
               required
               placeholder="example@gmail.com"
-              value={email} // <-- Idinagdag
-              onChange={(e) => setEmail(e.target.value)} // <-- Idinagdag
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} 
               className="bg-white shadow-[0_2px_8px_rgba(0,0,0,0.1)] text-s pl-10 p-2 w-full h-10 rounded-[10px] outline-p-gray placeholder:text-[#B3B3B3]"
             />
           </div>
@@ -74,8 +74,8 @@ const EmailSendOTP = () => {
           {/* Send OTP Button */}
           <button
             type="submit"
-            disabled={loading} // <-- Idinagdag
-            className="w-full h-10 bg-[#C4702E] text-white text-[16px] font-['Wendy_One'] rounded-[15px] hover:opacity-90 transition disabled:opacity-50"
+            disabled={loading} 
+          className="w-[300px] h-[40px] bg-[#C4702E] text-white text-[16px] font-['Wendy_One'] rounded-[10px] mt-2 hover:opacity-90 transition disabled:opacity-50"
           >
             {loading ? "Sending..." : "Send verification code"}
           </button>
