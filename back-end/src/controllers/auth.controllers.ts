@@ -11,6 +11,8 @@ import {
   extractUserInfo,
   updateUserPassword,
   createResetPasswordTokenField,
+  updateValidateField,
+  createOtpFields,
   verifyResetPasswordOtp,
   deleteResetPasswordOtp
 } from "../services/auth.service";

@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict TRrNdjseqTcJ3KilbWquUBPxalDCBoAL3sg7nBM4UjIq0M20Rbwlhkz7c1PQiob
+\restrict leSzc5WZeRNSCLfPgFxnl0TuHsTHRvZEozirf3p5tHaIwTWXr1VXCJAX2Q6wbey
 
 -- Dumped from database version 18.0
 -- Dumped by pg_dump version 18.0
@@ -148,6 +148,28 @@ $$;
 ALTER PROCEDURE public.createotpcredentials(IN _email character varying, IN verificationcode text, IN lastotpsentat timestamp without time zone, IN verificationexpiresat timestamp without time zone) OWNER TO postgres;
 
 --
+-- Name: fn_get_otp_details(character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.fn_get_otp_details(_email character varying) RETURNS TABLE(stored_code text, expires_at timestamp without time zone)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        verification_code,
+        verification_expires_at
+    FROM 
+        password_reset_token
+    WHERE 
+        email = _email;
+END;
+$$;
+
+
+ALTER FUNCTION public.fn_get_otp_details(_email character varying) OWNER TO postgres;
+
+--
 -- Name: getuserinfobyemail(text); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -181,6 +203,43 @@ $$;
 
 
 ALTER PROCEDURE public.set_verified_by_email(IN _email character varying, IN _verified public.enum_verified) OWNER TO postgres;
+
+--
+-- Name: sp_delete_otp(character varying); Type: PROCEDURE; Schema: public; Owner: postgres
+--
+
+CREATE PROCEDURE public.sp_delete_otp(IN _email character varying)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    DELETE FROM password_reset_token
+    WHERE email = _email;
+END;
+$$;
+
+
+ALTER PROCEDURE public.sp_delete_otp(IN _email character varying) OWNER TO postgres;
+
+--
+-- Name: sp_upsert_otp(character varying, text); Type: PROCEDURE; Schema: public; Owner: postgres
+--
+
+CREATE PROCEDURE public.sp_upsert_otp(IN _email character varying, IN _hashed_code text)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    INSERT INTO password_reset_token (email, verification_code, last_otp_sent_at, verification_expires_at)
+    VALUES (_email, _hashed_code, NOW(), NOW() + INTERVAL '10 minutes')
+    ON CONFLICT (email) 
+    DO UPDATE SET
+        verification_code = _hashed_code,
+        last_otp_sent_at = NOW(),
+        verification_expires_at = NOW() + INTERVAL '10 minutes';
+END;
+$$;
+
+
+ALTER PROCEDURE public.sp_upsert_otp(IN _email character varying, IN _hashed_code text) OWNER TO postgres;
 
 --
 -- Name: updateuserpasswordbyemail(character varying, text); Type: PROCEDURE; Schema: public; Owner: postgres
@@ -362,5 +421,5 @@ CREATE TRIGGER after_validate_update BEFORE UPDATE ON public.users FOR EACH ROW 
 -- PostgreSQL database dump complete
 --
 
-\unrestrict TRrNdjseqTcJ3KilbWquUBPxalDCBoAL3sg7nBM4UjIq0M20Rbwlhkz7c1PQiob
+\unrestrict leSzc5WZeRNSCLfPgFxnl0TuHsTHRvZEozirf3p5tHaIwTWXr1VXCJAX2Q6wbey
 

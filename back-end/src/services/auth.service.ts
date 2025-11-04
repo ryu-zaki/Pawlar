@@ -157,6 +157,7 @@ export {
   createOtpFields,
   createResetPasswordTokenField,
   verifyResetPasswordOtp,
-  deleteResetPasswordOtp
+  deleteResetPasswordOtp,
+  updateValidateField
 }; 
 
