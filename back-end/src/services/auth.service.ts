@@ -50,9 +50,9 @@ const checkUser = async (email: string) => {
 const extractUserInfo = async (_email: string) => {
   try {
     const result = await pool.query('SELECT getUserInfoByEmail($1)', [_email]);
-
     const info = result.rows[0].getuserinfobyemail; //(jhonwell,Espanola,jhon@gmail.com,123)
     const [firstName, lastName, email, password, verification_code]
+
       = info.slice(1, info.length - 1).split(',');
 
     return ({ firstName, lastName, email, password, verification_code })
@@ -90,6 +90,7 @@ const createOtpFields = async (email: string) => {
    }
 }
 
+
 const updateValidateField = async (email:string, numericValue: string)  => {
    try {
     await pool.query('CALL set_verified_by_email($1, $2)', [email, numericValue])
@@ -99,4 +100,63 @@ const updateValidateField = async (email:string, numericValue: string)  => {
    }
 }
 
-export { createUser, checkUser, extractUserInfo, updateUserPassword, createOtpFields, updateValidateField }; 
+//#region Verification Code Handling - Reset Password Token
+const createResetPasswordTokenField = async (email: string, unhashedOtp: string) => {
+  try {
+    const hashedOtp = await bcrypt.hash(unhashedOtp, 10);
+    
+    await pool.query('CALL sp_upsert_otp($1, $2)', [email, hashedOtp]);
+  
+  } catch (err) {
+    console.error("Error sa createOtpFields:", err);
+    throw err;
+  }
+};
+
+const verifyResetPasswordOtp = async (email: string, unhashedOtp: string) => {
+  try {
+    const result = await pool.query('SELECT * FROM fn_get_otp_details($1)', [email]);
+
+    if (result.rows.length === 0) {
+      return { valid: false, message: 'Invalid email or OTP request.' };
+    }
+
+    const { stored_code, expires_at } = result.rows[0];
+
+    if (new Date() > new Date(expires_at)) {
+      return { valid: false, message: 'OTP has expired.' };
+    }
+
+    const isMatch = await bcrypt.compare(unhashedOtp, stored_code);
+
+    if (!isMatch) {
+      return { valid: false, message: 'Invalid OTP.' };
+    }
+    return { valid: true, message: 'OTP verified.' };
+
+  } catch (err) {
+    console.error("Error sa verifyOtp:", err);
+    throw new Error('Server error during OTP verification.');
+  }
+};
+
+const deleteResetPasswordOtp = async (email: string) => {
+  try {
+    await pool.query('CALL sp_delete_otp($1)', [email]);
+  } catch (err) {
+    console.error("Error on deleteOtp:", err);
+  }
+};
+//#endregion
+
+export { 
+  createUser, 
+  checkUser, 
+  extractUserInfo, 
+  updateUserPassword, 
+  createOtpFields,
+  createResetPasswordTokenField,
+  verifyResetPasswordOtp,
+  deleteResetPasswordOtp
+}; 
+

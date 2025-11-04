@@ -5,12 +5,22 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { sendOTPEmail } from '../utils/email.helper';
 import { generateOTP } from '../utils/otp.helper'
-import { createUser, checkUser, extractUserInfo, updateUserPassword, updateValidateField, createOtpFields } from "../services/auth.service";
+import {
+  createUser,
+  checkUser,
+  extractUserInfo,
+  updateUserPassword,
+  createResetPasswordTokenField,
+  verifyResetPasswordOtp,
+  deleteResetPasswordOtp
+} from "../services/auth.service";
+
 const REFRESH_SECRET = process.env.REFRESH_SECRET as string;
 const RESET_SECRET = process.env.RESET_SECRET as string;
 
 const loginController = async (req: Request, res: Response) => {
   const { body } = req;
+
   try {
     /* const exists = await checkUser(body.email); */
     const user = await extractUserInfo(body.email);
@@ -37,7 +47,7 @@ const loginController = async (req: Request, res: Response) => {
 
 
 const registerController = async (req: Request, res: Response) => {
-  
+
   try {
     await createUser(req.body);
     
@@ -48,7 +58,7 @@ const registerController = async (req: Request, res: Response) => {
 
   catch (err) {
     console.log(err);
-    res.sendStatus(403); 
+    res.sendStatus(403);
   }
 }
 
@@ -65,7 +75,7 @@ const refreshAccessToken = async (req: Request, res: Response) => {
 
     res.json({ newAccessToken, user });
   }
-  
+
   catch (err) {
     res.sendStatus(403)
   }
@@ -82,50 +92,48 @@ const forgotPasswordController = async (req: Request, res: Response) => {
     }
 
     const otp = generateOTP();
+    await createResetPasswordTokenField(email, otp);
     await sendOTPEmail(email, otp);
 
-    const resetToken = jwt.sign({ email, otp }, RESET_SECRET, { expiresIn: '10m' }); // Valid for 10 minutes
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
 
     res.status(200).json({
       message: 'An OTP has been sent to your email.',
-      resetToken: resetToken
+      expiresAt: expiresAt
     });
-
+    
   } catch (err) {
-    console.error(err); 
+    console.error(err);
     res.status(500).json({ message: 'Server error while sending OTP.' });
   }
 };
 
 const resetPasswordController = async (req: Request, res: Response) => {
-  const { email, otp, newPassword, resetToken } = req.body;
+  const { email, otp, newPassword } = req.body;
 
-  if (!resetToken) {
-    return res.status(400).json({ message: 'Reset token is required.' });
+  if (!email || !otp || !newPassword) {
+    return res.status(400).json({ message: 'Email, OTP, and new password are required.' });
   }
 
   try {
-    const decoded = jwt.verify(resetToken, RESET_SECRET) as { email: string, otp: string };
+    const verification = await verifyResetPasswordOtp(email, otp);
 
-    if (decoded.email !== email || decoded.otp !== otp) {
-      return res.status(400).json({ message: 'Invalid OTP or token.' });
+    if (!verification.valid) {
+      return res.status(400).json({ message: verification.message });
     }
 
     await updateUserPassword(email, newPassword);
+    await deleteResetPasswordOtp(email);
 
     res.status(200).json({ message: 'Password has been reset successfully.' });
-
   } catch (err: any) {
-    if (err instanceof jwt.TokenExpiredError || err instanceof jwt.JsonWebTokenError) {
-      return res.status(400).json({ message: 'Reset token is invalid or has expired.' });
-    }
     console.error(err);
     res.status(500).json({ message: 'Server error while resetting password.' });
   }
 };
 
 const handleGoogleLogin = (req: Request, res: Response) => {
-  
+
   try {
     const { body } = req;
     const refreshToken = generateRefreshToken(body.email);
@@ -138,7 +146,7 @@ const handleGoogleLogin = (req: Request, res: Response) => {
     res.json({ accessToken });
   }
 
-  catch(err) {
+  catch (err) {
     console.log(err);
   }
 

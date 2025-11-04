@@ -9,10 +9,11 @@ import EmailSendOTP from './components/EmailSendOTP';
 import EmailOTP from './components/EmailOTP';
 import RenewPassword from './components/RenewPassword';
 import TermsAndConditions from './components/TermsAndConditions';
-import SignupEmailOTP from './components/SignUpEmailOTP';
 import { useLogin } from "./contexts/LoginContext";
 import AuthLayout from './components/AuthLayout';
 import ForgotPasswordParent from './components/ForgotPasswordParent';
+import SignupEmailOTP from './components/SignupEmailOTP';
+import { Toaster, toast } from "sonner";
 
 
 function App() {
@@ -21,24 +22,29 @@ function App() {
 
   return (
 
-    <Routes>
-      <Route path='/' element={<StartupPage />} />
+    <>
+      <Toaster richColors position="bottom-center" />
+      
+      <Routes>
+        <Route path='/' element={<StartupPage />} />
 
-      <Route path="/auth" element={(isLogin && isEmailVerified) ? <Navigate to={"/sample"} /> : <AuthLayout />}>
-        <Route path='login' element={<LoginPage />} />
-        <Route path='signup' element={<SignUpPage />} />
-        <Route path="termsandconditions" element={< TermsAndConditions />}/>
-        <Route path="verify-signup" element={<SignupEmailOTP />} />
-        <Route path="otp" element={<ForgotPasswordParent />}>
-        <Route index element={<EmailSendOTP />} />
-        <Route path="verify" element={<EmailOTP />} />
-        <Route path="renew" element={<RenewPassword />} />
+         <Route path="/auth" element={(isLogin && isEmailVerified) ? <Navigate to={"/sample"} /> : <AuthLayout />}>
+          <Route path='login' element={<LoginPage />} />
+          <Route path='signup' element={<SignUpPage />} />
+          <Route path="termsandconditions" element={< TermsAndConditions />} />
+          <Route path="verify-signup" element={<SignupEmailOTP />} />
+          <Route path="otp" element={<ForgotPasswordParent />}>
+            <Route index element={<EmailSendOTP />} />
+            <Route path="verify" element={<EmailOTP />} />
+            <Route path="renew" element={<RenewPassword />} />
+          </Route>
+
         </Route>
-      </Route>
 
-      <Route path="/sample" element={isLogin ? <SampleLandingPage /> : <Navigate to={"/auth/login"} />} />
-    </Routes>
+        <Route path="/sample" element={isLogin ? <SampleLandingPage /> : <Navigate to={"/auth/login"} />} />
+      </Routes>
 
+    </>
   );
 }
 export default App

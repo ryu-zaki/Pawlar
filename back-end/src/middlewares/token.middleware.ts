@@ -31,7 +31,7 @@ export const checkUser = async (req: Request, res: Response, next: NextFunction)
     const validate = result.rows[0].checkuserexist;
 
     if (!validate) {
-      res.sendStatus(403) // forbidden: emaiil doesn't exists
+      res.sendStatus(403)
     } else {
       next();
     }

@@ -149,8 +149,8 @@ const LoginPage = () => {
               id="email"
               value={userInfo.email}
               type="text"
-              className={`bg-white shadow text-[4vw] p-2 w-full h-10 rounded-[15px] mb-2 outline-p-gray 
-                ${ emailError ? "border border-error-red" : "" }`}
+              className={`bg-white shadow text-[4vw] p-2 w-full h-10 rounded-[15px] mb-2  
+                ${ emailError ? "border border-error-red" : "outline-p-gray" }`}
               placeholder="Enter your email"              
             />
             {emailError && (
