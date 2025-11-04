@@ -12,7 +12,6 @@ const LoginContext = ({ children }: { children: ReactElement }) => {
     const [isEmailVerified, setIsEmailVerified] = React.useState<boolean>(false);
     const [credentials, setCredentials] = React.useState();
     
-    console.log(credentials)
     React.useEffect(() => {
       
         (async () => {

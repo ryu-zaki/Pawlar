@@ -49,12 +49,12 @@ export const checkLoginWithGoogle = async (req: Request, res: Response, next: Ne
    
    try {
 
-      const {credential} = req.body;
-      const nameArr = credential.name.split(",");
+     
+      const nameArr = req.body.name.split(",");
       const userInfo = {
         firstName: nameArr[1],
         lastName: nameArr[0],
-        email: credential.email,
+        email: req.body.email,
         password: null
       }
   

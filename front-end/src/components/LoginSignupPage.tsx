@@ -66,6 +66,7 @@ const LoginPage = () => {
       setAccessToken(data.accessToken);
       setIsLogin(true);
       setIsEmailVerified(true);
+      
       navigate("/sample");
     }
 
@@ -98,12 +99,11 @@ const LoginPage = () => {
     
     try {
     // Send token to backend
-    await api.post("/auth/google", {
-      credential: decoded,
-    });
+    await api.post("/auth/google", decoded);
     
     setIsEmailVerified(true);
     setIsLogin(true);
+    
     }
 
     catch(err) {

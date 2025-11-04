@@ -24,7 +24,7 @@ const loginController = async (req: Request, res: Response) => {
   const { body } = req;
 
   try {
-    /* const exists = await checkUser(body.email); */
+    
     const user = await extractUserInfo(body.email);
     const isPasswordValid = await bcrypt.compare(body.password, user?.password);
 
@@ -71,7 +71,7 @@ const refreshAccessToken = async (req: Request, res: Response) => {
 
   try {
     const decoded = jwt.verify(refreshToken, REFRESH_SECRET) as TokenPayload;
-
+    console.log(decoded);
     const newAccessToken = generateAccessToken({ email: decoded.email, password: decoded.password });
     const user = await extractUserInfo(decoded.email);
 
