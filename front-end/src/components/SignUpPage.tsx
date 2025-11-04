@@ -2,11 +2,12 @@ import React, { useState, type FormEvent } from "react";
 import { GoogleLogoIcon, EyeIcon, EyeSlashIcon } from "@phosphor-icons/react";
 import { Button, Checkbox } from "@heroui/react";
 import { Link, useNavigate } from "react-router-dom";
-import api from "../utils/api";
+import api, { setAccessToken } from "../utils/api";
 import {useLogin} from '../contexts/LoginContext';
 
 const SignUpPage = () => {
-    const {setCredentials} = useLogin();
+    const {setCredentials, setIsLogin} = useLogin();
+    const [isLoading, setIsLoading] = React.useState(false);
     const [userInfo, setUserInfo] = React.useState({
         firstName: "", 
         lastName: "", 
@@ -73,7 +74,9 @@ const SignUpPage = () => {
 
     const handleSignUp = async (e: FormEvent) => {
     e.preventDefault();
-
+        if (isLoading) return;    
+        
+        setIsLoading(true);
         const newErrors = {
            firstName: !nameRegex.test(userInfo.firstName)
         ? "First name should contain only letters." : "",
@@ -94,13 +97,20 @@ const SignUpPage = () => {
              if (!response) {
                  throw new Error();
              }
-             setCredentials(response.data)
-             navigate("/auth/verify-signup");
+
+             setCredentials(response.data.user);
+             setAccessToken(response.data.accessToken);
+             setIsLogin(true);
+             navigate("/verify-signup");
 
             }
 
             catch(err) {
                console.log(err)    
+            }
+
+            finally {
+                setIsLoading(false);
             }
         
 }
@@ -284,11 +294,10 @@ const SignUpPage = () => {
                         isDisabled={!userInfo.termsAccepted}
                         className={`w-full h-10 mt-4 text-[4.5vw] rounded-[15px] border-2 border-white shadow-sm 
                             ${
-                            userInfo.termsAccepted
+                            userInfo.termsAccepted && !isLoading
                                 ? "bg-brown-orange text-white"
                                 : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                            }`}>
-                        Sign up
+                            }`}> { isLoading ? "Loading..." : "Sign up" }
                         </Button>
                     </div>
                         {/* Divider */}

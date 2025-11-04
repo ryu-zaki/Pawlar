@@ -7,6 +7,7 @@ import { useNavigate, Link } from "react-router-dom";
 import api, { setAccessToken } from "../utils/api";
 import { useLogin } from '../contexts/LoginContext';
 import { GoogleLogin } from "@react-oauth/google";
+import { toast } from "sonner";
 
 interface GooglePayload {
   email: string;
@@ -61,21 +62,33 @@ const LoginPage = () => {
       if (response.status === 401) throw new Error();
 
       const data = response.data;
-      console.log(data);
+      
       setCredentials(data.user)
       setAccessToken(data.accessToken);
       setIsLogin(true);
       setIsEmailVerified(true);
-      
+      toast.success("Successfully logged In.");
       navigate("/sample");
     }
 
     catch (err: any) {
       console.log(err);
       // backend stuff
-      if(err.message?.toLowerCase().includes("password")) {
-        setPasswordError("Invalid credentials.");
-      }      
+
+      switch(err.status) {
+         case 403:
+           toast.error("Account doesn't exists")
+         break;
+
+         case 401:
+           toast.error("Incorrect Email or Password");
+         break;
+
+         default:
+           toast.error("Something Went wrong");
+         break;
+      }
+      
     }
   }
 
@@ -100,7 +113,7 @@ const LoginPage = () => {
     try {
     // Send token to backend
     await api.post("/auth/google", decoded);
-    
+    toast.success("Successfully logged In.");
     setIsEmailVerified(true);
     setIsLogin(true);
     
@@ -108,7 +121,7 @@ const LoginPage = () => {
 
     catch(err) {
       console.log(err);
-      setPasswordError("Google login failed. Please try again.")
+      toast.error("Google login failed. Please try again.")
     }
     
   };

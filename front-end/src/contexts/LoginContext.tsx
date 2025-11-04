@@ -23,8 +23,9 @@ const LoginContext = ({ children }: { children: ReactElement }) => {
               });
 
               const data = await response.json();
-              console.log(data);
               setCredentials(data.user);
+              setIsEmailVerified(!data.user.verification_code)
+              
               setIsLogin(!!data?.newAccessToken);
             }
 

@@ -16,7 +16,6 @@ const [error, setError] = useState<string>("");
 const [resendCount, setResendCount] = useState(30);
 
   React.useEffect(() => {
-   
     const interval = setInterval(() => {
       setResendCount(prev => !prev ? 0 : prev - 1)
     }, 1000)
@@ -57,9 +56,9 @@ const [resendCount, setResendCount] = useState(30);
 
       if (response.status ==  200) {
         toast.success("Create account successfully.");
-        navigate("../");
         setIsEmailVerified(true);
         setIsLogin(true);
+        navigate("/sample");
         
       } else {
         alert("Error")

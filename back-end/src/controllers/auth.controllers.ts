@@ -53,8 +53,16 @@ const registerController = async (req: Request, res: Response) => {
   try {
     await createUser(req.body);
     
-    const user = await extractUserInfo(req.body.email); 
-    res.json(user);
+    const user = await extractUserInfo(req.body.email);
+    
+    const refreshToken = generateRefreshToken(req.body.email);
+    const accessToken = generateAccessToken(req.body);
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7
+    })
+
+    res.json({ accessToken, user });
 
   }
 
