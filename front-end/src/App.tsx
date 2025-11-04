@@ -28,7 +28,7 @@ function App() {
       <Routes>
         <Route path='/' element={<StartupPage />} />
 
-         <Route path="/auth" element={isEmailVerified && isLogin ? <Navigate to={"/sample"} /> : <AuthLayout />}>
+         <Route path="/auth" element={isEmailVerified ? isLogin ? (<Navigate to="/sample" />) : <AuthLayout /> : <Navigate to="/verify-signup" />}>
 
           <Route path='login' element={<LoginPage />} />
           <Route path='signup' element={<SignUpPage />} />
