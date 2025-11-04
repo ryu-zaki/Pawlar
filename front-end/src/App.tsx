@@ -18,13 +18,13 @@ import ForgotPasswordParent from './components/ForgotPasswordParent';
 function App() {
 
   const { isLogin, isEmailVerified } = useLogin();
-
+  console.log(isLogin, isEmailVerified)
   return (
-
+/*  isEmailVerified ? (isLogin ? <Navigate to={"/sample"} />  ) : <AuthLayout /> */
     <Routes>
       <Route path='/' element={<StartupPage />} />
 
-      <Route path="/auth" element={(isLogin && isEmailVerified) ? <Navigate to={"/sample"} /> : <AuthLayout />}>
+      <Route path="/auth" element={<AuthLayout />}>
         <Route path='login' element={<LoginPage />} />
         <Route path='signup' element={<SignUpPage />} />
         <Route path="termsandconditions" element={< TermsAndConditions />}/>
@@ -35,8 +35,8 @@ function App() {
         <Route path="renew" element={<RenewPassword />} />
         </Route>
       </Route>
-
-      <Route path="/sample" element={isLogin ? <SampleLandingPage /> : <Navigate to={"/auth/login"} />} />
+ 
+      <Route path="/sample" element={isEmailVerified ? (isLogin ? <SampleLandingPage /> : <Navigate to="/auth/login" />) : (<Navigate to="/auth/verify-signup" />)} />
     </Routes>
 
   );
