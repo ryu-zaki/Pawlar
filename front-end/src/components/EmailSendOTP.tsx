@@ -40,7 +40,7 @@ const EmailSendOTP = () => {
       const response = await requestPasswordReset(trimmedEmail);
       setEmail(trimmedEmail);
 
-      const expiryTime = Date.now() + 600000;
+      const expiryTime = Date.now() + 30000;
       localStorage.setItem('otpCooldownExpiry', expiryTime.toString());
 
       localStorage.setItem('otpActualExpiry', response.expiresAt);
