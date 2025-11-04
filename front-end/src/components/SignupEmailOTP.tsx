@@ -1,15 +1,30 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"
 import { GreaterThanIcon } from "@phosphor-icons/react";
-
+import api from '../utils/api';
+import { useLogin } from '../contexts/LoginContext';
+import React from 'react';
 
 const SignupEmailOTP = () => {
 const navigate = useNavigate();
+const {credentials, setIsEmailVerified} = useLogin();
 
 const [otp, setOtp] = useState(["", "", "", "", "", ""]);
 const [showConfirmBack, setShowConfirmBack] = useState(false);
 const [error, setError] = useState<string>("");
+const [resendCount, setResendCount] = useState(30);
 
+  React.useEffect(() => {
+   
+    const interval = setInterval(() => {
+      setResendCount(prev => !prev ? 0 : prev - 1)
+    }, 1000)
+
+    return () => clearInterval(interval);
+
+    
+  }, [])
+  
   const handleChange = (index: number, value: string) => {
     if (/^[0-9]?$/.test(value)) {
       const newOtp = [...otp];
@@ -23,7 +38,8 @@ const [error, setError] = useState<string>("");
     }
   };
 
-    const handleVerify = (e: React.FormEvent) => {
+    const handleVerify = async (e: React.FormEvent) => {
+    
     e.preventDefault();
     setError("");
 
@@ -33,9 +49,42 @@ const [error, setError] = useState<string>("");
       return;
     }
 
-    sessionStorage.setItem("email_verification_otp", otpString);
-    navigate("/auth/register");
+
+    try {
+      const response = await api.post("/auth/validate-code", {
+         email: credentials.email, 
+         code: otpString});
+
+      if (response.status ==  200) {
+        alert("Correct CODE");
+        setIsEmailVerified(true);
+      } else {
+        alert("Error")
+      }
+    }
+
+    catch(err) {
+      console.log(err);
+    }
+    
   };
+
+  const handleResend = async () => {
+     
+      if (resendCount > 0) return;
+      console.log("Clicked")
+      try {
+        const response = await api.post('/auth/resend-otp', { email: credentials.email });
+
+        if (response.status) {
+          alert("Verification Code Resent.");
+        }
+      }
+
+      catch(err) {
+        console.log(err);
+      }
+  }
 
 
 
@@ -87,8 +136,8 @@ const [error, setError] = useState<string>("");
       </div>
 
       <p className="text-sm text-gray-600 mt-4">
-        Didn’t receive the code?{" "}
-        <button className="text-[#C4703D] font-semibold hover:underline">
+        Didn’t receive the code? Wait for {resendCount} seconds to  
+        <button onClick={ handleResend } className={resendCount != 0 ? "text-[#aaaa]  font-semibold" : "text-[#C4703D] font-semibold hover:underline"} >
           Resend
         </button>
       </p>

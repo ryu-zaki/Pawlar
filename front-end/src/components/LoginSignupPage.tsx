@@ -21,7 +21,7 @@ const LoginPage = () => {
     email: "",
     password: "",
   });
-  const { setIsLogin } = useLogin();
+  const { setIsLogin, setCredentials } = useLogin();
 
   // const [modalOpen, setModalOpen] = useState(false);
   // const [modalMessage, setModalMessage] = useState("");
@@ -62,6 +62,7 @@ const LoginPage = () => {
 
       const data = response.data;
       console.log(data);
+      setCredentials(data.user)
       setAccessToken(data.accessToken);
       setIsLogin(true);
 

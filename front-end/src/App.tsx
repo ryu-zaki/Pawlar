@@ -18,16 +18,17 @@ import { Toaster, toast } from "sonner";
 
 function App() {
 
-  const { isLogin } = useLogin();
+  const { isLogin, isEmailVerified } = useLogin();
 
   return (
+
     <>
       <Toaster richColors position="bottom-center" />
       
       <Routes>
         <Route path='/' element={<StartupPage />} />
 
-        <Route path="/auth" element={isLogin ? <Navigate to={"/sample"} /> : <AuthLayout />}>
+         <Route path="/auth" element={(isLogin && isEmailVerified) ? <Navigate to={"/sample"} /> : <AuthLayout />}>
           <Route path='login' element={<LoginPage />} />
           <Route path='signup' element={<SignUpPage />} />
           <Route path="termsandconditions" element={< TermsAndConditions />} />
@@ -37,6 +38,7 @@ function App() {
             <Route path="verify" element={<EmailOTP />} />
             <Route path="renew" element={<RenewPassword />} />
           </Route>
+
         </Route>
 
         <Route path="/sample" element={isLogin ? <SampleLandingPage /> : <Navigate to={"/auth/login"} />} />
