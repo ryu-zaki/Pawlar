@@ -91,9 +91,9 @@ const EmailOTP = () => {
 
       toast.success(`Verification code resent to ${email}`);
 
-      const expiryTime = Date.now() + 600000;
+      const expiryTime = Date.now() + 30000;
       localStorage.setItem('otpCooldownExpiry', expiryTime.toString());
-      setCooldown(600);
+      setCooldown(30);
 
       localStorage.setItem('otpActualExpiry', response.expiresAt);
     } catch (err) {

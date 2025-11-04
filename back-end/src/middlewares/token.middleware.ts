@@ -5,18 +5,18 @@ const ACCESS_SECRET = process.env.ACCESS_SECRET as string;
 import pool from '../config/db';
 
 export const checkIfAccessToken = (req: Request, res: Response, next: NextFunction) => {
-  
-  try {
-     const authHeaders = req.headers["authorization"];
-     const token = authHeaders && authHeaders.split(' ')[1];
-     if (!token) return res.sendStatus(401);
-  
-     const decoded = jwt.verify(token, ACCESS_SECRET);
 
-     next();       
+  try {
+    const authHeaders = req.headers["authorization"];
+    const token = authHeaders && authHeaders.split(' ')[1];
+    if (!token) return res.sendStatus(401);
+
+    const decoded = jwt.verify(token, ACCESS_SECRET);
+
+    next();
   }
 
-  catch(err) {
+  catch (err) {
     res.sendStatus(403);
   }
 }
@@ -35,21 +35,19 @@ export const checkUser = async (req: Request, res: Response, next: NextFunction)
     } else {
       next();
     }
-    
+
   }
 
   catch (err) {
     console.log(err);
     res.sendStatus(500);
-    
+
   }
 }
 
 export const checkLoginWithGoogle = async (req: Request, res: Response, next: NextFunction) => {
-   
-   try {
-
      
+  try {
       const nameArr = req.body.name.split(",");
       const userInfo = {
         firstName: nameArr[1],
@@ -66,22 +64,23 @@ export const checkLoginWithGoogle = async (req: Request, res: Response, next: Ne
         await createUser(userInfo);
       } 
 
-      next();
-   }
 
-   catch(err) {
+    next();
+  }
+
+  catch (err) {
     console.log(err);
-   }
+  }
 }
 
 export const handleRegisterOTP = async (req: Request, res: Response, next: NextFunction) => {
   const { email } = req.body;
   try {
     await createOtpFields(email);
-    
+
   }
 
-  catch(err) {
+  catch (err) {
     throw err;
   }
 

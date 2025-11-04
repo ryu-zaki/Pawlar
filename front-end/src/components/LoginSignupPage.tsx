@@ -230,7 +230,7 @@ const LoginPage = () => {
             </button> */}
             <GoogleLogin 
               onSuccess={handleLoginSuccess}
-              onError={() => {}}
+              onError={() => {console.log('Error failed.')}}
               
             />
           </div>

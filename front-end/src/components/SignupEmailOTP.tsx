@@ -4,6 +4,7 @@ import { GreaterThanIcon } from "@phosphor-icons/react";
 import api from '../utils/api';
 import { useLogin } from '../contexts/LoginContext';
 import React from 'react';
+import { toast } from "sonner";
 
 const SignupEmailOTP = () => {
 const navigate = useNavigate();
@@ -21,7 +22,6 @@ const [resendCount, setResendCount] = useState(30);
     }, 1000)
 
     return () => clearInterval(interval);
-
     
   }, [])
   
@@ -56,7 +56,8 @@ const [resendCount, setResendCount] = useState(30);
          code: otpString});
 
       if (response.status ==  200) {
-        alert("Correct CODE");
+        toast.success("Create account successfully.");
+        navigate("../");
         setIsEmailVerified(true);
         setIsLogin(true);
         
@@ -79,7 +80,8 @@ const [resendCount, setResendCount] = useState(30);
         const response = await api.post('/auth/resend-otp', { email: credentials.email });
 
         if (response.status) {
-          alert("Verification Code Resent.");
+          // alert("Verification Code Resent.");
+          toast.success("Verification Code Resent.");
         }
       }
 
