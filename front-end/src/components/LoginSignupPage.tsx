@@ -21,7 +21,7 @@ const LoginPage = () => {
     email: "",
     password: "",
   });
-  const { setIsLogin, setCredentials } = useLogin();
+  const { setIsLogin, setCredentials, setIsEmailVerified } = useLogin();
 
   // const [modalOpen, setModalOpen] = useState(false);
   // const [modalMessage, setModalMessage] = useState("");
@@ -65,8 +65,8 @@ const LoginPage = () => {
       setCredentials(data.user)
       setAccessToken(data.accessToken);
       setIsLogin(true);
-
-
+setIsEmailVerified(true);
+      navigate("/sample")
     }
 
     catch (err: any) {
@@ -102,6 +102,7 @@ const LoginPage = () => {
       credential: decoded,
     });
     
+    setIsEmailVerified(true)
     setIsLogin(true);
     }
 
