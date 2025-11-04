@@ -65,8 +65,8 @@ const LoginPage = () => {
       setCredentials(data.user)
       setAccessToken(data.accessToken);
       setIsLogin(true);
-setIsEmailVerified(true);
-      navigate("/sample")
+      setIsEmailVerified(true);
+      navigate("/sample");
     }
 
     catch (err: any) {
@@ -102,7 +102,7 @@ setIsEmailVerified(true);
       credential: decoded,
     });
     
-    setIsEmailVerified(true)
+    setIsEmailVerified(true);
     setIsLogin(true);
     }
 
