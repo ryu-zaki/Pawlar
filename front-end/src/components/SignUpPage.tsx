@@ -8,6 +8,7 @@ import {useLogin} from '../contexts/LoginContext';
 
 const SignUpPage = () => {
     const {setCredentials} = useLogin();
+    const [isLoading, setIsLoading] = React.useState(false);
     const [userInfo, setUserInfo] = React.useState({
         firstName: "", 
         lastName: "", 
@@ -89,7 +90,8 @@ const SignUpPage = () => {
             confirmPassword: userInfo.password !== userInfo.confirmPassword 
         ? "Passwords do not match." : "",
     };  setErrors(newErrors);
-
+        
+    setIsLoading(true)
         if (Object.values(newErrors).some((err) => err)) return;
        
             try {
@@ -104,7 +106,7 @@ const SignUpPage = () => {
             }
 
             catch(err: any) {
-                console.log(err);
+                
                switch(err.response?.status) {
                 case 403:
                   toast.error("Email already registered.")
@@ -115,6 +117,11 @@ const SignUpPage = () => {
                 break;
                }
                
+               
+            }
+
+            finally {
+                setIsLoading(false)
             }
 
                
