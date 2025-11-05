@@ -4,7 +4,7 @@ import { CaretLeftIcon } from "@phosphor-icons/react";
 import { ForgotPasswordContext } from "./ForgotPasswordParent";
 import { requestPasswordReset } from "../utils/requests";
 import { toast } from "sonner";
-
+import { useLogin } from "../contexts/LoginContext";
 
 const EmailOTP = () => {
   const navigate = useNavigate();
@@ -14,6 +14,8 @@ const EmailOTP = () => {
   const [cooldown, setCooldown] = useState<number>(0);
 
   const { email, setOtp: setGlobalOtp } = useContext(ForgotPasswordContext)!;
+  const { setIsLoading } = useLogin(); // NEW: Get global loader
+  const isOtpComplete = localOtp.every(digit => digit.length === 1);
 
   useEffect(() => {
     const checkCooldown = () => {
@@ -57,6 +59,11 @@ const EmailOTP = () => {
     e.preventDefault();
     setError("");
 
+    if (!isOtpComplete) {
+      setError("Please enter the complete 6-digit verification code.");
+      return;
+    }
+
     const expiryString = localStorage.getItem('otpActualExpiry');
     if (!expiryString) {
       setError("Session error. Please request a new code.");
@@ -84,6 +91,8 @@ const EmailOTP = () => {
       toast.error("Failed to resend code. Please try again.");
       return;
     }
+
+    setIsLoading(true);
     try {
       setError("");
       console.log(`Resending OTP to ${email}`);
@@ -98,6 +107,8 @@ const EmailOTP = () => {
       localStorage.setItem('otpActualExpiry', response.expiresAt);
     } catch (err) {
       setError("Failed to resend code. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -147,7 +158,13 @@ const EmailOTP = () => {
 
           <button
             type="submit"
-            className="w-[280px] h-10 bg-[#C4702E] text-white text-[16px] font-['Wendy_One'] rounded-[10px] mt-2 hover:opacity-90 transition"
+            disabled={!isOtpComplete}
+            className={`w-[280px] h-10 text-white text-[16px] font-['Wendy_One'] rounded-[10px] mt-2 transition
+              ${!isOtpComplete
+                ? 'bg-gray-400 cursor-not-allowed'
+                : 'bg-[#C4702E] hover:opacity-90'
+              }
+            `}
           >
             Confirm
           </button>
@@ -159,10 +176,15 @@ const EmailOTP = () => {
         <button
           onClick={handleResend}
           disabled={cooldown > 0}
-          className="text-[#C4703D] font-semibold hover:underline disabled:opacity-50 disabled:cursor-not-allowed" // <--- I-update 'to
+          className={`font-semibold
+            ${cooldown > 0
+              ? "text-gray-400 cursor-not-allowed"
+              : "text-[#C4703D] hover:underline"
+            }
+          `}
         >
           {cooldown > 0
-            ? `Resend in ${Math.floor(cooldown / 60)}:${(cooldown % 60).toString().padStart(2, '0')}`
+            ? `Resend in ${cooldown}s`
             : "Resend"}
         </button>
       </p>
