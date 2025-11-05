@@ -8,10 +8,9 @@ import { checkIfAccessToken } from "./middlewares/token.middleware";
 const PORT = process.env.PORT;
 const app = express();
 
-app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
+app.use(cors({ origin: 'http://192.168.1.4:5173', credentials: true }));
 app.use(cookieParser());
 app.use(express.json());
-
 
 app.use('/', routes);
 app.use(checkIfAccessToken);

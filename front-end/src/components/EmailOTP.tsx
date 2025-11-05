@@ -5,7 +5,6 @@ import { ForgotPasswordContext } from "./ForgotPasswordParent";
 import { requestPasswordReset } from "../utils/requests";
 import { toast } from "sonner";
 
-
 const EmailOTP = () => {
   const navigate = useNavigate();
   const [localOtp, setLocalOtp] = useState(["", "", "", "", "", ""]);
