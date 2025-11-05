@@ -4,14 +4,15 @@ import { useNavigate } from "react-router-dom";
 import { requestPasswordReset } from "../utils/requests";
 import { useContext } from 'react';
 import { ForgotPasswordContext } from "./ForgotPasswordParent";
+import { useLogin } from "../contexts/LoginContext";
 
 const EmailSendOTP = () => {
   const navigate = useNavigate();
   const [email, setUserEmail] = useState<string>("");
   const [error, setError] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
 
   const { setEmail } = useContext(ForgotPasswordContext)!;
+  const { isLoading, setIsLoading } = useLogin();
 
   const validateEmail = (email: string) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -34,7 +35,7 @@ const EmailSendOTP = () => {
       return;
     }
 
-    setLoading(true);
+    setIsLoading(true);
 
     try {
       const response = await requestPasswordReset(trimmedEmail);
@@ -50,7 +51,7 @@ const EmailSendOTP = () => {
       const errorMessage = err.response?.data?.message || err.message || "An unexpected error occurred.";
       setError(errorMessage);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
 
   };
@@ -99,10 +100,10 @@ const EmailSendOTP = () => {
           {/* Send OTP Button */}
           <button
             type="submit"
-            disabled={loading}
+            disabled={isLoading}
             className="w-full h-10 bg-[#C4702E] text-white text-[16px] font-['Wendy_One'] rounded-[15px] hover:opacity-90 transition disabled:opacity-50"
           >
-            {loading ? "Sending..." : "Send verification code"}
+            {isLoading ? "Sending..." : "Send verification code"}
           </button>
         </form>
       </div>
