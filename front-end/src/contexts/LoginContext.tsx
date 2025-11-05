@@ -3,16 +3,16 @@ import React, { useContext, type ReactElement } from "react";
 const LoginComponent = React.createContext<{ 
     isLogin: boolean, setIsLogin: 
       React.Dispatch<React.SetStateAction<boolean>>, 
-        isEmailVerified: boolean | string, setIsEmailVerified: React.Dispatch<React.SetStateAction<boolean>>, setCredentials: React.Dispatch<React.SetStateAction<undefined>>, credentials: any  }>
+        isEmailVerified: boolean | string, setIsEmailVerified: React.Dispatch<React.SetStateAction<boolean>>, setCredentials: React.Dispatch<React.SetStateAction<{}>>, credentials: any  }>
            ({ isLogin: false, setIsLogin: () => {}, isEmailVerified: false, setIsEmailVerified: () => {}, setCredentials: () => {}, credentials: {}});
 
 const LoginContext = ({ children }: { children: ReactElement }) => {
 
     const [isLogin, setIsLogin] = React.useState(false);
     const [isEmailVerified, setIsEmailVerified] = React.useState<boolean>(false);
-    const [credentials, setCredentials] = React.useState();
+    const [credentials, setCredentials] = React.useState({});
     
-    React.useEffect(() => {
+    React.useEffect(() => { 
       
         (async () => {
          

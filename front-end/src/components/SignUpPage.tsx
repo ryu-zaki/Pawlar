@@ -76,7 +76,7 @@ const SignUpPage = () => {
     e.preventDefault();
         if (isLoading) return;    
         
-        setIsLoading(true);
+        
         const newErrors = {
            firstName: !nameRegex.test(userInfo.firstName)
         ? "First name should contain only letters." : "",
@@ -90,7 +90,8 @@ const SignUpPage = () => {
     };  setErrors(newErrors);
 
         if (Object.values(newErrors).some((err) => err)) return;
-       
+            
+        setIsLoading(true);
             try {
              const response = await api.post("/auth/register", userInfo)
                  

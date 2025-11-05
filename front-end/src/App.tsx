@@ -28,7 +28,7 @@ function App() {
       <Routes>
         <Route path='/' element={<StartupPage />} />
 
-         <Route path="/auth" element={isEmailVerified ? isLogin ? (<Navigate to="/sample" />) : <AuthLayout /> : <Navigate to="/verify-signup" />}>
+         <Route path="/auth" element={isLogin ? (isEmailVerified ? <Navigate to="/sample" /> : <Navigate to="/verify-signup"  /> ) : <AuthLayout />}>
 
           <Route path='login' element={<LoginPage />} />
           <Route path='signup' element={<SignUpPage />} />
@@ -41,9 +41,9 @@ function App() {
 
         </Route>
         
-        <Route path="/verify-signup" element={!isEmailVerified ? <SignupEmailOTP /> : <Navigate  to="/auth/loginlogin" />} />
+        <Route path="/verify-signup" element={!isEmailVerified ? <SignupEmailOTP /> : <Navigate  to="/auth/login" />} />
 
-        <Route path="/sample" element={isLogin ? <SampleLandingPage /> : <Navigate to={"/auth/login"} />} />
+        <Route path="/sample" element={isLogin ? (isEmailVerified ? <SampleLandingPage /> : <Navigate to="/verify-signup"  /> ) : <Navigate to="/auth/login" />} />
       </Routes>
 
     </>

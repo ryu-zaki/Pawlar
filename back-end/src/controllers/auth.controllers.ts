@@ -196,4 +196,12 @@ const resendOTP = async (req: Request, res: Response) => {
     }
 }
 
-export { loginController, registerController, refreshAccessToken, forgotPasswordController, resetPasswordController, handleGoogleLogin, validateCode, resendOTP };
+const logoutUser = (req: Request, res: Response) => {
+  
+  console.log("Logout");
+
+  res.clearCookie("refreshToken", {httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7});
+  res.send("hi")
+}
+
+export { loginController, registerController, refreshAccessToken, forgotPasswordController, resetPasswordController, handleGoogleLogin, validateCode, resendOTP, logoutUser };
