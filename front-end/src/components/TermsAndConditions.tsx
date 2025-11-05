@@ -5,7 +5,7 @@ const TermsAndPrivacy = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="max-h-screen bg-[#FFEBD8] text-[#5A3921] font-['League_Spartan'] flex flex-col items-center relative px-6 py-10 overflow-y-auto">
+    <div className="max-h-screen bg-flesh text-[#5A3921] font-['League_Spartan'] flex flex-col items-center relative px-6 py-10 overflow-y-auto">
 
       {/* Back Button */}
       <button

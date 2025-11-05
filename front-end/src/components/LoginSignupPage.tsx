@@ -6,7 +6,7 @@ import {jwtDecode} from "jwt-decode";
 import { useNavigate, Link } from "react-router-dom";
 import api, { setAccessToken } from "../utils/api";
 import { useLogin } from '../contexts/LoginContext';
-import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+import { useGoogleLogin } from "@react-oauth/google";
 import { toast } from "sonner";
 
 interface GooglePayload {

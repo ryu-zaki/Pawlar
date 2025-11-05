@@ -1,11 +1,14 @@
-import axios, { AxiosError, type AxiosInstance, type InternalAxiosRequestConfig, type AxiosResponse } from 'axios';
+/* import axios, { AxiosError, type AxiosInstance, type InternalAxiosRequestConfig, type AxiosResponse } from 'axios'; */
+
+import axios, { type AxiosInstance } from 'axios';
+
 
 const api: AxiosInstance = axios.create({
     baseURL: `http://localhost:3000`,
     withCredentials: true,
 });
 
-let accessToken: null | string;
+export let accessToken: null | string;
 
 export const setAccessToken = (token: string) => {
     accessToken = token
