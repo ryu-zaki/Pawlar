@@ -101,7 +101,7 @@ const SignUpPage = () => {
                  throw new Error();
              }
              setCredentials(response.data)
-             navigate("/auth/verify-signup");
+             navigate("../verify-signup");
 
             }
 
