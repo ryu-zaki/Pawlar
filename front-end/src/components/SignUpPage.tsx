@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import {useLogin} from '../contexts/LoginContext';
 
 const SignUpPage = () => {
-    const {setCredentials} = useLogin();
+    const {setCredentials, setIsLogin, setIsEmailVerified} = useLogin();
     const [isLoading, setIsLoading] = React.useState(false);
     const [userInfo, setUserInfo] = React.useState({
         firstName: "", 
@@ -91,17 +91,19 @@ const SignUpPage = () => {
         ? "Passwords do not match." : "",
     };  setErrors(newErrors);
         
-    setIsLoading(true)
+    
         if (Object.values(newErrors).some((err) => err)) return;
-       
+            setIsLoading(true);
             try {
              const response = await api.post("/auth/register", userInfo)
                  
              if (!response) {
                  throw new Error();
              }
-             setCredentials(response.data)
-             navigate("/auth/verify-signup");
+             setCredentials(response.data.user);
+             setIsLogin(true)
+             
+             navigate("/verify-signup");
 
             }
 
@@ -306,11 +308,11 @@ const SignUpPage = () => {
                         isDisabled={!userInfo.termsAccepted}
                         className={`w-full h-10 mt-4 text-[4.5vw] rounded-[15px] border-2 border-white shadow-sm 
                             ${
-                            userInfo.termsAccepted
+                            userInfo.termsAccepted && !isLoading
                                 ? "bg-brown-orange text-white"
                                 : "bg-gray-300 text-gray-500 cursor-not-allowed"
                             }`}>
-                        Sign up
+                         {isLoading ? "Loading..." : "Sign up"}
                         </Button>
                     </div>
                         {/* Divider */}
