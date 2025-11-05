@@ -30,7 +30,10 @@ const [resendCount, setResendCount] = useState(30);
       newOtp[index] = value;
       setOtp(newOtp);
 
-      if (value && index < 5) {
+      if (value === "" && index > 0) {
+        const prevInput = document.getElementById(`otp-input-${index - 1}`);
+        prevInput?.focus();
+      } else if (value && index < 5) {
         const nextInput = document.getElementById(`otp-input-${index + 1}`);
         nextInput?.focus();
       }
@@ -47,7 +50,6 @@ const [resendCount, setResendCount] = useState(30);
       setError("Please enter the complete 6-digit verification code.");
       return;
     }
-
 
     try {
       const response = await api.post("/auth/validate-code", {
@@ -81,6 +83,8 @@ const [resendCount, setResendCount] = useState(30);
         if (response.status) {
           // alert("Verification Code Resent.");
           toast.success("Verification Code Resent.");
+        }else{
+          toast.error("Verification Code Not Sent.")
         }
       }
 

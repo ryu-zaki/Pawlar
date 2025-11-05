@@ -27,11 +27,10 @@ export const checkUser = async (req: Request, res: Response, next: NextFunction)
 
   try {
     const result = await pool.query('SELECT checkUserExist($1)', [email]);
-
     const validate = result.rows[0].checkuserexist;
 
     if (!validate) {
-      res.sendStatus(403)
+      res.sendStatus(403);
     } else {
       next();
     }

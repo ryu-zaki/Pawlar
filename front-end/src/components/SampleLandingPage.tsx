@@ -20,26 +20,21 @@ const SampleLandingPage = () => {
                 label: "Cancel",
                 onClick: () => toast.dismiss(),
             },
-            duration: 10000, // Bigyan ng 10 segundo para mag-decide
+            duration: 10000, 
         });
     }
    
 
     const handleLogout = async () => {
         try { 
-          await fetch("http://10.221.198.148:3000/auth/logout", {
-                method: 'POST',
-                credentials: 'include'
-              });
-
-          /* if (response.status !== 200) throw new Error(); */
+            await api.post("/auth/logout");
           
             toast.success("Successfully Logged out.");
             setIsLogin(false);
             setIsEmailVerified(true);
             setCredentials({});
 
-            navigate("/auth/login")
+            navigate("/auth/login");
         }
 
         catch(err) {

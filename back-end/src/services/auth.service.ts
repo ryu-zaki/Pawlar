@@ -87,7 +87,7 @@ const createOtpFields = async (email: string) => {
    }
 
    catch(err) {
-    throw err
+    throw err;
    }
 }
 

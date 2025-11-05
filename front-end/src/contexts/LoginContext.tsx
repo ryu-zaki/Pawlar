@@ -1,4 +1,5 @@
 import React, { useContext, type ReactElement } from "react";
+import api from '../utils/api.ts';
 
 const LoginComponent = React.createContext<{ 
     isLogin: boolean, setIsLogin: 
@@ -11,18 +12,15 @@ const LoginContext = ({ children }: { children: ReactElement }) => {
     const [isLogin, setIsLogin] = React.useState(false);
     const [isEmailVerified, setIsEmailVerified] = React.useState<boolean>(false);
     const [credentials, setCredentials] = React.useState({});
-    console.log("email verified: ", isEmailVerified)
+    
     React.useEffect(() => { 
         
         (async () => {
          
             try {
-              const response = await fetch("http://10.221.198.148:5173:3000/auth/refresh-access-token", {
-                method: 'POST',
-                credentials: 'include'
-              });
+              const response = await api.post("/auth/refresh-access-token")
 
-              const data = await response.json();
+              const data = response.data;
               setCredentials(data.user);
               setIsEmailVerified(!data.user.verification_code)
               
