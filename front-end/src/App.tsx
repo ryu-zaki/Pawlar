@@ -17,12 +17,30 @@ import { Toaster, toast } from "sonner";
 import LandingPage from './components/LandingPage';
 import PageNotFound from './components/PageNotFound';
 import LoadingOverlay from './components/LoadingOverlay';
-
+import { App as CapacitorApp } from '@capacitor/app';
+import { useEffect } from 'react';
 
 function App() {
 
   const { isLogin, isEmailVerified, isLoading } = useLogin();
   console.log(isLogin, isEmailVerified, isLoading);
+
+  useEffect(() => {
+    const listener = CapacitorApp.addListener('backButton', ({ canGoBack }) => {
+      if (canGoBack) {
+        window.history.back();
+      } else {
+        CapacitorApp.exitApp();
+      }
+    });
+
+    return () => {
+      listener.then(listener => {
+        listener.remove();
+      });
+    };
+  }, []);
+
   return (
 
     <>
@@ -32,12 +50,12 @@ function App() {
       <Routes>
         <Route path='/' element={<StartupPage />} />
 
-         <Route path="/auth" element={isLogin ? (isEmailVerified ? <Navigate to="/sample" /> : <Navigate to="/verify-signup"  /> ) : <AuthLayout />}>
-          <Route path='landing' element={<LandingPage/>}/>
+        <Route path="/auth" element={isLogin ? (isEmailVerified ? <Navigate to="/sample" /> : <Navigate to="/verify-signup" />) : <AuthLayout />}>
+          <Route path='landing' element={<LandingPage />} />
           <Route path='login' element={<LoginPage />} />
           <Route path='signup' element={<SignUpPage />} />
           <Route path="termsandconditions" element={< TermsAndConditions />} />
-          
+
           <Route path="otp" element={<ForgotPasswordParent />}>
             <Route index element={<EmailSendOTP />} />
             <Route path="verify" element={<EmailOTP />} />
@@ -47,9 +65,9 @@ function App() {
 
         <Route path="/verify-signup" element={!isEmailVerified ? <SignupEmailOTP /> : <Navigate to="/auth/login" />} />
 
-        <Route path="/sample" element={isLogin ? (isEmailVerified ? <SampleLandingPage /> : <Navigate to="/verify-signup"  /> ) : <Navigate to="/auth/login" />} />
+        <Route path="/sample" element={isLogin ? (isEmailVerified ? <SampleLandingPage /> : <Navigate to="/verify-signup" />) : <Navigate to="/auth/login" />} />
 
-        <Route path='*' element={<PageNotFound/>} />
+        <Route path='*' element={<PageNotFound />} />
       </Routes>
 
     </>
