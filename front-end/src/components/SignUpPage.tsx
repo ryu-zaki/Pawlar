@@ -4,6 +4,7 @@ import { Button, Checkbox } from "@heroui/react";
 import { Link, useNavigate } from "react-router-dom";
 import api, { setAccessToken } from "../utils/api";
 import {useLogin} from '../contexts/LoginContext';
+import { toast } from "sonner";
 
 const SignUpPage = () => {
     const {setCredentials, setIsLogin} = useLogin();
@@ -34,7 +35,10 @@ const SignUpPage = () => {
 
     const nameRegex = /^[A-Za-z]+(?:[' -][A-Za-z]+)*$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
+    const lowerCaseRegex = /[a-z]/;
+    const upperCaseRegex = /[A-Z]/;
+    const digitRegex = /\d/;
+    const specialCharRegex = /[!@#$%^&*]/;
 
       const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = target;
@@ -55,11 +59,34 @@ const SignUpPage = () => {
                 else if (!emailRegex.test(value)) errorMessage = "Enter a valid email address.";
             break;
             case "password":
-                if (!value) errorMessage = "Password is required.";
-                else if (!passRegex.test(value)) errorMessage = "Password must contain 8 characters";
-                if (value.length < 8) setPasswordStrength("Weak");
-                else if (value.length < 10) setPasswordStrength("Medium");
-                else setPasswordStrength("Strong");
+                if (!value) {
+                errorMessage = "Password is required.";
+                setPasswordStrength("");
+            } else {
+                const errorParts = [];
+
+                if (value.length < 8) {
+                errorParts.push("at least 8 characters");
+                }
+                if (!lowerCaseRegex.test(value)) {
+                errorParts.push("a lowercase letter");
+                }
+                if (!upperCaseRegex.test(value)) {
+                errorParts.push("an uppercase letter");
+                }
+                if (!digitRegex.test(value)) {
+                errorParts.push("a number");
+                }
+                if (!specialCharRegex.test(value)) {
+                errorParts.push("a special character (!@#$%^&*)");
+                }
+
+                if (errorParts.length > 0) {
+                errorMessage = `Must include ${errorParts.join(', ')}.`;
+                } else {
+                errorMessage = "";
+                }
+            }
             break;
             case "confirmPassword":
                 if (value !== userInfo.password) errorMessage = "Password do not match";
@@ -83,7 +110,7 @@ const SignUpPage = () => {
             lastName: !nameRegex.test(userInfo.lastName)
         ? "Last name should contain only letters." : "",
             email: !emailRegex.test(userInfo.email) ? "Enter a valid email address." : "",
-            password: !passRegex.test(userInfo.password)
+            password: !lowerCaseRegex.test(userInfo.password)
         ? "Password must be at least 8 chars, include uppercase, lowercase, number, and symbol." : "",
             confirmPassword: userInfo.password !== userInfo.confirmPassword 
         ? "Passwords do not match." : "",
@@ -92,10 +119,11 @@ const SignUpPage = () => {
         if (Object.values(newErrors).some((err) => err)) return;
             
         setIsLoading(true);
+    
             try {
              const response = await api.post("/auth/register", userInfo)
-                 
-             if (!response) {
+                
+             if (!response) { 
                  throw new Error();
              }
 
@@ -106,8 +134,17 @@ const SignUpPage = () => {
 
             }
 
-            catch(err) {
-               console.log(err)    
+            catch(err: any) {
+               switch(err.response.status) {
+                case 403:
+                  toast.error("Email already registered.")
+                break;
+
+                default: 
+                  toast.error("Something went wrong")
+                break;
+               }
+               
             }
 
             finally {

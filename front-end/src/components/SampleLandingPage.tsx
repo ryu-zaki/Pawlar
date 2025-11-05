@@ -8,11 +8,25 @@ const SampleLandingPage = () => {
     
     const { credentials, setIsLogin, setIsEmailVerified, setCredentials } = useLogin();
     const navigate = useNavigate();
-
+    
+    const logout = () => {
+        toast("Are you sure you want to logout?", {
+            action: {
+                label: "Logout",
+                onClick: () => handleLogout(),
+            },
+            cancel: {
+                label: "Cancel",
+                onClick: () => toast.dismiss(),
+            },
+            duration: 10000, // Bigyan ng 10 segundo para mag-decide
+        });
+    }
+   
 
     const handleLogout = async () => {
         try { 
-          await fetch("http://localhost:3000/auth/logout", {
+          await fetch("http://10.221.198.148:3000/auth/logout", {
                 method: 'POST',
                 credentials: 'include'
               });
@@ -51,7 +65,7 @@ const SampleLandingPage = () => {
                        
                   </ul>
 
-                  <button onClick={handleLogout} className="bg-brown-orange mt-20 text-white px-4 py-1 rounded-md">logout</button>
+                  <button onClick={logout} className="bg-brown-orange mt-20 text-white px-4 py-1 rounded-md">logout</button>
                 </div>
                 
             </div>

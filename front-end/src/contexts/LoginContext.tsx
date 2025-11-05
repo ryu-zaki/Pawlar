@@ -11,13 +11,13 @@ const LoginContext = ({ children }: { children: ReactElement }) => {
     const [isLogin, setIsLogin] = React.useState(false);
     const [isEmailVerified, setIsEmailVerified] = React.useState<boolean>(false);
     const [credentials, setCredentials] = React.useState({});
-    
+    console.log("email verified: ", isEmailVerified)
     React.useEffect(() => { 
-      
+        
         (async () => {
          
             try {
-              const response = await fetch("http://localhost:3000/auth/refresh-access-token", {
+              const response = await fetch("http://10.221.198.148:5173:3000/auth/refresh-access-token", {
                 method: 'POST',
                 credentials: 'include'
               });

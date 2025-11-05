@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'capacitor_prac',
   webDir: 'dist',
   server: {
-    url: "http://192.168.1.4:5173",
+    url: "http://10.221.198.148:5173",
     cleartext: true
   }
 };

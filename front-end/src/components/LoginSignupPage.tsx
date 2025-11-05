@@ -1,12 +1,12 @@
 
 import React, { useState, type FormEvent } from "react";
-import { EyeIcon, EyeSlashIcon } from "@phosphor-icons/react";
+import { EyeIcon, EyeSlashIcon, GoogleLogoIcon } from "@phosphor-icons/react";
 import { Button } from "@heroui/react";
 import {jwtDecode} from "jwt-decode";
 import { useNavigate, Link } from "react-router-dom";
 import api, { setAccessToken } from "../utils/api";
 import { useLogin } from '../contexts/LoginContext';
-import { GoogleLogin } from "@react-oauth/google";
+import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 import { toast } from "sonner";
 
 interface GooglePayload {
@@ -126,6 +126,11 @@ const LoginPage = () => {
     
   };
 
+  const login = useGoogleLogin({
+    onSuccess: handleLoginSuccess,
+    onError: () => toast.error("Something went wrong")
+  })
+
 
   return (
     <div className="w-screen bg-flesh h-auto">
@@ -232,7 +237,12 @@ const LoginPage = () => {
           </div>
 
           <div className="relative flex items-center justify-center mt-[15vw] bottom-4">
-            {/* <button
+            
+      
+
+
+            <button
+              onClick={() => login()}
               type="button"
               className="absolute w-full h-10 z-0 bg-white text-p-gray text-[4.5vw] rounded-[15px] border shadow-sm">
               <GoogleLogoIcon
@@ -240,12 +250,7 @@ const LoginPage = () => {
                 className="absolute z-10 flex items-center justify-center translate-x-15 translate-y-1"
               />
               Continue with Google
-            </button> */}
-            <GoogleLogin 
-              onSuccess={handleLoginSuccess}
-              onError={() => {console.log('Error failed.')}}
-              
-            />
+            </button>
           </div>
         </form>
       </div>

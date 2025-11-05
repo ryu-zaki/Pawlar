@@ -81,6 +81,7 @@ const createOtpFields = async (email: string) => {
      
      await sendOTPEmail(email, code);
      console.log("Email sent.");
+     console.log("Code", code);
      await pool.query("CALL createOTPcredentials($1, $2, $3, $4)", 
       [email, verification_code, last_otp_sent_at, verification_expires_at])
    }

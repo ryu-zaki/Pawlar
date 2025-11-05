@@ -49,7 +49,7 @@ const loginController = async (req: Request, res: Response) => {
 
 
 const registerController = async (req: Request, res: Response) => {
-
+  
   try {
     await createUser(req.body);
     
@@ -165,10 +165,11 @@ const handleGoogleLogin = (req: Request, res: Response) => {
 const validateCode = async (req: Request, res: Response) => {
    try {
      const { code, email } = req.body;
-     const user = await extractUserInfo(email);
-    
-     const isValid = await bcrypt.compare(code, user?.verification_code);
      
+     const user = await extractUserInfo(email);
+    console.log(user)
+     const isValid = await bcrypt.compare(code, user?.verification_code);
+     console.log(isValid);
      if (isValid) {
        await updateValidateField(user?.email, '1');
        res.sendStatus(200);
