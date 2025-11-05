@@ -73,8 +73,11 @@ const SignUpPage = () => {
       };
 
     const handleSignUp = async (e: FormEvent) => {
-    e.preventDefault();
+        e.preventDefault();
+        if (isLoading) return;    
+        
 
+ 
         const newErrors = {
            firstName: !nameRegex.test(userInfo.firstName)
         ? "First name should contain only letters." : "",
@@ -101,21 +104,20 @@ const SignUpPage = () => {
             }
 
             catch(err: any) {
-
-                switch(err.response.status) {
-                   case 403:
-                   
-                   toast.error("Email already exists.");
-                   
-                   
-                   break;
-
-                   default:
-                     toast.error("Something went wrong");
-                   break;
-                }
-                 
+                console.log(err);
+               switch(err.response?.status) {
+                case 403:
+                  toast.error("Email already registered.")
+                break;
+                
+                default: 
+                  toast.error("Something went wrong")
+                break;
+               }
+               
             }
+
+               
         
 }
 

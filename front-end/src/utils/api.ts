@@ -1,7 +1,7 @@
 import axios, { AxiosError, type AxiosInstance, type InternalAxiosRequestConfig, type AxiosResponse } from 'axios';
 
 const api: AxiosInstance = axios.create({
-    baseURL: `http://10.221.198.148:3000`,
+    baseURL: `http://localhost:3000`,
     withCredentials: true,
 });
 
