@@ -13,7 +13,7 @@ import { useLogin } from "./contexts/LoginContext";
 import AuthLayout from './components/AuthLayout';
 import ForgotPasswordParent from './components/ForgotPasswordParent';
 import SignupEmailOTP from './components/SignupEmailOTP';
-import { Toaster, toast } from "sonner";
+import { Toaster } from "sonner";
 import LandingPage from './components/LandingPage';
 import PageNotFound from './components/PageNotFound';
 

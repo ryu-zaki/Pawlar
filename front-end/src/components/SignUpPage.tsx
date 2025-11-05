@@ -175,7 +175,7 @@ const SignUpPage = () => {
             }
         }
 
-        if (Object.values(newErrors).some((err) => err)) return;
+        if (Object.values(newErrors).some((err) => err) || hasError) return;
             setIsLoading(true);
             try {
              const response = await api.post("/auth/register", userInfo)
