@@ -24,26 +24,27 @@ function App() {
 
     <>
       <Toaster richColors position="bottom-center" />
-      
+
       <Routes>
         <Route path='/' element={<StartupPage />} />
 
-         <Route path="/auth" element={isLogin ? (isEmailVerified ? <Navigate to="/sample" /> : <Navigate to="/verify-signup"  /> ) : <AuthLayout />}>
+        <Route path="/auth" element={isLogin ? (isEmailVerified ? <Navigate to="/sample" /> : <Navigate to="/verify-signup" />) : <AuthLayout />}>
 
           <Route path='login' element={<LoginPage />} />
           <Route path='signup' element={<SignUpPage />} />
           <Route path="termsandconditions" element={< TermsAndConditions />} />
+          
           <Route path="otp" element={<ForgotPasswordParent />}>
             <Route index element={<EmailSendOTP />} />
             <Route path="verify" element={<EmailOTP />} />
             <Route path="renew" element={<RenewPassword />} />
           </Route>
 
+          <Route path="verify-signup" element={!isEmailVerified ? <SignupEmailOTP /> : <Navigate to="/auth/login" />} />
         </Route>
-        
-        <Route path="/verify-signup" element={!isEmailVerified ? <SignupEmailOTP /> : <Navigate  to="/auth/login" />} />
 
-        <Route path="/sample" element={isLogin ? (isEmailVerified ? <SampleLandingPage /> : <Navigate to="/verify-signup"  /> ) : <Navigate to="/auth/login" />} />
+
+        <Route path="/sample" element={isLogin ? (isEmailVerified ? <SampleLandingPage /> : <Navigate to="/verify-signup" />) : <Navigate to="/auth/login" />} />
       </Routes>
 
     </>
