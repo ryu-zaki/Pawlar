@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import {useLogin} from '../contexts/LoginContext';
 
 const SignUpPage = () => {
-    const {setCredentials, setIsLogin, setIsEmailVerified} = useLogin();
+    const {setCredentials, setIsLogin} = useLogin();
     const [isLoading, setIsLoading] = React.useState(false);
     const [userInfo, setUserInfo] = React.useState({
         firstName: "", 
