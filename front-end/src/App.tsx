@@ -41,9 +41,9 @@ function App() {
             <Route path="verify" element={<EmailOTP />} />
             <Route path="renew" element={<RenewPassword />} />
           </Route>
-
-          <Route path="verify-signup" element={!isEmailVerified ? <SignupEmailOTP /> : <Navigate to="/auth/login" />} />
         </Route>
+
+        <Route path="/verify-signup" element={!isEmailVerified ? <SignupEmailOTP /> : <Navigate to="/auth/login" />} />
 
         <Route path="/sample" element={isLogin ? (isEmailVerified ? <SampleLandingPage /> : <Navigate to="/verify-signup"  /> ) : <Navigate to="/auth/login" />} />
 

@@ -31,7 +31,7 @@ const SampleLandingPage = () => {
           
             toast.success("Successfully Logged out.");
             setIsLogin(false);
-            setIsEmailVerified(true);
+            setIsEmailVerified(false);
             setCredentials({});
 
             navigate("/auth/login");
