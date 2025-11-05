@@ -51,7 +51,6 @@ const [resendCount, setResendCount] = useState(30);
       return;
     }
 
-
     try {
       const response = await api.post("/auth/validate-code", {
          email: credentials.email, 

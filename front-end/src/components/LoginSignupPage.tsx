@@ -23,7 +23,7 @@ const LoginPage = () => {
     password: "",
   });
   const { setIsLogin, setCredentials, setIsEmailVerified } = useLogin();
-
+  
   // const [modalOpen, setModalOpen] = useState(false);
   // const [modalMessage, setModalMessage] = useState("");
   // const [modalHeader, setModalHeader] = useState("");
