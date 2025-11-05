@@ -2,13 +2,12 @@ import React, { useState, type FormEvent } from "react";
 import { GoogleLogoIcon, EyeIcon, EyeSlashIcon } from "@phosphor-icons/react";
 import { Button, Checkbox } from "@heroui/react";
 import { Link, useNavigate } from "react-router-dom";
-import api, { setAccessToken } from "../utils/api";
-import {useLogin} from '../contexts/LoginContext';
+import api from "../utils/api";
 import { toast } from "sonner";
+import {useLogin} from '../contexts/LoginContext';
 
 const SignUpPage = () => {
-    const {setCredentials, setIsLogin} = useLogin();
-    const [isLoading, setIsLoading] = React.useState(false);
+    const {setCredentials} = useLogin();
     const [userInfo, setUserInfo] = React.useState({
         firstName: "", 
         lastName: "", 
@@ -35,10 +34,7 @@ const SignUpPage = () => {
 
     const nameRegex = /^[A-Za-z]+(?:[' -][A-Za-z]+)*$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const lowerCaseRegex = /[a-z]/;
-    const upperCaseRegex = /[A-Z]/;
-    const digitRegex = /\d/;
-    const specialCharRegex = /[!@#$%^&*]/;
+    const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
 
       const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = target;
@@ -59,34 +55,11 @@ const SignUpPage = () => {
                 else if (!emailRegex.test(value)) errorMessage = "Enter a valid email address.";
             break;
             case "password":
-                if (!value) {
-                errorMessage = "Password is required.";
-                setPasswordStrength("");
-            } else {
-                const errorParts = [];
-
-                if (value.length < 8) {
-                errorParts.push("at least 8 characters");
-                }
-                if (!lowerCaseRegex.test(value)) {
-                errorParts.push("a lowercase letter");
-                }
-                if (!upperCaseRegex.test(value)) {
-                errorParts.push("an uppercase letter");
-                }
-                if (!digitRegex.test(value)) {
-                errorParts.push("a number");
-                }
-                if (!specialCharRegex.test(value)) {
-                errorParts.push("a special character (!@#$%^&*)");
-                }
-
-                if (errorParts.length > 0) {
-                errorMessage = `Must include ${errorParts.join(', ')}.`;
-                } else {
-                errorMessage = "";
-                }
-            }
+                if (!value) errorMessage = "Password is required.";
+                else if (!passRegex.test(value)) errorMessage = "Password must contain 8 characters";
+                if (value.length < 8) setPasswordStrength("Weak");
+                else if (value.length < 10) setPasswordStrength("Medium");
+                else setPasswordStrength("Strong");
             break;
             case "confirmPassword":
                 if (value !== userInfo.password) errorMessage = "Password do not match";
@@ -103,34 +76,30 @@ const SignUpPage = () => {
         e.preventDefault();
         if (isLoading) return;    
         
-        
+
+ 
         const newErrors = {
            firstName: !nameRegex.test(userInfo.firstName)
         ? "First name should contain only letters." : "",
             lastName: !nameRegex.test(userInfo.lastName)
         ? "Last name should contain only letters." : "",
             email: !emailRegex.test(userInfo.email) ? "Enter a valid email address." : "",
-            password: !lowerCaseRegex.test(userInfo.password)
+            password: !passRegex.test(userInfo.password)
         ? "Password must be at least 8 chars, include uppercase, lowercase, number, and symbol." : "",
             confirmPassword: userInfo.password !== userInfo.confirmPassword 
         ? "Passwords do not match." : "",
     };  setErrors(newErrors);
 
         if (Object.values(newErrors).some((err) => err)) return;
-            
-        setIsLoading(true);
-    
+       
             try {
              const response = await api.post("/auth/register", userInfo)
-                
-             if (!response) { 
+                 
+             if (!response) {
                  throw new Error();
              }
-
-             setCredentials(response.data.user);
-             setAccessToken(response.data.accessToken);
-             setIsLogin(true);
-             navigate("/verify-signup");
+             setCredentials(response.data)
+             navigate("/auth/verify-signup");
 
             }
 
@@ -148,9 +117,7 @@ const SignUpPage = () => {
                
             }
 
-            finally {
-                setIsLoading(false);
-            }
+               
         
 }
 
@@ -315,17 +282,16 @@ const SignUpPage = () => {
                             radius="sm"
                             className="text-[3vw] text-gray-300"
                         >
-                            <span className="mt-1 text-[3vw] text-gray-400">
+                        </Checkbox>
+                           <span className="mt-1 text-[3vw] text-gray-400">
                                 I have read and agree to the{" "}
                             <Link
-                            to="/termsandconditions"
+                            to={'/auth/termsandconditions'}
                             className="text-black font-bold text-[3vw] underline ml-1"
-                            target="_blank"
                             >
                             Terms and Conditions and Privacy Policy
                             </Link>
                             </span>
-                        </Checkbox>
                        
                         {/* Save button */}
                         <Button
@@ -333,10 +299,11 @@ const SignUpPage = () => {
                         isDisabled={!userInfo.termsAccepted}
                         className={`w-full h-10 mt-4 text-[4.5vw] rounded-[15px] border-2 border-white shadow-sm 
                             ${
-                            userInfo.termsAccepted && !isLoading
+                            userInfo.termsAccepted
                                 ? "bg-brown-orange text-white"
                                 : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                            }`}> { isLoading ? "Loading..." : "Sign up" }
+                            }`}>
+                        Sign up
                         </Button>
                     </div>
                         {/* Divider */}
