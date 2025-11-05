@@ -8,12 +8,13 @@ import { toast } from "sonner";
 
 const SignupEmailOTP = () => {
   const navigate = useNavigate();
-  const { credentials, setIsEmailVerified, setIsLogin } = useLogin();
+  const { credentials, setIsEmailVerified, setIsLogin, setIsLoading } = useLogin();
 
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [showConfirmBack, setShowConfirmBack] = useState(false);
   const [error, setError] = useState<string>("");
   const [cooldown, setCooldown] = useState<number>(0);
+  const [isVerifying, setIsVerifying] = useState(false);
 
   const isOtpComplete = otp.every(digit => digit.length === 1);
 
@@ -70,6 +71,9 @@ const SignupEmailOTP = () => {
       return;
     }
 
+    setIsLoading(true);
+    setIsVerifying(true);
+
     try {
       const response = await api.post("/auth/validate-code", {
         email: credentials.email,
@@ -88,8 +92,18 @@ const SignupEmailOTP = () => {
       }
     }
 
-    catch (err) {
+    catch (err: any) {
       console.log(err);
+      if (err.response && err.response.status === 401) {
+        setError("Invalid verification code. Please try again.");
+      } else {
+        setError("An error occurred. Please try again.");
+      }
+    }
+
+    finally {
+      setIsLoading(false);
+      setIsVerifying(false);
     }
 
   };
@@ -99,6 +113,9 @@ const SignupEmailOTP = () => {
     if (cooldown > 0) return;
     console.log("Clicked");
     console.log("Email in credentials: " + credentials.email);
+
+    setIsLoading(true);
+
     try {
       const response = await api.post('/auth/resend-otp', { email: credentials.email });
 
@@ -116,6 +133,10 @@ const SignupEmailOTP = () => {
 
     catch (err) {
       console.log(err);
+    }
+
+    finally {
+      setIsLoading(false);
     }
   }
 
@@ -162,15 +183,15 @@ const SignupEmailOTP = () => {
           {/* Confirm Button */}
           <button
             onClick={handleVerify}
-            disabled={!isOtpComplete}
+            disabled={!isOtpComplete || isVerifying}
             className={`w-[280px] h-10 text-white text-[16px] font-['Wendy_One'] rounded-[15px] mt-2 transition
-              ${!isOtpComplete
-                ? 'bg-gray-500 cursor-not-allowed'
+              ${!isOtpComplete || isVerifying
+                ? 'bg-gray-400 cursor-not-allowed'
                 : 'bg-[#C4702E] hover:opacity-90'
               }
             `}
           >
-            Verify Email
+            {isVerifying ? "Verifying..." : "Verify Email"}
           </button>
         </div>
 
@@ -179,8 +200,8 @@ const SignupEmailOTP = () => {
           <button
             onClick={handleResend}
             disabled={cooldown > 0}
-            className={cooldown != 0
-              ? "text-[#aaaa]  font-semibold"
+            className={cooldown > 0
+              ? "text-gray-400 font-semibold cursor-not-allowed"
               : "text-[#C4703D] font-semibold hover:underline"} >
             {cooldown > 0 ? `Resend in ${cooldown}` : "Resend"}
           </button>

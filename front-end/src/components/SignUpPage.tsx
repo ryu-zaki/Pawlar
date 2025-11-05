@@ -7,8 +7,7 @@ import { toast } from "sonner";
 import { useLogin } from '../contexts/LoginContext';
 
 const SignUpPage = () => {
-    const { setCredentials, setIsLogin } = useLogin();
-    const [isLoading, setIsLoading] = React.useState(false);
+    const {setCredentials, setIsLogin, isLoading, setIsLoading} = useLogin();
     const [userInfo, setUserInfo] = React.useState({
         firstName: "",
         lastName: "",
@@ -176,6 +175,7 @@ const SignUpPage = () => {
         }
 
         if (Object.values(newErrors).some((err) => err)) return;
+
         setIsLoading(true);
         try {
             const response = await api.post("/auth/register", userInfo)
@@ -188,7 +188,7 @@ const SignUpPage = () => {
             setIsLogin(true)
 
             const expiryTime = Date.now() + 30000;
-            localStorage.setItem('otpCooldownExpiry', expiryTime.toString());
+            localStorage.setItem('otpSignupExpiry', expiryTime.toString());
 
             navigate("/verify-signup");
 

@@ -16,16 +16,18 @@ import SignupEmailOTP from './components/SignupEmailOTP';
 import { Toaster, toast } from "sonner";
 import LandingPage from './components/LandingPage';
 import PageNotFound from './components/PageNotFound';
+import LoadingOverlay from './components/LoadingOverlay';
 
 
 function App() {
 
-  const { isLogin, isEmailVerified } = useLogin();
-  console.log(isLogin, isEmailVerified)
+  const { isLogin, isEmailVerified, isLoading } = useLogin();
+  console.log(isLogin, isEmailVerified, isLoading);
   return (
 
     <>
       <Toaster richColors position="bottom-center" />
+      <LoadingOverlay isLoading={isLoading} />
 
       <Routes>
         <Route path='/' element={<StartupPage />} />
