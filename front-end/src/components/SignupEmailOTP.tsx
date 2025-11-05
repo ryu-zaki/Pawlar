@@ -84,6 +84,8 @@ const [resendCount, setResendCount] = useState(30);
         if (response.status) {
           // alert("Verification Code Resent.");
           toast.success("Verification Code Resent.");
+        }else{
+          toast.error("Verification Code Not Sent.")
         }
       }
 
