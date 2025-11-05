@@ -209,7 +209,7 @@ useGSAP(() => {
               <img
                 src="/assets/blob1.svg"
                 alt=""
-                className="absolute bottom-0 left-0 w-screen h-auto z-0 -translate-y-[25vh]"
+                className="absolute bottom-0 left-0 w-screen h-auto z-0 -translate-y-[10vh]"
               />
               <img
                 src="/assets/INTRO-MAP.svg"
