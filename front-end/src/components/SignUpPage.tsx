@@ -100,6 +100,7 @@ const SignUpPage = () => {
              if (!response) {
                  throw new Error();
              }
+              
              setCredentials(response.data.user);
              setIsLogin(true)
              
