@@ -13,14 +13,17 @@ const SampleLandingPage = () => {
     const logout = () => {
         if (isLoading) return;
 
-        toast("Are you sure you want to logout?", {
+        const confirmationToastId = toast("Are you sure you want to logout?", {
             action: {
                 label: "Logout",
-                onClick: () => handleLogout(),
+                onClick: () => {
+                    toast.dismiss(confirmationToastId);
+                    handleLogout();
+                },
             },
             cancel: {
                 label: "Cancel",
-                onClick: () => toast.dismiss(),
+                onClick: () => toast.dismiss(confirmationToastId),
             },
             duration: 10000,
         });
@@ -37,12 +40,16 @@ const SampleLandingPage = () => {
             setIsEmailVerified(false);
             setCredentials({});
 
-            navigate("/auth/login");
+            setTimeout(() => {
+                toast.dismiss();
+                navigate("/auth/login");
+            }, 1000);
         }
 
         catch (err) {
             console.log(err);
-            toast.error("Something went wrong")
+            toast.error("Something went wrong");
+            setIsLoading(false);
         }
 
         finally {
