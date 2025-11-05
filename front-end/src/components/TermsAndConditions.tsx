@@ -1,4 +1,4 @@
-import { CaretRightIcon } from "@phosphor-icons/react";
+import { CaretLeftIcon } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
 
 const TermsAndPrivacy = () => {
@@ -9,10 +9,10 @@ const TermsAndPrivacy = () => {
 
       {/* Back Button */}
       <button
-        onClick={() => navigate("/signup")}
+        onClick={() => navigate("/auth/signup")}
         className="absolute top-6 left-6 bg-[#C4703D] text-white rounded-full p-3 hover:bg-[#b16435] transition"
       >
-        <CaretRightIcon size={22} weight="bold" />
+        <CaretLeftIcon size={22} weight="bold" />
       </button>
 
       {/* Terms and Conditions */}

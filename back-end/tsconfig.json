@@ -9,5 +9,5 @@
     "skipLibCheck": true,
     "types": ["node", "jest"]
   },
-  "include": ["src/**/*", "src/types/**/*", "tests"]
+  "include": ["src/**/*", "src/types/**/*"]
 }

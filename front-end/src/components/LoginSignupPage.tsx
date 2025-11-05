@@ -152,7 +152,7 @@ const LoginPage = () => {
           <h1 className="text-[7vw] text-brown-orange font-wendy">
             Log In
           </h1>
-          <p className="text-gray-400">
+          <p className="text-gray-400 text-[4vw]">
             Don't have an account? {" "}
             <Link to={'/auth/signup'} className="text-brown underline cursor-pointer">Sign up</Link>           
           </p>

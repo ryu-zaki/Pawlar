@@ -205,11 +205,17 @@ useGSAP(() => {
               <GreaterThanIcon size={20} color="#FFF" weight="bold" />
             </button>
 
+            <button
+              onClick={(goToLogin)}
+              className="absolute left-[7vw] bottom-[5vh] flex items-center justify-center z-20">
+                <p className="text-flesh text-[4vw] font-league">Continue with Login</p>
+            </button>
+
             <div className="relative w-full h-full">
               <img
                 src="/assets/blob1.svg"
                 alt=""
-                className="absolute bottom-0 left-0 w-screen h-auto z-0 -translate-y-[10vh]"
+                className="absolute bottom-0 left-0 w-screen h-auto z-0 translate-y-[10vh]"
               />
               <img
                 src="/assets/INTRO-MAP.svg"
@@ -242,14 +248,14 @@ useGSAP(() => {
               className="absolute right-[5vw] bottom-[5vh] w-[12vw] h-[12vw] max-w-[50px] max-h-[50px] flex items-center justify-center bg-light-brown rounded-full z-20 shadow-md"
             >
               <GreaterThanIcon size={20} color="#FFF" weight="bold" />
-            </button>
+            </button> 
 
             {/* assets */}
             <div className="w-full h-screen">
               <img
                 src="/assets/blob2.svg"
                 alt=""
-                className="absolute left-0 w-full scale-[1.5] z-0 translate-x-[10vw] -translate-y-[15vh]"
+                className="absolute bottom-0 left-0 w-full scale-[1.5] z-0 translate-x-[10vw] -translate-y-[5vh]"
               />
               <img
                 src="/assets/Slide2-Dog.svg"
@@ -289,19 +295,20 @@ useGSAP(() => {
               <GreaterThanIcon size={20} color="#FFF" weight="bold" />
             </button>
 
+
             {/* assets */}
             <div className="relative w-full h-full">
               <img
                 src="/assets/blob3.svg"
                 alt=""
-                className="absolute top-0 left-0 scale-[2.2] h-auto z-0 translate-x-[10vw] -translate-y-[11vh]"
+                className="absolute bottom-0 left-0 scale-[2.2] h-auto z-0 translate-x-[10vw] -translate-y-[23.5vh]"
               />
               <img
                 src="/assets/gray-petdoor.svg"
                 alt=""
                 className="absolute w-[90vw] h-auto z-10 -bottom-[1vh] mx-auto transform -translate-x-2"
               />
-            </div>
+            </div>  
           </div>
 
             <div
