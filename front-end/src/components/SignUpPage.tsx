@@ -100,7 +100,7 @@ const SignUpPage = () => {
       };
 
     const handleSignUp = async (e: FormEvent) => {
-    e.preventDefault();
+        e.preventDefault();
         if (isLoading) return;    
         
         
@@ -135,11 +135,12 @@ const SignUpPage = () => {
             }
 
             catch(err: any) {
-               switch(err.response.status) {
+                console.log(err);
+               switch(err.response?.status) {
                 case 403:
                   toast.error("Email already registered.")
                 break;
-
+                
                 default: 
                   toast.error("Something went wrong")
                 break;
