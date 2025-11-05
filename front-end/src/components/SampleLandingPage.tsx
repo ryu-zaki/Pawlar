@@ -26,19 +26,14 @@ const SampleLandingPage = () => {
 
     const handleLogout = async () => {
         try { 
-          await fetch("http://localhost:3000/auth/logout", {
-                method: 'POST',
-                credentials: 'include'
-              });
-
-          /* if (response.status !== 200) throw new Error(); */
+            await api.post("/auth/logout");
           
             toast.success("Successfully Logged out.");
             setIsLogin(false);
             setIsEmailVerified(true);
             setCredentials({});
 
-            navigate("/auth/login")
+            navigate("/auth/login");
         }
 
         catch(err) {
