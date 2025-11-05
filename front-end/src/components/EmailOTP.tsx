@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { CaretLeft } from "@phosphor-icons/react";
+import { CaretLeftIcon } from "@phosphor-icons/react";
 import { ForgotPasswordContext } from "./ForgotPasswordParent";
 import { requestPasswordReset } from "../utils/requests";
 import { toast } from "sonner";
@@ -109,7 +109,7 @@ const EmailOTP = () => {
         onClick={() => setShowConfirmBack(true)}
         className="absolute top-6 left-6 bg-[#C4703D] text-white rounded-full p-2 shadow-md hover:bg-[#b35f2d] transition"
       >
-        <CaretLeft size={20} weight="bold" />
+        <CaretLeftIcon size={20} weight="bold" />
       </button>
 
       {/* Content */}

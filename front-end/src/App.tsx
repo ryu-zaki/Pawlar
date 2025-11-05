@@ -14,6 +14,8 @@ import AuthLayout from './components/AuthLayout';
 import ForgotPasswordParent from './components/ForgotPasswordParent';
 import SignupEmailOTP from './components/SignupEmailOTP';
 import { Toaster, toast } from "sonner";
+import LandingPage from './components/LandingPage';
+import PageNotFound from './components/PageNotFound';
 
 
 function App() {
@@ -29,7 +31,7 @@ function App() {
         <Route path='/' element={<StartupPage />} />
 
          <Route path="/auth" element={isLogin ? (isEmailVerified ? <Navigate to="/sample" /> : <Navigate to="/verify-signup"  /> ) : <AuthLayout />}>
-
+          <Route path='landing' element={<LandingPage/>}/>
           <Route path='login' element={<LoginPage />} />
           <Route path='signup' element={<SignUpPage />} />
           <Route path="termsandconditions" element={< TermsAndConditions />} />
@@ -44,6 +46,8 @@ function App() {
         <Route path="/verify-signup" element={!isEmailVerified ? <SignupEmailOTP /> : <Navigate  to="/auth/login" />} />
 
         <Route path="/sample" element={isLogin ? (isEmailVerified ? <SampleLandingPage /> : <Navigate to="/verify-signup"  /> ) : <Navigate to="/auth/login" />} />
+
+        <Route path='*' element={<PageNotFound/>} />
       </Routes>
 
     </>

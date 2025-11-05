@@ -2,7 +2,8 @@
 import { useLogin } from '../contexts/LoginContext';
 import { toast } from "sonner";
 import api from '../utils/api';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+import { Button } from "@heroui/react";
 
 const SampleLandingPage = () => {
     
@@ -53,22 +54,34 @@ const SampleLandingPage = () => {
 
     return (   
         <>
-            <div className="flex items-center justify-center w-full">
-                <div className="mt-10">
-                   <h1>Welcome to Pawlar App!</h1>
-                
-                   <h3 className="mt-10 font-bold mb-5">User Information</h3>
-                  <ul>
-                      <li>email: <span>{credentials.email}</span></li>
-                      <li>first name: <span>{credentials.firstName}</span></li>
-                    <li>last name: <span>{credentials.lastName}</span></li>
-                       
-                  </ul>
+             <div className="bg-flesh w-screen h-screen flex flex-col items-center">
+            {/* welcome user */}
+            
+            <div className="relative flex flex-col items-center justify-center pt-[10vw]">
+                <h1 className="text-choco font-wendy text-[9vw] leading-tight pt-[2.5vw]">
+                    Welcome to Pawlar!
+                </h1>
 
-                  <button onClick={logout} className="bg-brown-orange mt-20 text-white px-4 py-1 rounded-md">logout</button>
-                </div>
-                
+            <div>
+                <h3 className="mt-10 font-league font-bold mb-3 text-choco text-[7vw]">Your Information:</h3>
+                  <ul className="font-league text-brown-orange text-[5vw]">
+                      <li>Email: <span>{credentials.email}</span></li>
+                      <li>First name: <span>{credentials.firstName}</span></li>
+                    <li>Last name: <span>{credentials.lastName}</span></li>   
+                  </ul>
             </div>
+
+            <img src="/assets/Pets.svg" alt="" className="w-[70vw] ml-[20vw]"/>
+
+            <Button 
+            onClick={logout}
+            className= "w-[60vw] bg-brown-orange mt-[4vw]  text-white text-[5vw] font-league font-bold px-[4vw] py-[2vw] bottom-0 rounded-[15vw]">    
+                Logout
+            </Button>
+                
+
+            </div>
+        </div>
         </>
     );
 

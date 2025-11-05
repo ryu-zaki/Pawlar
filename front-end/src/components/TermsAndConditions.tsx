@@ -1,18 +1,18 @@
-import { CaretRightIcon } from "@phosphor-icons/react";
+import { CaretLeftIcon } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
 
 const TermsAndPrivacy = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="max-h-screen bg-[#FFEBD8] text-[#5A3921] font-['League_Spartan'] flex flex-col items-center relative px-6 py-10 overflow-y-auto">
+    <div className="max-h-screen bg-flesh text-[#5A3921] font-['League_Spartan'] flex flex-col items-center relative px-6 py-10 overflow-y-auto">
 
       {/* Back Button */}
       <button
-        onClick={() => navigate("/signup")}
+        onClick={() => navigate("/auth/signup")}
         className="absolute top-6 left-6 bg-[#C4703D] text-white rounded-full p-3 hover:bg-[#b16435] transition"
       >
-        <CaretRightIcon size={22} weight="bold" />
+        <CaretLeftIcon size={22} weight="bold" />
       </button>
 
       {/* Terms and Conditions */}

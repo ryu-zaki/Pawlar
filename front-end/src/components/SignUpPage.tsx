@@ -32,9 +32,12 @@ const SignUpPage = () => {
 
     //   REGEX
 
-    const nameRegex = /^[A-Za-z]+(?:[' -][A-Za-z]+)*$/;
+    const nameRegex = /^[A-Za-zÑñ]+(?:[' -][A-Za-z]+)*$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
+    const lowerCaseRegex = /[a-z]/;
+    const upperCaseRegex = /[A-Z]/;
+    const digitRegex = /\d/;
+    const specialCharRegex = /[!@#$%^&*]/;
 
       const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = target;
@@ -55,11 +58,47 @@ const SignUpPage = () => {
                 else if (!emailRegex.test(value)) errorMessage = "Enter a valid email address.";
             break;
             case "password":
-                if (!value) errorMessage = "Password is required.";
-                else if (!passRegex.test(value)) errorMessage = "Password must contain 8 characters";
-                if (value.length < 8) setPasswordStrength("Weak");
-                else if (value.length < 10) setPasswordStrength("Medium");
-                else setPasswordStrength("Strong");
+                if (id === "password") {
+                if (!value) {
+                    errorMessage = "Password is required.";
+                    setPasswordStrength("");
+                } else {
+                    const errorParts = [];
+
+                    if (value.length < 8) {
+                    errorParts.push("at least 8 characters");
+                    }
+                    if (!lowerCaseRegex.test(value)) {
+                    errorParts.push("a lowercase letter");
+                    }
+                    if (!upperCaseRegex.test(value)) {
+                    errorParts.push("an uppercase letter");
+                    }
+                    if (!digitRegex.test(value)) {
+                    errorParts.push("a number");
+                    }
+                    if (!specialCharRegex.test(value)) {
+                    errorParts.push("a special character (!@#$%^&*)");
+                    }
+
+                    if (errorParts.length > 0) {
+                    errorMessage = `Must include ${errorParts.join(', ')}.`;
+                    } else {
+                    errorMessage = "";
+                    }
+                }
+
+                if (!value) {
+                    setPasswordStrength("");
+                } else if (value.length < 8 || !lowerCaseRegex.test(value) || !upperCaseRegex.test(value) || !digitRegex.test(value) || !specialCharRegex.test(value)) {
+                    setPasswordStrength("Weak");
+                } else if (value.length < 10) {
+                    setPasswordStrength("Medium");
+                } else {
+                    setPasswordStrength("Strong");
+                }
+                }
+
             break;
             case "confirmPassword":
                 if (value !== userInfo.password) errorMessage = "Password do not match";
@@ -75,17 +114,63 @@ const SignUpPage = () => {
     const handleSignUp = async (e: FormEvent) => {
     e.preventDefault();
 
-        const newErrors = {
-           firstName: !nameRegex.test(userInfo.firstName)
-        ? "First name should contain only letters." : "",
-            lastName: !nameRegex.test(userInfo.lastName)
-        ? "Last name should contain only letters." : "",
-            email: !emailRegex.test(userInfo.email) ? "Enter a valid email address." : "",
-            password: !passRegex.test(userInfo.password)
-        ? "Password must be at least 8 chars, include uppercase, lowercase, number, and symbol." : "",
-            confirmPassword: userInfo.password !== userInfo.confirmPassword 
-        ? "Passwords do not match." : "",
-    };  setErrors(newErrors);
+        let hasError = false;
+        const newErrors: any = {};
+
+        // First Name
+        if (!userInfo.firstName) {
+            newErrors.firstName = "First name is required.";
+            hasError = true;
+        } else if (!nameRegex.test(userInfo.firstName)) {
+            newErrors.firstName = "First name should contain only letters.";
+            hasError = true;
+        }
+
+        // Last Name
+        if (!userInfo.lastName) {
+            newErrors.lastName = "Last name is required.";
+            hasError = true;
+        } else if (!nameRegex.test(userInfo.lastName)) {
+            newErrors.lastName = "Last name should contain only letters.";
+            hasError = true;
+        }
+
+        // Email
+        if (!userInfo.email) {
+            newErrors.email = "Email is required.";
+            hasError = true;
+        } else if (!emailRegex.test(userInfo.email)) {
+            newErrors.email = "Enter a valid email address.";
+            hasError = true;
+        }
+
+        if (!userInfo.password) {
+            newErrors.password = "Password is required.";
+            hasError = true;
+        } else {
+            const errorParts: string[] = [];
+
+            if (userInfo.password.length < 8) {
+            errorParts.push("at least 8 characters");
+            }
+            if (!lowerCaseRegex.test(userInfo.password)) {
+            errorParts.push("a lowercase letter");
+            }
+            if (!upperCaseRegex.test(userInfo.password)) {
+            errorParts.push("an uppercase letter");
+            }
+            if (!digitRegex.test(userInfo.password)) {
+            errorParts.push("a number");
+            }
+            if (!specialCharRegex.test(userInfo.password)) {
+            errorParts.push("a special character (!@#$%^&*)");
+            }
+
+            if (errorParts.length > 0) {
+            newErrors.password = `Must include ${errorParts.join(", ")}.`;
+            hasError = true;
+            }
+        }
 
         if (Object.values(newErrors).some((err) => err)) return;
        
@@ -139,7 +224,7 @@ const SignUpPage = () => {
                   <h1 className="text-[7vw] text-brown-orange font-wendy">
                     Sign Up
                 </h1>
-                <p className="text-gray-400">
+                <p className="text-gray-400 text-[4vw] ">
                     Already have an account? {" "}
                     <Link to={'/auth/login'} className="text-brown underline cursor-pointer">Log in</Link>
                 </p>
@@ -306,15 +391,15 @@ const SignUpPage = () => {
                     </div>
                         {/* Divider */}
                         <div className="flex items-center my-4">
-                            <div className="grow h-px bg-gray-300 mr-5"></div>
+                            <div className="grow h-px bg-gray-300 mr-8"></div>
                             <span className="mx-2 text-gray-300 text-[4vw]">or</span>
-                            <div className="grow h-px bg-gray-300 ml-5"></div>
+                            <div className="grow h-px bg-gray-300 ml-8"></div>
                         </div>
                         {/* Google */}
-                    <div className="relative flex items-center justify-center mt-[13vw] bottom-4">
+                    <div className="relative flex items-center justify-center mt-[10vw] bottom-4">
                         <button
                             type="button"
-                            className="absolute w-full h-10 z-0 bg-white text-p-gray text-[4.5vw] rounded-[15px] border border-brown-orange shadow-sm">
+                            className="relative w-full bottom-2 h-10 z-0 bg-white text-p-gray text-[4.5vw] rounded-[15px] border border-brown-orange shadow-sm">
                             <GoogleLogoIcon 
                             size={20}
                             className="absolute z-10 flex items-center justify-center translate-x-[11vw] translate-y-[.3vh]"           
