@@ -71,7 +71,11 @@ const SampleLandingPage = () => {
                         <h3 className="mt-10 font-league font-bold mb-3 text-choco text-[7vw]">Your Information:</h3>
                         <ul className="font-league text-brown-orange text-[5vw]">
                             <li>Email: <span>{credentials.email}</span></li>
-                            <li>First name: <span>{credentials.firstName}</span></li>
+                            
+                            {
+                                !!credentials?.firstName && <li>First name: <span>{credentials.firstName}</span></li>
+                            }
+                           
                             <li>Last name: <span>{credentials.lastName}</span></li>
                         </ul>
                     </div>
