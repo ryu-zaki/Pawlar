@@ -165,7 +165,7 @@ useGSAP(() => {
 
     const tl = gsap.timeline({
       defaults: { ease: "power2.inOut", duration: 1 },
-      onComplete: () => navigate("/auth/login"),
+      onComplete: () => navigate("/auth/login", { replace: true }),
     });
 
     // Slide final cta up

@@ -2,7 +2,7 @@
 import React, { useState, type FormEvent } from "react";
 import { EyeIcon, EyeSlashIcon, GoogleLogoIcon } from "@phosphor-icons/react";
 import { Button } from "@heroui/react";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { useNavigate, Link } from "react-router-dom";
 import api, { setAccessToken } from "../utils/api";
 import { useLogin } from '../contexts/LoginContext';
@@ -23,8 +23,8 @@ const LoginPage = () => {
     email: "",
     password: "",
   });
-  const { setIsLogin, setCredentials, setIsEmailVerified } = useLogin();
-  
+  const { setIsLogin, setCredentials, setIsEmailVerified, isLoading, setIsLoading } = useLogin();
+
   // const [modalOpen, setModalOpen] = useState(false);
   // const [modalMessage, setModalMessage] = useState("");
   // const [modalHeader, setModalHeader] = useState("");
@@ -56,14 +56,14 @@ const LoginPage = () => {
       setPasswordError("Invalid credentials")
       return;
     }
-    
+    setIsLoading(true);
     try {
       const response = await api.post("/auth/login", userInfo)
 
       if (response.status === 401) throw new Error();
 
       const data = response.data;
-      
+
       setCredentials(data.user)
       setAccessToken(data.accessToken);
       setIsLogin(true);
@@ -76,32 +76,35 @@ const LoginPage = () => {
       console.log(err);
       // backend stuff
 
-      switch(err.status) {
-         case 403:
-           toast.error("Account doesn't exists")
-         break;
+      switch (err.status) {
+        case 403:
+          toast.error("Account doesn't exists")
+          break;
 
-         case 401:
-           toast.error("Incorrect Email or Password");
-         break;
+        case 401:
+          toast.error("Incorrect Email or Password");
+          break;
 
-         default:
-           toast.error("Something Went wrong");
-         break;
+        default:
+          toast.error("Something Went wrong");
+          break;
       }
-      
+
+    } finally {
+      setIsLoading(false);
     }
   }
 
 
   const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     setUserInfo(prev => {
-      return ({ ...prev, [target.id]: target.value }); }) 
+      return ({ ...prev, [target.id]: target.value });
+    })
 
-      if (target.id === "email") setEmailError("");
-      if (target.id === "password") setPasswordError("");
-    
-    };
+    if (target.id === "email") setEmailError("");
+    if (target.id === "password") setPasswordError("");
+
+  };
 
 
   const handleLoginSuccess = async (credentialResponse: any) => {
@@ -110,21 +113,21 @@ const LoginPage = () => {
     // Decode JWT (optional, just to view data on frontend)
     const decoded: GooglePayload = jwtDecode(credentialResponse.credential);
     console.log("Google user:", decoded);
-    
+
     try {
-    // Send token to backend
-    await api.post("/auth/google", decoded);
-    toast.success("Successfully logged In.");
-    setIsEmailVerified(true);
-    setIsLogin(true);
-    
+      // Send token to backend
+      await api.post("/auth/google", decoded);
+      toast.success("Successfully logged In.");
+      setIsEmailVerified(true);
+      setIsLogin(true);
+
     }
 
-    catch(err) {
+    catch (err) {
       console.log(err);
       toast.error("Google login failed. Please try again.")
     }
-    
+
   };
 
 
@@ -150,7 +153,7 @@ const LoginPage = () => {
           </h1>
           <p className="text-gray-400 text-[4vw]">
             Don't have an account? {" "}
-            <Link to={'/auth/signup'} className="text-brown underline cursor-pointer">Sign up</Link>           
+            <Link to={'/auth/signup'} className="text-brown underline cursor-pointer">Sign up</Link>
           </p>
         </div>
 
@@ -165,12 +168,12 @@ const LoginPage = () => {
               value={userInfo.email}
               type="text"
               className={`bg-white shadow text-[4vw] p-2 w-full h-10 rounded-[15px] mb-2  
-                ${ emailError ? "border border-error-red" : "outline-p-gray" }`}
-              placeholder="Enter your email"              
+                ${emailError ? "border border-error-red" : "outline-p-gray"}`}
+              placeholder="Enter your email"
             />
             {emailError && (
               <p className="text-error-red text-[3.5vw] mb-1">{emailError}</p>
-            )              
+            )
             }
 
             <label className="block text-[4vw] mb-1 mt-2 text-p-gray">
@@ -178,30 +181,30 @@ const LoginPage = () => {
             </label>
             <div className="relative">
               <input
-              id="password"
-              onChange={handleChange}
-              value={userInfo.password}
-              type={showPassword ? "text" : "password"}
-              className={`bg-white shadow text-[4vw] p-2 w-full h-10 rounded-[15px] mb-2 outline-p-gray 
-                ${ passwordError ? "border border-error-red" : "" }`}
-              placeholder="Enter your password"            
+                id="password"
+                onChange={handleChange}
+                value={userInfo.password}
+                type={showPassword ? "text" : "password"}
+                className={`bg-white shadow text-[4vw] p-2 w-full h-10 rounded-[15px] mb-2 outline-p-gray 
+                ${passwordError ? "border border-error-red" : ""}`}
+                placeholder="Enter your password"
               />
               {passwordError && (
-              <p className="text-error-red text-[3.5vw] mb-1">{passwordError}</p>
-            )
-              
-            }
+                <p className="text-error-red text-[3.5vw] mb-1">{passwordError}</p>
+              )
+
+              }
               <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-2 text-gray-500">
-              {showPassword ? (
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-2 text-gray-500">
+                {showPassword ? (
                   <EyeIcon size={22} weight="regular" />
-                  ) : (
+                ) : (
                   <EyeSlashIcon size={22} weight="regular" />
-                  )}
+                )}
               </button>
-          </div>
+            </div>
 
             <div className="mt-2 flex items-center justify-between">
               {/* <div>
@@ -211,8 +214,8 @@ const LoginPage = () => {
                 </label>
               </div> */}
               <p
-              className="text-[#A95A29] font-semibold justify-end"
-              onClick={() => navigate('../otp')}>
+                className="text-[#A95A29] font-semibold justify-end"
+                onClick={() => navigate('../otp')}>
                 Forgot Password?
               </p>
 
@@ -221,7 +224,8 @@ const LoginPage = () => {
             {/* Save button */}
             <Button
               type="submit"
-              className="w-full h-10 mt-4 bg-brown-orange text-white text-[4.5vw] rounded-[15px] border-2 border-white shadow-sm">
+              disabled={isLoading}
+              className="w-full h-10 bg-[#C4702E] text-white text-[16px] font-['Wendy_One'] rounded-[15px] hover:opacity-90 transition disabled:opacity-50" >
               Log in
             </Button>
           </div>
@@ -233,7 +237,16 @@ const LoginPage = () => {
           </div>
 
           <div className="relative flex items-center justify-center mt-[15vw] bottom-4">
-    
+            <button
+              onClick={() => login()}
+              type="button"
+              className="absolute w-full h-10 z-0 bg-white text-p-gray text-[4.5vw] rounded-[15px] border shadow-sm">
+              <GoogleLogoIcon
+                size={20}
+                className="absolute z-10 flex items-center justify-center translate-x-15 translate-y-1"
+              />
+              Continue with Google
+            </button>
           </div>
         </form>
         <GoogleLoginButton />

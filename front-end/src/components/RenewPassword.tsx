@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { CaretLeftIcon, EyeIcon, EyeSlashIcon } from "@phosphor-icons/react";
 import { resetPassword } from "../utils/requests";
 import { ForgotPasswordContext } from "./ForgotPasswordParent";
+import { useLogin } from "../contexts/LoginContext";
 
 const RenewPassword = () => {
   const navigate = useNavigate();
@@ -23,9 +24,9 @@ const RenewPassword = () => {
     general: ""
   });
 
-  const [loading, setLoading] = useState<boolean>(false);
   const successButtonRef = useRef<HTMLButtonElement>(null);
   const { email, otp, setEmail, setOtp } = useContext(ForgotPasswordContext)!;
+  const { isLoading, setIsLoading } = useLogin();
 
   const lowerCaseRegex = /[a-z]/;
   const upperCaseRegex = /[A-Z]/;
@@ -146,11 +147,11 @@ const RenewPassword = () => {
 
     if (!email || !otp) {
       setErrors((prev) => ({ ...prev, general: "Your session has expired. Please try again." }));
-      setLoading(false);
+      setIsLoading(false);
       return;
     }
 
-    setLoading(true);
+    setIsLoading(true);
 
     try {
       await resetPassword(email, otp, passwords.password);
@@ -170,7 +171,7 @@ const RenewPassword = () => {
 
       setErrors((prev) => ({ ...prev, general: errorMessage }));
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -283,10 +284,10 @@ const RenewPassword = () => {
           {/* Confirm Button */}
           <button
             type="submit"
-            disabled={loading}
+            disabled={isLoading} // MODIFIED: Use global isLoading
             className="w-[280px] h-10 bg-[#C4702E] text-white text-[16px] font-['Wendy_One'] rounded-[15px] mt-1 hover:opacity-90 transition disabled:opacity-50"
           >
-            {loading ? "Confirming..." : "Confirm"}
+            {isLoading ? "Confirming..." : "Confirm"}
           </button>
 
         </form>
