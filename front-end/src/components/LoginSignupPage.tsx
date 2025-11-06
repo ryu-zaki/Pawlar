@@ -8,6 +8,7 @@ import api, { setAccessToken } from "../utils/api";
 import { useLogin } from '../contexts/LoginContext';
 import { useGoogleLogin } from "@react-oauth/google";
 import { toast } from "sonner";
+import { GoogleLoginButton } from "./GoogleButton";
 
 interface GooglePayload {
   email: string;
@@ -126,11 +127,6 @@ const LoginPage = () => {
     
   };
 
-  const login = useGoogleLogin({
-    onSuccess: handleLoginSuccess,
-    onError: () => toast.error("Something went wrong")
-  })
-
 
   return (
     <div className="w-screen bg-flesh h-auto">
@@ -237,22 +233,10 @@ const LoginPage = () => {
           </div>
 
           <div className="relative flex items-center justify-center mt-[15vw] bottom-4">
-            
-      
-
-
-            <button
-              onClick={() => login()}
-              type="button"
-              className="absolute w-full h-10 z-0 bg-white text-p-gray text-[4.5vw] rounded-[15px] border shadow-sm">
-              <GoogleLogoIcon
-                size={20}
-                className="absolute z-10 flex items-center justify-center translate-x-15 translate-y-1"
-              />
-              Continue with Google
-            </button>
+    
           </div>
         </form>
+        <GoogleLoginButton />
       </div>
 
       {/* <Modal
