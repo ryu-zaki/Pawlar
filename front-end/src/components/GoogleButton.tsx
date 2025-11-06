@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 
 
 export const GoogleLoginButton = () => {
- const { setIsLogin, setIsEmailVerified, setCredentials } = useLogin();
+ const { setIsLogin, setIsEmailVerified, setCredentials, setIsLoading } = useLogin();
  
  useEffect(() => {
     const initGoogle = async () => {
@@ -59,12 +59,16 @@ export const GoogleLoginButton = () => {
       provider: 'google',
       options: { },
     });
-   
+    setIsLoading(true);
     await handleLoginSuccess(data.result);
     
   
   } catch (err) {
     toast.error("Google login failed. Please try again.")
+  }
+
+  finally {
+    setIsLoading(false);
   }
 };
 
@@ -74,7 +78,7 @@ export const GoogleLoginButton = () => {
       onClick={loginWithGoogle}
       className="h-10 mx-7 z-0 bg-white text-p-gray text-[4.5vw] rounded-[15px] border shadow-sm"
     >
-      Continue Google
+      Continue with Google
     </button>
     </>
     

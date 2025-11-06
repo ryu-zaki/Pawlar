@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'Pawlar',
   webDir: 'dist',
   server: {
-    url: 'https://pawlar-server.onrender.com',
+    url: 'https://pawlar.onrender.com/',
     cleartext: true
   }
 };

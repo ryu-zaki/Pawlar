@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import api from "../utils/api";
 import { toast } from "sonner";
 import { useLogin } from '../contexts/LoginContext';
+import { GoogleLoginButton } from "./GoogleButton";
 
 const SignUpPage = () => {
     const {setCredentials, setIsLogin, isLoading, setIsLoading} = useLogin();
@@ -243,7 +244,7 @@ const SignUpPage = () => {
                         </p>
                     </div>
                     {/* Form */}
-                    <form onSubmit={handleSignUp} className="space-y-4 mx-7 mt-3">
+                    <form onSubmit={handleSignUp} className="flex flex-col space-y-4 mx-7 mt-3">
                         {/* Main form */}
                         <div>
 
@@ -402,17 +403,7 @@ const SignUpPage = () => {
                             <div className="grow h-px bg-gray-300 ml-8"></div>
                         </div>
                         {/* Google */}
-                        <div className="relative flex items-center justify-center mt-[10vw] bottom-4">
-                            <button
-                                type="button"
-                                className="relative w-full bottom-2 h-10 z-0 bg-white text-p-gray text-[4.5vw] rounded-[15px] border border-brown-orange shadow-sm">
-                                <GoogleLogoIcon
-                                    size={20}
-                                    className="absolute z-10 flex items-center justify-center translate-x-[11vw] translate-y-[.3vh]"
-                                />
-                                Continue with Google
-                            </button>
-                        </div>
+                        <GoogleLoginButton />
                     </form>
                 </div>
 
