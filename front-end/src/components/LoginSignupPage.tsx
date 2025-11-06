@@ -1,21 +1,12 @@
 
 import React, { useState, type FormEvent } from "react";
-import { EyeIcon, EyeSlashIcon, GoogleLogoIcon } from "@phosphor-icons/react";
+import { EyeIcon, EyeSlashIcon } from "@phosphor-icons/react";
 import { Button } from "@heroui/react";
-import { jwtDecode } from "jwt-decode";
 import { useNavigate, Link } from "react-router-dom";
 import api, { setAccessToken } from "../utils/api";
 import { useLogin } from '../contexts/LoginContext';
-import { useGoogleLogin } from "@react-oauth/google";
 import { toast } from "sonner";
 import { GoogleLoginButton } from "./GoogleButton";
-
-interface GooglePayload {
-  email: string;
-  name: string;
-  picture: string;
-  sub: string; // Google user ID
-}
 
 
 const LoginPage = () => {
@@ -106,29 +97,6 @@ const LoginPage = () => {
 
   };
 
-
-  const handleLoginSuccess = async (credentialResponse: any) => {
-    if (!credentialResponse.credential) return;
-
-    // Decode JWT (optional, just to view data on frontend)
-    const decoded: GooglePayload = jwtDecode(credentialResponse.credential);
-    console.log("Google user:", decoded);
-
-    try {
-      // Send token to backend
-      await api.post("/auth/google", decoded);
-      toast.success("Successfully logged In.");
-      setIsEmailVerified(true);
-      setIsLogin(true);
-
-    }
-
-    catch (err) {
-      console.log(err);
-      toast.error("Google login failed. Please try again.")
-    }
-
-  };
 
 
   return (
@@ -236,18 +204,6 @@ const LoginPage = () => {
             <div className="grow h-px bg-gray-300"></div>
           </div>
 
-          <div className="relative flex items-center justify-center mt-[15vw] bottom-4">
-            <button
-              onClick={() => login()}
-              type="button"
-              className="absolute w-full h-10 z-0 bg-white text-p-gray text-[4.5vw] rounded-[15px] border shadow-sm">
-              <GoogleLogoIcon
-                size={20}
-                className="absolute z-10 flex items-center justify-center translate-x-15 translate-y-1"
-              />
-              Continue with Google
-            </button>
-          </div>
         </form>
         <GoogleLoginButton />
       </div>
@@ -270,7 +226,7 @@ const LoginPage = () => {
             <Button
               onPress={() => setModalOpen(false)}
               className={`bg-transparent text-[4vw] -translate-y-[6vw] 
-                ${modalMessage.toLowerCase().includes("successfully") ? "text-[#17592B]" : "text-[#B31919]"}
+                ${modalMessage.toLowerCase().includes("successfully") ? "text-p-green" : "text-error-red"}
                 `}>
               Tap to continue
             </Button>
