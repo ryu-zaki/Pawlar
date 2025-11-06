@@ -1,5 +1,5 @@
 import React, { useState, type FormEvent } from "react";
-import { GoogleLogoIcon, EyeIcon, EyeSlashIcon } from "@phosphor-icons/react";
+import { EyeIcon, EyeSlashIcon } from "@phosphor-icons/react";
 import { Button, Checkbox } from "@heroui/react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../utils/api";
