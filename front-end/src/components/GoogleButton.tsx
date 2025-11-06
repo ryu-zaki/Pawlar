@@ -18,12 +18,11 @@ export const GoogleLoginButton = () => {
  const { setIsLogin, setIsEmailVerified } = useLogin();
  
  useEffect(() => {
-    // Initialize plugin with your Google Client ID
     const initGoogle = async () => {
       try {
         await SocialLogin.initialize({
            google: {
-               webClientId: "824231704072-gsrcn341ikphj2a0n5deb86q4t83qbgr.apps.googleusercontent.com", // 🔥 replace this
+               webClientId: "824231704072-gsrcn341ikphj2a0n5deb86q4t83qbgr.apps.googleusercontent.com", 
                mode: "online"
            }
         });
