@@ -188,7 +188,7 @@ useGSAP(() => {
             className="absolute inset-0 flex flex-col items-center bg-flesh"
           >
             <div className="relative z-20 flex flex-col items-start text-justify pt-[8vh] -left-5 ">
-              <h1 className="text-[10vw] mb-2 font-wendy text-choco leading-tight">
+              <h1 className="text-[10vw] mb-2 font-wendy text-choco leading-none">
                 Track Your
                 <br />
                 Pet Anytime
@@ -207,8 +207,8 @@ useGSAP(() => {
 
             <button
               onClick={(goToLogin)}
-              className="absolute left-[7vw] bottom-[5vh] flex items-center justify-center z-20">
-                <p className="text-flesh text-[4vw] font-league">Continue with Login</p>
+              className="absolute w-[16vw] h-auto right-[7vw] rounded-xl top-[4vh] flex items-center justify-center z-20 bg-choco/30">
+                <p className="text-white text-[4vw] font-league font-bold p-[2vw]">Skip</p>
             </button>
 
             <div className="relative w-full h-full">
@@ -231,13 +231,13 @@ useGSAP(() => {
             className="absolute inset-0 flex flex-col items-center bg-flesh overflow-hidden"
           >
             {/* texts */}
-            <div className="relative z-20 flex flex-col items-end text-right pt-[8vh] pr-[5vw]">
-              <h1 className="text-[12vw] mb-2 font-wendy text-choco leading-tight">
-                Meals on time.
+            <div className="relative z-20 flex flex-col items-end text-right pt-[10vh] pr-[5vw]">
+              <h1 className="text-[12vw] mb-2 font-wendy text-choco leading-none">
+                Meals on time,
                 <br />
                 Every time
               </h1>
-              <p className="max-w-[80vw] text-[6vw] font-league text-light-brown leading-tight">
+              <p className="max-w-[80vw] text-[6vw] font-league text-light-brown leading-snug">
                 Automated feeders make sure your pet eats on schedule with portions tailored for them.
               </p>
             </div>
@@ -249,6 +249,12 @@ useGSAP(() => {
             >
               <GreaterThanIcon size={20} color="#FFF" weight="bold" />
             </button> 
+
+            <button
+              onClick={(goToLogin)}
+              className="absolute w-[15vw] h-auto right-[7vw] rounded-xl top-[4vh] flex items-center justify-center z-20 bg-choco/30">
+                <p className="text-white text-[4vw] font-league font-bold p-[2vw]">Skip</p>
+            </button>
 
             {/* assets */}
             <div className="w-full h-screen">
@@ -276,8 +282,8 @@ useGSAP(() => {
             className="absolute inset-0 flex flex-col items-center bg-flesh overflow-hidden"
           >
             {/* texts */}
-            <div className="relative z-20 flex flex-col items-start text-left pt-[8vh] pl-[5vw]">
-              <h1 className="text-[12vw] mb-2 font-wendy text-choco leading-tight">
+            <div className="relative z-20 flex flex-col items-start text-left pt-[10vh] pl-[5vw]">
+              <h1 className="text-[12vw] mb-2 font-wendy text-choco leading-none">
                 Freedom
                 <br />
                 Made safe
@@ -285,7 +291,7 @@ useGSAP(() => {
               <p className="max-w-[80vw] text-[6vw] font-league text-light-brown leading-snug">
                 Your pet’s collar unlocks the door only for them. <br /> No strays, no worries.
               </p>
-            </div>
+            </div>  
 
             {/* button */}
             <button
@@ -295,6 +301,11 @@ useGSAP(() => {
               <GreaterThanIcon size={20} color="#FFF" weight="bold" />
             </button>
 
+            <button
+              onClick={(goToLogin)}
+              className="absolute w-[16vw] h-auto right-[7vw] rounded-xl top-[4vh] flex items-center justify-center z-20 bg-choco/30">
+                <p className="text-white text-[4vw] font-league font-bold p-[2vw]">Skip</p>
+            </button>
 
             {/* assets */}
             <div className="relative w-full h-full">

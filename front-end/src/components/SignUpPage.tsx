@@ -416,32 +416,6 @@ const SignUpPage = () => {
                     </form>
                 </div>
 
-                {/* Modal
-            <Modal
-            isOpen={modalOpen} 
-            onOpenChange={setModalOpen} 
-            isDismissable={false} 
-            backdrop="opaque"
-            placement="center"
-            className="w-[85vw] h-[20vh] flex flex-center items-center z-30 rounded-2xl shadow-lg">
-                <ModalContent className="bg-white-button text-center p-6">
-                    <ModalHeader className="text-brown-orange text-semibold text-[5vw] translate-y-[3vw]">
-                        {modalHeader}
-                    </ModalHeader>
-                    <ModalBody>
-                        <p className="-translate-y-[2vw] text-[4vw]">{modalMessage}</p>
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button onPress={() => setModalOpen(false)}
-                            className={`bg-transparent text-[4vw] -translate-y-[6vw] 
-                            ${ modalMessage.toLowerCase().includes("successfully") ? "text-p-green" : "text-error-red"}
-                            `}>
-                            Tap to continue
-                        </Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal> */}
-
             </div>
         </>
     );
