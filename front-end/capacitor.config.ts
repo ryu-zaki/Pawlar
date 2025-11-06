@@ -2,12 +2,20 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.example.app',
-  appName: 'capacitor_prac',
+  appName: 'Pawlar',
   webDir: 'dist',
   server: {
-    url: "http://192.168.1.5:5173",
+    url: "https://pawlar.onrender.com/",
     cleartext: true
-  }
+  },
+  plugins: {
+    SocialLogin: {
+      google: {
+        clientId: '824231704072-gsrcn341ikphj2a0n5deb86q4t83qbgr.apps.googleusercontent.com',
+        scopes: ['profile', 'email'],
+      },
+    },
+  },  
 };
 
 export default config;
