@@ -1,31 +1,34 @@
-import {Pool} from 'pg';
-import dotenv from 'dotenv';
+import { Pool } from "pg";
+import dotenv from "dotenv";
 
-/* DATABASE CREDENTIALS */
 dotenv.config();
-const { DB_USER, DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT } = process.env; 
 
+/* DATABASE CONNECTION */
+const connectionConfig =
+  process.env.DATABASE_URL
+    ? {
+        connectionString: process.env.DATABASE_URL,
+        ssl: {
+          rejectUnauthorized: false, // required for Railway
+        },
+      }
+    : {
+        user: process.env.DB_USER,
+        host: process.env.DB_HOST,
+        database: process.env.DB_NAME,
+        password: process.env.DB_PASSWORD,
+        port: Number(process.env.DB_PORT) || 5432,
+      };
 
-const pool = new Pool({
-    user: DB_USER,
-    host: DB_HOST,
-    database: DB_NAME,
-    port: Number(DB_PORT),
-    password: DB_PASSWORD
-});
+const pool = new Pool(connectionConfig);
 
 (async () => {
-    try {
-       await pool.connect();
-       console.log("Database Connected")
-    }
-
-    catch(err) { 
-       console.log(err)
-    }
-  
-
-
+  try {
+    await pool.connect();
+    console.log("Database Connected");
+  } catch (err) {
+    console.error("Database connection failed:", err);
+  }
 })();
 
 export default pool;
