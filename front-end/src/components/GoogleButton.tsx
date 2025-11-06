@@ -67,7 +67,7 @@ export const GoogleLoginButton = () => {
       options: { scopes: ['profile', 'email'] },
     });
     console.log(result);
-   /*  await handleLoginSuccess(result); */
+    await handleLoginSuccess(result);
     // handle result: result.idToken, result.email etc
     alert("hi")
   } catch (err) {
