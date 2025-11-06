@@ -174,7 +174,7 @@ const LoginPage = () => {
               </button>
             </div>
 
-            <div className="mt-2 flex items-center justify-between">
+            <div className="mt-[2vw] mb-[3vw] flex items-center justify-between">
               {/* <div>
                 <input type="checkbox" className="h-3 w-3" />
                 <label className="ml-2 text-[4vw] text-p-gray">
@@ -182,7 +182,7 @@ const LoginPage = () => {
                 </label>
               </div> */}
               <p
-                className="text-[#A95A29] font-semibold justify-end"
+                className="text-brown-orange text-[3.5vw] font-semibold justify-end"
                 onClick={() => navigate('../otp')}>
                 Forgot Password?
               </p>
@@ -193,7 +193,7 @@ const LoginPage = () => {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full h-10 bg-[#C4702E] text-white text-[16px] font-['Wendy_One'] rounded-[15px] hover:opacity-90 transition disabled:opacity-50" >
+              className="w-full h-10 bg-[#C4702E] text-white text-[4vw] font-['Wendy_One'] rounded-[15px] hover:opacity-90 transition disabled:opacity-50" >
               Log in
             </Button>
           </div>
@@ -205,34 +205,10 @@ const LoginPage = () => {
           </div>
 
         </form>
-        <GoogleLoginButton />
+        <GoogleLoginButton 
+        />
       </div>
 
-      {/* <Modal
-        isOpen={modalOpen}
-        onOpenChange={setModalOpen}
-        isDismissable={false}
-        backdrop="opaque"
-        placement="center"
-        className="w-[85vw] h-[20vh] flex flex-center items-center z-30 rounded-2xl shadow-lg">
-        <ModalContent className="bg-white-button text-center p-6">
-          <ModalHeader
-            className="text-brown-orange text-semibold text-[5vw] translate-y-[3vw]">
-            {modalHeader} </ModalHeader>
-          <ModalBody>
-            <p className="-translate-y-[2vw] text-[4vw]">{modalMessage}</p>
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              onPress={() => setModalOpen(false)}
-              className={`bg-transparent text-[4vw] -translate-y-[6vw] 
-                ${modalMessage.toLowerCase().includes("successfully") ? "text-p-green" : "text-error-red"}
-                `}>
-              Tap to continue
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal> */}
 
     </div>
   );
