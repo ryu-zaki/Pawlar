@@ -174,7 +174,7 @@ const SignUpPage = () => {
             }
         }
 
-        if (Object.values(newErrors).some((err) => err)) return;
+        if (Object.values(newErrors).some((err) => err) || hasError) return;
 
         setIsLoading(true);
         try {
