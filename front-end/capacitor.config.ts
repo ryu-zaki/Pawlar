@@ -4,10 +4,10 @@ const config: CapacitorConfig = {
   appId: 'com.pawlar.app',
   appName: 'Pawlar',
   webDir: 'dist',
- /*  server: {
-    url: 'http://192.168.0.107:5173/',
+  server: {
+    url: 'https://pawlar-server.onrender.com',
     cleartext: true
-  } */
+  }
 };
 
 export default config;
