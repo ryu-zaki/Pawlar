@@ -8,10 +8,7 @@ import { checkIfAccessToken } from "./middlewares/token.middleware";
 const PORT = process.env.PORT;
 const app = express();
 
-app.use(cors({ origin: [
-    'capacitor://localhost',
-    'http://localhost'
-  ], credentials: true }));
+app.use(cors({ origin: 'https://pawlar.onrender.com', credentials: true }));
 app.use(cookieParser());
 app.use(express.json());
 

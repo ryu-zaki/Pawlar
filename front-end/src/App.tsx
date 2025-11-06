@@ -18,8 +18,7 @@ import LandingPage from './components/LandingPage';
 import PageNotFound from './components/PageNotFound';
 import LoadingOverlay from './components/LoadingOverlay';
 import { App as CapacitorApp } from '@capacitor/app';
-import React, { useEffect } from 'react';
-import {useLocation} from 'react-router-dom'
+import { useEffect } from 'react';
 
 function App() {
 
