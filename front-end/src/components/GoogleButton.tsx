@@ -1,28 +1,20 @@
 
-import {jwtDecode} from 'jwt-decode';
 import api from '../utils/api';
 import { toast } from 'sonner';
 import { useLogin } from '../contexts/LoginContext';
 import { SocialLogin } from '@capgo/capacitor-social-login';
 import { useEffect } from 'react';
 
-interface GooglePayload {
-  email: string;
-  name: string;
-  picture: string;
-  sub: string; // Google user ID
-}
-
 
 export const GoogleLoginButton = () => {
- const { setIsLogin, setIsEmailVerified } = useLogin();
+ const { setIsLogin, setIsEmailVerified, setCredentials } = useLogin();
  
  useEffect(() => {
     const initGoogle = async () => {
       try {
         await SocialLogin.initialize({
            google: {
-               webClientId: "824231704072-gsrcn341ikphj2a0n5deb86q4t83qbgr.apps.googleusercontent.com", 
+               webClientId: "1069775178537-26k3ntp3fqrpa1droijc76kvu6m37mfc.apps.googleusercontent.com", 
                mode: "online"
            }
         });
@@ -36,20 +28,22 @@ export const GoogleLoginButton = () => {
   }, []);
 
 
-  const handleLoginSuccess = async (credentialResponse: any) => {
-    if (!credentialResponse.credential) return;
-
-    // Decode JWT (optional, just to view data on frontend)
-    const decoded: GooglePayload = jwtDecode(credentialResponse.credential);
-    console.log("Google user:", decoded);
-    
+  const handleLoginSuccess = async (result: any) => {
+  
     try {
     // Send token to backend
-    await api.post("/auth/google", decoded);
+    await api.post("/auth/google", result.profile);
     toast.success("Successfully logged In.");
     setIsEmailVerified(true);
     setIsLogin(true);
     
+    const nameArr = result.profile.name.split(',')
+    const userInfo = {
+      email: result.profile.email,
+      firstName: nameArr[1],
+      lastName: nameArr[0],
+    }
+    setCredentials(userInfo)
     }
 
     catch(err) {
@@ -59,27 +53,30 @@ export const GoogleLoginButton = () => {
   };
 
   const loginWithGoogle = async () => {
-
+  
   try {
-    const result = await SocialLogin.login({
+    const data = await SocialLogin.login({
       provider: 'google',
-      options: { scopes: ['profile', 'email'] },
+      options: { },
     });
-    console.log(result);
-    await handleLoginSuccess(result);
-    // handle result: result.idToken, result.email etc
-    alert("hi")
+   
+    await handleLoginSuccess(data.result);
+    
+  
   } catch (err) {
     toast.error("Google login failed. Please try again.")
   }
 };
 
   return (
-    <button
+    <>
+      <button
       onClick={loginWithGoogle}
       className="h-10 mx-7 z-0 bg-white text-p-gray text-[4.5vw] rounded-[15px] border shadow-sm"
     >
-      Continue with Google
+      Continue Google
     </button>
+    </>
+    
   );
 };

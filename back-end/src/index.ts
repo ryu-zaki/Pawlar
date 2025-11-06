@@ -8,16 +8,12 @@ import { checkIfAccessToken } from "./middlewares/token.middleware";
 const PORT = process.env.PORT;
 const app = express();
 
-app.use(cors({ origin: 'http://192.168.1.5:5173', credentials: true }));
+app.use(cors({ origin: 'http://192.168.0.107:5173', credentials: true }));
 app.use(cookieParser());
 app.use(express.json());
 
 app.use('/', routes);
 app.use(checkIfAccessToken);
-app.get("/profile", (req, res) => {
-   
-   res.json({ message: "Hello World" });
-})
  
 app.listen(PORT, () => console.log(`Server is runninng on PORT ${PORT}`));
 

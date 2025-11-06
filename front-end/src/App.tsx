@@ -18,12 +18,12 @@ import LandingPage from './components/LandingPage';
 import PageNotFound from './components/PageNotFound';
 import LoadingOverlay from './components/LoadingOverlay';
 import { App as CapacitorApp } from '@capacitor/app';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
+import {useLocation} from 'react-router-dom'
 
 function App() {
 
   const { isLogin, isEmailVerified, isLoading } = useLogin();
-  console.log(isLogin, isEmailVerified, isLoading);
 
   useEffect(() => {
     const listener = CapacitorApp.addListener('backButton', ({ canGoBack }) => {
