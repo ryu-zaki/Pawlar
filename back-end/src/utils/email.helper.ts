@@ -1,18 +1,10 @@
 import nodemailer from 'nodemailer';
-
-const transporter = nodemailer.createTransport({
-   tls: {
-      rejectUnauthorized: false
-    },
-    service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER, 
-    pass: process.env.EMAIL_APP_PASSWORD, 
-  }
-});
+import {Resend} from 'resend';
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendOTPEmail = async (toEmail: string, otp: string): Promise<void> => {
-  const mailOptions = {
+  try { 
+  await resend.emails.send({
     from: `"Pawlar Support" <${process.env.EMAIL_USER}>`,
     to: toEmail,
     subject: 'Your Pawlar Password Reset OTP',
@@ -24,10 +16,9 @@ export const sendOTPEmail = async (toEmail: string, otp: string): Promise<void> 
         <p>This OTP is valid for 10 minutes. If you did not request this, please ignore this email.</p>
       </div>
     `
-  };
+  });
 
-  try {
-    await transporter.sendMail(mailOptions);
+  
     console.log('OTP email sent to:', toEmail);
   } catch (error) {
     console.error('Error sending email:', error);
