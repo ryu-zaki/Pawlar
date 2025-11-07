@@ -4,6 +4,7 @@ import axios, { type AxiosInstance } from 'axios';
 
 
 const api: AxiosInstance = axios.create({
+    /* baseURL: `https://pawlar-server.onrender.com`, */
     baseURL: `https://pawlar-server.onrender.com`,
     withCredentials: true,
 });

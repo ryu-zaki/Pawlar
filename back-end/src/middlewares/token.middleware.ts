@@ -69,6 +69,7 @@ export const checkLoginWithGoogle = async (req: Request, res: Response, next: Ne
 
   catch (err) {
     console.log(err);
+    res.sendStatus(500);
   }
 }
 
