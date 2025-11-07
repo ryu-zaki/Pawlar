@@ -5,7 +5,7 @@ import axios, { type AxiosInstance } from 'axios';
 
 const api: AxiosInstance = axios.create({
     /* baseURL: `https://pawlar-server.onrender.com`, */
-    baseURL: `https://192.168.0.107:3000`,
+    baseURL: `http://192.168.0.107:3000`,
     withCredentials: true,
 });
 
