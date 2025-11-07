@@ -3,9 +3,11 @@ import {Resend} from 'resend';
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendOTPEmail = async (toEmail: string, otp: string): Promise<void> => {
+
   try { 
   await resend.emails.send({
-    from: `"Pawlar Support" <${process.env.EMAIL_USER}>`,
+    from: "Pawlar Support <onboarding@resend.dev>",
+    /* from: 'onboarding@resend.dev', */
     to: toEmail,
     subject: 'Your Pawlar Password Reset OTP',
     html: `
