@@ -1,13 +1,19 @@
 import nodemailer from 'nodemailer';
-import {Resend} from 'resend';
-const resend = new Resend(process.env.RESEND_API_KEY);
+
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_APP_PASSWORD,
+  },
+});
 
 export const sendOTPEmail = async (toEmail: string, otp: string): Promise<void> => {
 
   try { 
-  await resend.emails.send({
-    from: "Pawlar Support <onboarding@resend.dev>",
-    /* from: 'onboarding@resend.dev', */
+  await transporter.sendMail({
+    from: `Pawlar Support ${process.env.EMAIL_USER}`,
     to: toEmail,
     subject: 'Your Pawlar Password Reset OTP',
     html: `

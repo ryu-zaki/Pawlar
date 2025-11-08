@@ -3,12 +3,12 @@ import api from '../utils/api';
 import { toast } from 'sonner';
 import { useLogin } from '../contexts/LoginContext';
 import { SocialLogin } from '@capgo/capacitor-social-login';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 
 export const GoogleLoginButton = () => {
  const { setIsLogin, setIsEmailVerified, setCredentials, setIsLoading } = useLogin();
- 
+ const [err, setErr] = React.useState<unknown>();
  useEffect(() => {
     const initGoogle = async () => {
       try {
@@ -53,7 +53,7 @@ export const GoogleLoginButton = () => {
   };
 
   const loginWithGoogle = async () => {
-  
+  setErr("");
   try {
     const data = await SocialLogin.login({
       provider: 'google',
@@ -64,7 +64,9 @@ export const GoogleLoginButton = () => {
     
   
   } catch (err) {
-    toast.error("Google login failed. Please try again.")
+    setErr(err);
+    alert(err);
+   // toast.error("Google login failed. Please try again.")
   }
 
   finally {
@@ -80,6 +82,7 @@ export const GoogleLoginButton = () => {
     >
       Continue with Google
     </button>
+    {err}
     </>
     
   );
