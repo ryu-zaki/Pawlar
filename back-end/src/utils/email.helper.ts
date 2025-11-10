@@ -37,12 +37,12 @@ export const sendOTPEmail = async (toEmail: string, otp: string): Promise<void> 
         "
       >
         <img
-          src="paw-brown.svg"
-          style="height: 40px; margin-right: 1px"
+          src="https://res.cloudinary.com/dpwt71uzk/image/upload/v1762788517/pawlar-logo_xpksso.png"
+          style="height: 40px;"
         />
         <img
-          src="email-pawlar-brown.svg"
-          style="height: 40px; margin-right: 10px; margin-left: -10px"
+          src="https://res.cloudinary.com/dpwt71uzk/image/upload/v1762788517/pawlar-text_o7ckd9.png"
+          style="height: 40px; margin-right: 10px; margin-left: -18px"
         />
         <h3
           style="
