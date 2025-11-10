@@ -1,6 +1,6 @@
 import express from 'express';
 import { loginController, registerController, refreshAccessToken, forgotPasswordController, resetPasswordController, handleGoogleLogin, validateCode, resendOTP, logoutUser } from '../controllers/auth.controllers';
-import { checkUser, checkLoginWithGoogle } from '../middlewares/token.middleware';
+import { checkUser, checkLoginWithGoogle, checkIfPasswordChange } from '../middlewares/token.middleware';
 const router = express.Router();
 
 router.post('/login', checkUser, loginController);
@@ -12,6 +12,6 @@ router.post('/resend-otp', resendOTP)
 router.post('/logout', logoutUser);
 
 router.post('/forgot-password', forgotPasswordController);
-router.post('/reset-password', resetPasswordController);
+router.post('/reset-password', checkIfPasswordChange, resetPasswordController);
 
 export default router;

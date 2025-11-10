@@ -1,8 +1,9 @@
 import { Response, Request, NextFunction } from 'express';
-import { createUser, createOtpFields } from '../services/auth.service';
+import { createUser, createOtpFields, extractUserInfo } from '../services/auth.service';
 import jwt from 'jsonwebtoken';
 const ACCESS_SECRET = process.env.ACCESS_SECRET as string;
 import pool from '../config/db';
+import bcrypt from 'bcrypt';
 
 export const checkIfAccessToken = (req: Request, res: Response, next: NextFunction) => {
 
@@ -77,11 +78,39 @@ export const handleRegisterOTP = async (req: Request, res: Response, next: NextF
   const { email } = req.body;
   try {
     await createOtpFields(email);
-
   }
 
   catch (err) {
     throw err;
+  }
+
+}
+
+export const checkIfPasswordChange = async (req: Request, res: Response, next: NextFunction) => {
+  
+  const { newPassword, email, otp } = req.body;
+
+  if (!email || !otp || !newPassword) {
+    return res.status(400).json({ message: 'Email, OTP, and new password are required.' });
+  }
+
+  try {
+    //Extract user information to match the password
+    const userInfo = await extractUserInfo(email);
+    if (!userInfo) return res.status(401).json({message: "Email doesn't exists"});
+
+    //Validate the new password
+    const isPasswordSame = await bcrypt.compare(newPassword, userInfo.password);
+    
+    if (isPasswordSame) return res.status(403).json({ message: "New password must be different from your current password." });
+    
+    // proceede to the controller
+    next();
+  }
+
+  catch(err) {
+    console.log(err);
+    return res.sendStatus(500);
   }
 
 }
