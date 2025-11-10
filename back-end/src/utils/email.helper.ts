@@ -17,12 +17,127 @@ export const sendOTPEmail = async (toEmail: string, otp: string): Promise<void> 
     to: toEmail,
     subject: 'Your Pawlar Password Reset OTP',
     html: `
-      <div style="font-family: Arial, sans-serif; text-align: center; color: #333;">
-        <h2>Password Reset Request</h2>
-        <p>Your One-Time Password (OTP) is:</p>
-        <h1 style="font-size: 48px; letter-spacing: 8px; margin: 20px; color: #FF7A00;">${otp}</h1>
-        <p>This OTP is valid for 10 minutes. If you did not request this, please ignore this email.</p>
+       <div
+      style="
+        max-width: 500px;
+        margin: auto;
+        background-color: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        font-family: 'League Spartan', sans-serif;
+      "
+    >
+      <div
+        style="
+          flex: content;
+          justify-items: start;
+          flex-direction: row;
+          background-color: #ffeaea;
+          padding: 15px 20px;
+        "
+      >
+        <img
+          src="paw-brown.svg"
+          style="height: 40px; margin-right: 1px"
+        />
+        <img
+          src="email-pawlar-brown.svg"
+          style="height: 40px; margin-right: 10px; margin-left: -10px"
+        />
+        <h3
+          style="
+            color: #ca731c;
+            font-size: medium;
+            font-weight: 600;
+            margin-top: 2px;
+            margin-left: 7px;
+          "
+        >
+          One Collar, Endless Care
+        </h3>
       </div>
+      <div style="margin-top: 20px; padding: 15px 40px">
+        <h1
+          style="
+            color: #363433;
+            font-size: 28px;
+            margin-bottom: 10px;
+            margin-top: 10px;
+          "
+        >
+          Verification Code
+        </h1>
+        <p
+          style="
+            font-size: 16px;
+            line-height: 1;
+            margin-bottom: 15px;
+            text-align: justify;
+          "
+        >
+          Hi, there! Welcome to Pawlar — your pet's smart companion!
+        </p>
+        <p
+          style="
+            font-size: 16px;
+            line-height: 1;
+            margin-bottom: 15px;
+            text-align: justify;
+          "
+        >
+          We've received a request related to your account. To proceed, please
+          use the code below to complete the requested action:
+        </p>
+        <div>
+          <h2
+            style="
+              font-size: 32px;
+              font-style: bold;
+              text-align: center;
+              color: #ca731c;
+              letter-spacing: 10px;
+              margin: 20px 0;
+              background: #ffeaea;
+              padding: 15px;
+            "
+          >
+            ${otp}
+          </h2>
+        </div>
+        <p
+          style="
+            font-size: 16px;
+            line-height: 1;
+            margin-bottom: 15px;
+            text-align: justify;
+          "
+        >
+          This code will expire in 5 minutes.
+        </p>
+        <p
+          style="
+            font-size: 16px;
+            line-height: 1;
+            margin-bottom: 15px;
+            text-align: justify;
+          "
+        >
+          If you didn't request this verification, you can safely ignore this
+          email.
+        </p>
+      </div>
+      <div
+        style="
+          text-align: center;
+          margin-top: 30px;
+          margin-bottom: 20px;
+          font-size: 14px;
+          color: #777;
+        "
+      >
+        <p style="margin-bottom: 3px">© 2025 Pawlar. All rights reserved.</p>
+      </div>
+    </div>
     `
   });
 
