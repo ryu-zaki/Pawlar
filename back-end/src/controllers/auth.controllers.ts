@@ -121,10 +121,6 @@ const forgotPasswordController = async (req: Request, res: Response) => {
 const resetPasswordController = async (req: Request, res: Response) => {
   const { email, otp, newPassword } = req.body;
 
-  if (!email || !otp || !newPassword) {
-    return res.status(400).json({ message: 'Email, OTP, and new password are required.' });
-  }
-
   try {
     const verification = await verifyResetPasswordOtp(email, otp);
 

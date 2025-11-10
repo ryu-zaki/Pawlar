@@ -8,6 +8,17 @@ Content-Type: application/json
     "password": "123"
 }
 
+### SETIING NEW PASSWORD
+
+POST http://localhost:3000/auth/reset-password
+Content-Type: application/json
+
+{
+    "newPassword": "123",
+    "otp": "rtrtrt",
+    "email": "jhonwellssespanola4@gmail.com"
+}
+
 
 
 
